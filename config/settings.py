@@ -40,7 +40,7 @@ INSTALLED_APPS = [
 
     # apps
     'apps.users.apps.UsersConfig',
-    'apps.halls.apps.HallsConfig',
+    'apps.tables.apps.TablesConfig',
 
     # 3rd party apps
 ]
