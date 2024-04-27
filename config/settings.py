@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     # apps
     'apps.users.apps.UsersConfig',
     'apps.tables.apps.TablesConfig',
+    'apps.orders.apps.OrdersConfig',
+    'apps.meals.apps.MealsConfig',
 
     # 3rd party apps
 ]
