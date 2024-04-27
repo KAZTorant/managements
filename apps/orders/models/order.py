@@ -25,4 +25,4 @@ class OrderItem(models.Model):
     is_prepared = models.BooleanField(default=False)  # To track preparation status
 
     def __str__(self):
-        return f"{self.quantity} x {self.meal.name} for {self.order}"
+        return f"{self.quantity} x {self.meal.name} | Qiymət: {self.quantity*self.meal.price}"
