@@ -20,4 +20,4 @@ class Table(models.Model):
     )
 
     def __str__(self):
-        return f"Table {self.number} in {self.room.name if self.room else 'No Room'}"
+        return f"{self.number} | Ərazi {self.room.name} "
