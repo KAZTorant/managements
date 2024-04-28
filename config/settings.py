@@ -137,3 +137,14 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ),
 }
+
+# Swagger settings (optional)
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'PINAuth': {
+            'type': 'apiKey',
+            'name': 'X-PIN',
+            'in': 'header'
+        }
+    }
+}

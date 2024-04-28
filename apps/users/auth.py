@@ -1,6 +1,5 @@
 from django.contrib.auth import get_user_model
-from rest_framework import authentication
-from rest_framework import exceptions
+from rest_framework import authentication, exceptions
 
 User = get_user_model()
 
@@ -13,8 +12,10 @@ class PINAuthentication(authentication.BaseAuthentication):
 
         try:
             user = User.objects.get(username=pin)
-            if user.is_active:
-                return (user, None)
+            if not user.is_active:
+                raise exceptions.AuthenticationFailed(
+                    'User account is inactive')
+            return (user, None)
         except User.DoesNotExist:
             raise exceptions.AuthenticationFailed('No such user')
 

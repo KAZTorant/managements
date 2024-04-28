@@ -10,7 +10,10 @@ User = get_user_model()
 
 class Order(models.Model):
     table = models.ForeignKey(
-        Table, related_name='orders', on_delete=models.CASCADE)
+        Table,
+        related_name='orders',
+        on_delete=models.CASCADE
+    )
     meals = models.ManyToManyField(Meal, through='OrderItem')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
