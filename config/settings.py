@@ -148,3 +148,5 @@ SWAGGER_SETTINGS = {
         }
     }
 }
+
+AUTH_USER_MODEL = 'users.User'
