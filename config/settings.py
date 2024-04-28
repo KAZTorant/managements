@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'apps.meals.apps.MealsConfig',
 
     # 3rd party apps
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
