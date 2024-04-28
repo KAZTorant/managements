@@ -12,6 +12,7 @@ class TableSerializer(serializers.ModelSerializer):
     class Meta:
         model = Table
         fields = (
+            "id",
             "number",
             "room",
             "waitress",
@@ -34,6 +35,7 @@ class RoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Room
         fields = (
+            "id",
             "name",
             "description"
         )
