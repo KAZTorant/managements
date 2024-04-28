@@ -18,7 +18,7 @@ urlpatterns = [
     ),
 
     path(
-        'add-multiple-order-item/<int:table_id>/',
+        'add-multiple-order-items/<int:table_id>/',
         AddMultipleOrderItemsAPIView.as_view(),
         name='add-multiple-order-item'
     ),
