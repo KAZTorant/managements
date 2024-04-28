@@ -8,8 +8,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import F
+from django.db import transaction
 
 from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 
 class OrderSerializer(serializers.ModelSerializer):
@@ -126,3 +128,106 @@ class AddOrderItemAPIView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class OrderItemInputSerializer(serializers.Serializer):
+    meal_id = serializers.IntegerField(
+        required=True, help_text="ID of the meal to add to the order.")
+    quantity = serializers.IntegerField(
+        required=True, min_value=1, help_text="Quantity of the meal to order.")
+
+
+class OrderItemOutputSerializer(serializers.Serializer):
+    meal_id = serializers.IntegerField(read_only=True)
+    quantity = serializers.IntegerField(read_only=True)
+
+
+class AddMultipleOrderItemsAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(
+        operation_description="Add multiple items to an existing unpaid order for a specified table.",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_ARRAY,
+            items=openapi.Items(type=openapi.TYPE_OBJECT, properties={
+                'meal_id': openapi.Schema(type=openapi.TYPE_INTEGER, description='ID of the meal to add to the order.'),
+                'quantity': openapi.Schema(type=openapi.TYPE_INTEGER, description='Quantity of the meal to order.', minimum=1),
+            }),
+            description="List of meals and their quantities to add to the order."
+        ),
+        responses={
+            201: openapi.Response('Order items successfully added or updated.', OrderItemOutputSerializer(many=True)),
+            404: openapi.Response(description='Order not found or payment already made.'),
+            400: openapi.Response(description='Invalid data received.'),
+        }
+    )
+    def post(self, request, table_id):
+        # Retrieve the order, validate its existence and status
+        order = self.get_order(request.user, table_id)
+        if isinstance(order, Response):  # Error handling in case of a response object
+            return order
+
+        items = request.data  # This should be a list of dicts with 'meal_id' and 'quantity'
+
+        # Process the items and handle any potential errors
+        result = self.process_items(order, items)
+        if isinstance(result, Response):  # Error handling in case of a response object
+            return result
+
+        # Successful processing
+        return Response({
+            'message': 'Order items added or updated successfully.',
+            'items': result
+        }, status=status.HTTP_201_CREATED)
+
+    def get_order(self, user, table_id):
+        """Retrieve and validate the order for the given table and user."""
+        order = user.orders.filter(table__id=table_id, is_paid=False).first()
+        if not order:
+            return Response(
+                {'error': 'Order not found or payment has been made already.'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        return order
+
+    def process_items(self, order, items):
+        """Process multiple items, adding them to the order."""
+        created_items = []
+
+        try:
+            with transaction.atomic():
+                for item in items:
+                    meal, response = self.validate_meal(item.get('meal_id'))
+                    if response:
+                        return response
+
+                    quantity = item.get('quantity', 1)
+                    order_item, created = OrderItem.objects.get_or_create(
+                        meal=meal,
+                        order=order,
+                        defaults={'quantity': quantity}
+                    )
+
+                    if not created:
+                        order_item.quantity += quantity
+                        order_item.save()
+
+                    created_items.append({
+                        'meal_id': order_item.meal.id,
+                        'quantity': order_item.quantity
+                    })
+
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+        return created_items
+
+    def validate_meal(self, meal_id):
+        """Validate the meal ID and return the Meal object or an error response."""
+        if not meal_id:
+            return None, Response({'error': 'Meal ID is required'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            meal = Meal.objects.get(id=meal_id)
+            return meal, None
+        except Meal.DoesNotExist:
+            return None, Response({'error': f'Meal with ID {meal_id} not found'}, status=status.HTTP_400_BAD_REQUEST)

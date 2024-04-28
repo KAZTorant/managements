@@ -2,6 +2,7 @@ from django.urls import path
 
 from apps.orders.apis import CreateOrderAPIView
 from apps.orders.apis import AddOrderItemAPIView
+from apps.orders.apis import AddMultipleOrderItemsAPIView
 
 urlpatterns = [
     path(
@@ -14,5 +15,11 @@ urlpatterns = [
         'add-order-item/<int:table_id>/',
         AddOrderItemAPIView.as_view(),
         name='add-order-item'
+    ),
+
+    path(
+        'add-multiple-order-item/<int:table_id>/',
+        AddMultipleOrderItemsAPIView.as_view(),
+        name='add-multiple-order-item'
     ),
 ]
