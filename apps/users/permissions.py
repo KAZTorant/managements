@@ -20,3 +20,12 @@ class IsRestaurantOwner(permissions.BasePermission):
 
     def has_permission(self, request, view):
         return request.user.type == 'restaurant'
+
+
+class IsWaitressOrAdmin(permissions.BasePermission):
+    message = 'You must be a waitress or admin to access this endpoint.'
+
+    def has_permission(self, request, view):
+        return request.user.type in ['waitress', 'admin']
+
+

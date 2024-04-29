@@ -13,6 +13,10 @@ from django.db import transaction
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
+from apps.users.permissions import IsWaitress
+from apps.users.permissions import IsWaitressOrAdmin
+from apps.users.permissions import IsAdmin
+
 
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
@@ -26,7 +30,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 class CreateOrderAPIView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsWaitressOrAdmin]
 
     def post(self, request, table_id):
         # Check if there is an existing unpaid order for this table
@@ -42,7 +46,7 @@ class CreateOrderAPIView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
@@ -95,7 +99,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
 
 class AddOrderItemAPIView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsWaitressOrAdmin]
 
     @swagger_auto_schema(
         operation_description="Add an item to an existing unpaid order for the specified table.",
@@ -143,7 +147,7 @@ class OrderItemOutputSerializer(serializers.Serializer):
 
 
 class AddMultipleOrderItemsAPIView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsWaitressOrAdmin]
 
     @swagger_auto_schema(
         operation_description="Add multiple items to an existing unpaid order for a specified table.",
