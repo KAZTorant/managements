@@ -34,3 +34,10 @@ class Table(DateTimeModel, models.Model):
         if order:
             return order.waitress
         return User.objects.none()
+
+    @property
+    def total_price(self):
+        order = self.orders.filter(is_paid=False).first()
+        if order:
+            return order.total_price
+        return 0

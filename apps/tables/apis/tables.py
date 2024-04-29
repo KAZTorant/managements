@@ -16,6 +16,7 @@ class TableSerializer(serializers.ModelSerializer):
             "number",
             "room",
             "waitress",
+            "total_price",
         )
 
     def get_waitress(self, obj: Table):

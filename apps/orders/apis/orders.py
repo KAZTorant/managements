@@ -95,6 +95,8 @@ class OrderItemSerializer(serializers.ModelSerializer):
         # Refresh from database to get updated quantity if it was updated
         order_item.refresh_from_db()
 
+        order.update_total_price()
+
         return order_item
 
 
@@ -178,6 +180,7 @@ class AddMultipleOrderItemsAPIView(APIView):
         if isinstance(result, Response):  # Error handling in case of a response object
             return result
 
+        order.update_total_price()
         # Successful processing
         return Response({
             'message': 'Order items added or updated successfully.',
@@ -269,6 +272,8 @@ class DeleteOrderItemSerializer(serializers.Serializer):
                 quantity=new_quantity)
         else:
             order_item.delete()
+
+        order.update_total_price()
 
 
 class DeleteOrderItemAPIView(APIView):
