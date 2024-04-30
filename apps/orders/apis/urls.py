@@ -4,6 +4,7 @@ from apps.orders.apis import CreateOrderAPIView
 from apps.orders.apis import AddOrderItemAPIView
 from apps.orders.apis import AddMultipleOrderItemsAPIView
 from apps.orders.apis import DeleteOrderItemAPIView
+from apps.orders.apis import ListOrderItemsAPIView
 
 urlpatterns = [
     path(
@@ -28,5 +29,11 @@ urlpatterns = [
         'delete-order-item/<int:table_id>/',
         DeleteOrderItemAPIView.as_view(),
         name='delete-order-item'
+    ),
+
+    path(
+        'list-order-items/<int:table_id>/',
+        ListOrderItemsAPIView.as_view(),
+        name='list-order-itemsm'
     ),
 ]

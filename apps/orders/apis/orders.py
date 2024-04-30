@@ -4,6 +4,8 @@ from apps.orders.models import Order
 from apps.orders.models import OrderItem
 from rest_framework import serializers
 from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
+
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
@@ -12,12 +14,14 @@ from django.db import transaction
 
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+from apps.tables.models import Table
 
 from apps.users.permissions import IsWaitress
 from apps.users.permissions import IsWaitressOrAdmin
 from apps.users.permissions import IsAdmin
 
 
+# CreateOrderAPI
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
@@ -49,6 +53,7 @@ class CreateOrderAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+# AddOrderItemAPI
 class OrderItemSerializer(serializers.ModelSerializer):
     meal_id = serializers.IntegerField(
         write_only=True,
@@ -136,6 +141,7 @@ class AddOrderItemAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+# AddMultipleOrderItemsAPIView
 class OrderItemInputSerializer(serializers.Serializer):
     meal_id = serializers.IntegerField(
         required=True, help_text="ID of the meal to add to the order.")
@@ -240,6 +246,7 @@ class AddMultipleOrderItemsAPIView(APIView):
             return None, Response({'error': f'Meal with ID {meal_id} not found'}, status=status.HTTP_400_BAD_REQUEST)
 
 
+# DeleteOrderItemAPIView
 class DeleteOrderItemSerializer(serializers.Serializer):
     meal_id = serializers.IntegerField(
         help_text="ID of the meal to decrease quantity from")
@@ -306,3 +313,39 @@ class DeleteOrderItemAPIView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# Orders List view
+class ListOrderItemSerializer(serializers.ModelSerializer):
+
+    meal = serializers.SerializerMethodField()
+
+    class Meta:
+        model = OrderItem
+        fields = (
+            "meal",
+            "quantity",
+        )
+
+    def get_meal(self, obj: OrderItem):
+        return {
+            "name": obj.meal.name,
+            "price": obj.meal.price,
+            "description": obj.meal.description,
+        }
+
+
+class ListOrderItemsAPIView(ListAPIView):
+    serializer_class = ListOrderItemSerializer
+    permission_classes = [IsAuthenticated, IsWaitressOrAdmin]
+
+    def get_queryset(self):
+        table_id = self.kwargs.get("table_id", 0)
+        table = Table.objects.filter(id=table_id).first()
+        order = table.current_order if table else None
+
+        return (
+            order.order_items.all()
+            if order else
+            OrderItem.objects.none()
+        )

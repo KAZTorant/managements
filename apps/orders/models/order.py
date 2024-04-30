@@ -50,11 +50,15 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
     order = models.ForeignKey(
-        Order, on_delete=models.CASCADE, related_name="order_items")
+        Order,
+        on_delete=models.CASCADE,
+        related_name="order_items"
+    )
     meal = models.ForeignKey(Meal, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
     is_prepared = models.BooleanField(
-        default=False)  # To track preparation status
+        default=False
+    )
 
     def __str__(self):
         return f"{self.quantity} x {self.meal.name} | Qiymət: {self.quantity*self.meal.price}"

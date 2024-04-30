@@ -30,14 +30,18 @@ class Table(DateTimeModel, models.Model):
 
     @property
     def waitress(self) -> User:
-        order = self.orders.filter(is_paid=False).first()
+        order = self.current_order
         if order:
             return order.waitress
         return User.objects.none()
 
     @property
     def total_price(self):
-        order = self.orders.filter(is_paid=False).first()
+        order = self.current_order
         if order:
             return order.total_price
         return 0
+
+    @property
+    def current_order(self):
+        return self.orders.filter(is_paid=False).first()
