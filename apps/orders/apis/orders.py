@@ -19,9 +19,11 @@ from apps.tables.models import Table
 from apps.users.permissions import IsWaitress
 from apps.users.permissions import IsWaitressOrAdmin
 from apps.users.permissions import IsAdmin
-
+from apps.users.models import User
 
 # CreateOrderAPI
+
+
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
@@ -282,4 +284,37 @@ class ListOrderItemsAPIView(ListAPIView):
         )
 
 
-#
+# Close the table order
+class CloseTableOrderAPIView(APIView):
+
+    def delete(self, request, table_id):
+
+        table = Table.objects.filter(id=table_id).first()
+        if not table:
+            return Response(
+                {
+                    "errors": 'Masa tapılmadı.'
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        order: Order = table.current_order
+
+        if not order:
+            return Response(
+                {"success": False, "message": "Masada sifariş yoxdur."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        if request.user.type == 'admin' or (request.user.type == 'waitress' and request.user == order.waitress):
+            order.is_paid = True
+            order.save()
+            return Response(
+                {"success": True, "message": "Sifariş uğurla bağlamşdır."},
+                status=status.HTTP_200_OK
+            )
+
+        return Response(
+            {"success": False, "message": "Sifariş bağlamaq mümkün deyil."},
+            status=status.HTTP_403_FORBIDDEN
+        )
