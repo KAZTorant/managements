@@ -5,3 +5,5 @@ from apps.orders.apis.orders import ListOrderItemsAPIView
 from apps.orders.apis.orders import CloseTableOrderAPIView
 from apps.orders.apis.managers import DeleteOrderItemAPIView
 from apps.orders.apis.managers import ChangeOrderTableAPIView
+from apps.orders.apis.managers import ListWaitressAPIView
+from apps.orders.apis.managers import ChangeWaitressAPIView

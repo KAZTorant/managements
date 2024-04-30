@@ -7,6 +7,8 @@ from apps.orders.apis import DeleteOrderItemAPIView
 from apps.orders.apis import ListOrderItemsAPIView
 from apps.orders.apis import ChangeOrderTableAPIView
 from apps.orders.apis import CloseTableOrderAPIView
+from apps.orders.apis import ListWaitressAPIView
+from apps.orders.apis import ChangeWaitressAPIView
 
 urlpatterns = [
     path(
@@ -49,5 +51,17 @@ urlpatterns = [
         'close-table-for-order/<int:table_id>/',
         CloseTableOrderAPIView.as_view(),
         name='close-table-for-order'
+    ),
+
+    path(
+        'list-waitress',
+        ListWaitressAPIView.as_view(),
+        name='list-waitress'
+    ),
+
+    path(
+        'change-waitress/<int:table_id>/',
+        ChangeWaitressAPIView.as_view(),
+        name='change-waitress'
     ),
 ]
