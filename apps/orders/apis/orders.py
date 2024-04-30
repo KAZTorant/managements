@@ -246,75 +246,6 @@ class AddMultipleOrderItemsAPIView(APIView):
             return None, Response({'error': f'Meal with ID {meal_id} not found'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-# DeleteOrderItemAPIView
-class DeleteOrderItemSerializer(serializers.Serializer):
-    meal_id = serializers.IntegerField(
-        help_text="ID of the meal to decrease quantity from")
-    quantity = serializers.IntegerField(
-        help_text="Quantity to decrease", min_value=1, default=1)
-
-    def validate_meal_id(self, value):
-        # Ensure the meal exists
-        try:
-            Meal.objects.get(id=value)
-        except Meal.DoesNotExist:
-            raise serializers.ValidationError("Meal not found")
-        return value
-
-    def save(self):
-        meal_id = self.validated_data.get('meal_id', 0)
-        quantity_to_decrease = self.validated_data.get('quantity', 0)
-        order = self.context['order']
-
-        # Try to find the order item within the order
-        order_item = OrderItem.objects.filter(
-            order=order, meal_id=meal_id).first()
-        if not order_item:
-            raise serializers.ValidationError("Order item not found")
-
-        # Decrease quantity or delete if necessary
-        new_quantity = order_item.quantity - quantity_to_decrease
-        if new_quantity > 0:
-            OrderItem.objects.filter(id=order_item.id).update(
-                quantity=new_quantity)
-        else:
-            order_item.delete()
-
-        order.update_total_price()
-
-
-class DeleteOrderItemAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsWaitressOrAdmin]
-
-    @swagger_auto_schema(
-        operation_description="Decrease the quantity or delete an item from an existing unpaid order for the specified table.",
-        request_body=DeleteOrderItemSerializer,
-        responses={204: 'Item quantity updated or item deleted successfully',
-                   404: 'Order or item not found, or payment already made',
-                   400: 'Invalid data'}
-    )
-    def delete(self, request, table_id):
-        # Check if there is an existing unpaid order and if it belongs to the user
-        order = request.user.orders.filter(
-            table__id=table_id,
-            is_paid=False
-        ).first()
-
-        if not order:
-            return Response(
-                {'error': 'Order not found or payment has been made already.'},
-                status=status.HTTP_404_NOT_FOUND
-            )
-
-        # Deserialize data
-        serializer = DeleteOrderItemSerializer(
-            data=request.data, context={'order': order})
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 # Orders List view
 class ListOrderItemSerializer(serializers.ModelSerializer):
 
@@ -349,3 +280,6 @@ class ListOrderItemsAPIView(ListAPIView):
             if order else
             OrderItem.objects.none()
         )
+
+
+#

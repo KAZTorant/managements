@@ -5,6 +5,7 @@ from apps.orders.apis import AddOrderItemAPIView
 from apps.orders.apis import AddMultipleOrderItemsAPIView
 from apps.orders.apis import DeleteOrderItemAPIView
 from apps.orders.apis import ListOrderItemsAPIView
+from apps.orders.apis import ChangeOrderTableAPIView
 
 urlpatterns = [
     path(
@@ -36,4 +37,10 @@ urlpatterns = [
         ListOrderItemsAPIView.as_view(),
         name='list-order-itemsm'
     ),
+
+    path(
+        'change-table-for-order/<int:table_id>/',
+        ChangeOrderTableAPIView.as_view(),
+        name='change-table-for-order'
+    )
 ]
