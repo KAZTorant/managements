@@ -172,6 +172,7 @@ class ListWaitressAPIView(ListAPIView):
 
 # Change waitress
 class ChangeWaitressAPIView(APIView):
+    permission_classes = [IsAuthenticated, IsAdmin]
 
     @swagger_auto_schema(
         operation_description="Change an order's assigned waitress to the table.",
