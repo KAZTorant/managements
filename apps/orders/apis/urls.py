@@ -12,55 +12,55 @@ from apps.orders.apis import ChangeWaitressAPIView
 
 urlpatterns = [
     path(
-        'create/<int:table_id>/',
+        '<int:table_id>/create/',
         CreateOrderAPIView.as_view(),
         name='create-order'
     ),
 
     path(
-        'add-order-item/<int:table_id>/',
+        '<int:table_id>/add-order-item/',
         AddOrderItemAPIView.as_view(),
         name='add-order-item'
     ),
 
     path(
-        'add-multiple-order-items/<int:table_id>/',
+        '<int:table_id>/add-multiple-order-items/',
         AddMultipleOrderItemsAPIView.as_view(),
         name='add-multiple-order-item'
     ),
 
     path(
-        'delete-order-item/<int:table_id>/',
+        '<int:table_id>/delete-order-item/',
         DeleteOrderItemAPIView.as_view(),
         name='delete-order-item'
     ),
 
     path(
-        'list-order-items/<int:table_id>/',
+        '<int:table_id>/list-order-items/',
         ListOrderItemsAPIView.as_view(),
         name='list-order-itemsm'
     ),
 
     path(
-        'change-table-for-order/<int:table_id>/',
+        '<int:table_id>/change-table-for-order/',
         ChangeOrderTableAPIView.as_view(),
         name='change-table-for-order'
     ),
 
     path(
-        'close-table-for-order/<int:table_id>/',
+        '<int:table_id>/close-table-for-order/',
         CloseTableOrderAPIView.as_view(),
         name='close-table-for-order'
     ),
 
     path(
-        'list-waitress',
+        'list-waitress/',
         ListWaitressAPIView.as_view(),
         name='list-waitress'
     ),
 
     path(
-        'change-waitress/<int:table_id>/',
+        '<int:table_id>/change-waitress/',
         ChangeWaitressAPIView.as_view(),
         name='change-waitress'
     ),

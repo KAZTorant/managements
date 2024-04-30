@@ -31,6 +31,7 @@ class MealSerializer(serializers.ModelSerializer):
             "id",
             "name",
             "description",
+            "price"
         )
 
 
