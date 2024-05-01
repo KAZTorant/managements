@@ -1,3 +1,4 @@
+import os
 import requests
 
 from rest_framework.response import Response
@@ -10,7 +11,7 @@ from apps.tables.models import Table
 
 
 class PrinterService:
-    PRINTER_URL = "http://localhost:8000/print"
+    PRINTER_URL = os.environ.get("PRINTER_URL", "http://localhost:8000/print")
 
     @staticmethod
     def _generate_header(order):
