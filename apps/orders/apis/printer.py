@@ -11,7 +11,10 @@ from apps.tables.models import Table
 
 
 class PrinterService:
-    PRINTER_URL = os.environ.get("PRINTER_URL", "http://localhost:8000/print")
+    PRINTER_URL = os.environ.get(
+        "PRINTER_URL",
+        "http://localhost:3000/print/linux"
+    )
 
     @staticmethod
     def _generate_header(order):
@@ -58,11 +61,14 @@ class PrinterService:
         header = PrinterService._generate_header(order)
         body, total = PrinterService._generate_body(order.order_items.all())
         footer = PrinterService._generate_footer(total)
-        return header + body + footer
+        return f"\n{header}{body}{footer}\n"
 
     def send_to_printer(self, text):
-        data = {"text": text}
-        response = requests.post(self.PRINTER_URL, json=data)
+        response = requests.post(
+            self.PRINTER_URL,
+            data=text,
+            headers={"Content-Type": "text/plain"}
+        )
         return response
 
     def soft_print_order(self, text):
@@ -122,15 +128,16 @@ class PrintCheckAPIView(APIView):
         table = Table.objects.filter(id=table_id).first()
         if not table:
             return Response({"error": "Masa tapılmadı."}, status=status.HTTP_404_NOT_FOUND)
-
-        if not table.current_order:
+        order = table.current_order
+        if not order:
             return Response({"error": "Masa üçün sifariş tapılmadı."}, status=status.HTTP_404_NOT_FOUND)
 
         if table.can_print_check():
             return Response({"error": "Masa üçün çek print etmək mümkündür."}, status=status.HTTP_404_NOT_FOUND)
 
-        table.current_order.is_check_printed = False
-        table.current_order.save()
+        order.is_check_printed = False
+        order.save()
+        table.save()
 
         return Response({"success": True, "message": "Masa üçün yenidən çek print etmək mümkündür."}, status=status.HTTP_200_OK)
 
