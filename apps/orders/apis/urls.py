@@ -9,6 +9,7 @@ from apps.orders.apis import ChangeOrderTableAPIView
 from apps.orders.apis import CloseTableOrderAPIView
 from apps.orders.apis import ListWaitressAPIView
 from apps.orders.apis import ChangeWaitressAPIView
+from apps.orders.apis import PrintCheckAPIView
 
 urlpatterns = [
     path(
@@ -63,5 +64,11 @@ urlpatterns = [
         '<int:table_id>/change-waitress/',
         ChangeWaitressAPIView.as_view(),
         name='change-waitress'
+    ),
+
+    path(
+        '<int:table_id>/print-check/',
+        PrintCheckAPIView.as_view(),
+        name='print-check'
     ),
 ]

@@ -262,6 +262,7 @@ class ListOrderItemSerializer(serializers.ModelSerializer):
 
     def get_meal(self, obj: OrderItem):
         return {
+            "id": obj.meal.id,
             "name": obj.meal.name,
             "price": obj.meal.price,
             "description": obj.meal.description,
@@ -283,8 +284,14 @@ class ListOrderItemsAPIView(ListAPIView):
             OrderItem.objects.none()
         )
 
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
+
+        return response
 
 # Close the table order
+
+
 class CloseTableOrderAPIView(APIView):
 
     def delete(self, request, table_id):

@@ -49,3 +49,19 @@ class Table(DateTimeModel, models.Model):
     @property
     def assignable_table(self):
         return not self.orders.filter(is_paid=False).exists()
+
+    def can_print_check(self):
+        """
+        Determines if the table has an active order 
+        that hasn't had the check printed yet.
+
+        Returns:
+            can_print (bool): True if there is an active, 
+            unpaid order with an unprinted check, False otherwise.
+        """
+        active_order = self.current_order
+        return (
+            active_order is not None and
+            not active_order.is_check_printed and
+            not active_order.is_paid
+        )
