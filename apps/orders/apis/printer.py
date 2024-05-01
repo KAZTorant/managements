@@ -22,7 +22,7 @@ class PrinterService:
     def _generate_header(order):
         """Generates the header section of the receipt."""
         return (
-            f"Tarix: {order.created_at.strftime('%d.%m.%Y %H:%M:%S')}\n"
+            f"Çek Tarixi: {datetime.now().strftime('%d.%m.%Y %H:%M:%S')}\n"
             f"Ofisiant: {order.waitress.get_full_name() if order.waitress else 'N/A'}\n"
             f"Zal: {order.table.room.name if order.table and order.table.room else 'N/A'} "
             f"{order.table.number if order.table else 'N/A'}\n"
@@ -52,7 +52,6 @@ class PrinterService:
             f"Ümumi məbləğ: {total:,.2f} AZN\n"
             "\n"
             "Nuş Olsun!\nTəşəkkür edirik!\n"
-            f"ÇeK Tarixi: {datetime.now().strftime('%d.%m.%Y %H:%M:%S')}\n"
         )
 
     @staticmethod
