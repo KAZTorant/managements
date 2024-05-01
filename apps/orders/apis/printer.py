@@ -9,6 +9,8 @@ from rest_framework.permissions import IsAuthenticated
 from apps.users.permissions import IsAdmin
 from apps.tables.models import Table
 
+from datetime import datetime
+
 
 class PrinterService:
     PRINTER_URL = os.environ.get(
@@ -24,7 +26,7 @@ class PrinterService:
             f"Ofisiant: {order.waitress.get_full_name() if order.waitress else 'N/A'}\n"
             f"Zal: {order.table.room.name if order.table and order.table.room else 'N/A'} "
             f"{order.table.number if order.table else 'N/A'}\n"
-            + "-" * 20 + "\n"
+            + "-" * 25 + "\n"
         )
 
     @staticmethod
@@ -45,11 +47,12 @@ class PrinterService:
     def _generate_footer(total):
         """Generates the footer section of the receipt."""
         return (
-            "-" * 20 + "\n"
+            "-" * 25 + "\n"
             "\n"
             f"Ümumi məbləğ: {total:,.2f} AZN\n"
             "\n"
             "Nuş Olsun!\nTəşəkkür edirik!\n"
+            f"ÇeK Tarixi: {datetime.now().strftime('%d.%m.%Y %H:%M:%S')}\n"
         )
 
     @staticmethod
@@ -92,8 +95,8 @@ class PrinterService:
                 return False, "Aktiv sifariş tapılmadı."
 
             receipt_text = self.generate_receipt_text(order)
-
-            response = self.send_to_printer(receipt_text)
+            print(receipt_text)
+            # self.send_to_printer(receipt_text)
             order.is_check_printed = True
             order.save()
             return True, "Çek uğurla print edildi"
