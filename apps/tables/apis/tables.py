@@ -8,6 +8,7 @@ from rest_framework import serializers
 class TableSerializer(serializers.ModelSerializer):
 
     waitress = serializers.SerializerMethodField()
+    print_check = serializers.SerializerMethodField()
 
     class Meta:
         model = Table
@@ -17,6 +18,7 @@ class TableSerializer(serializers.ModelSerializer):
             "room",
             "waitress",
             "total_price",
+            "print_check",
         )
 
     def get_waitress(self, obj: Table):
@@ -30,6 +32,9 @@ class TableSerializer(serializers.ModelSerializer):
             "name": obj.waitress.get_full_name(),
             "id": obj.waitress.id,
         }
+
+    def get_print_check(self, obj: Table):
+        return obj.current_order.is_check_printed if obj.current_order else False
 
 
 class RoomSerializer(serializers.ModelSerializer):
