@@ -123,6 +123,10 @@ class AddOrderItemAPIView(APIView):
             is_paid=False
         ).first()
 
+        if request.user.type == "admin":
+            table = Table.objects.filter(id=table_id).first()
+            order = table.current_order if table else None
+
         if not order:
             return Response(
                 {'error': 'Order not found or payment has been made already.'},
@@ -198,6 +202,11 @@ class AddMultipleOrderItemsAPIView(APIView):
     def get_order(self, user, table_id):
         """Retrieve and validate the order for the given table and user."""
         order = user.orders.filter(table__id=table_id, is_paid=False).first()
+
+        if user.type == "admin":
+            table = Table.objects.filter(id=table_id).first()
+            order = table.current_order if table else None
+
         if not order:
             return Response(
                 {'error': 'Order not found or payment has been made already.'},
