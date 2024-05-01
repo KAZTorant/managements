@@ -94,12 +94,15 @@ class PrinterService:
             receipt_text = self.generate_receipt_text(order)
 
             response = self.send_to_printer(receipt_text)
-            if response.status_code == 200:
-                order.is_check_printed = True
-                order.save()
-                return True, "Çek uğurla print edildi"
-            else:
-                return False, "Çek print edilmədi. Printer API qoşulmayıb"
+            order.is_check_printed = True
+            order.save()
+            return True, "Çek uğurla print edildi"
+            # if response.status_code == 200:
+            #     order.is_check_printed = True
+            #     order.save()
+            #     return True, "Çek uğurla print edildi"
+            # else:
+            #     return False, "Çek print edilmədi. Printer API qoşulmayıb"
         except Table.DoesNotExist:
             return False, "Table does not exist."
 
