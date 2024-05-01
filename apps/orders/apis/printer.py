@@ -24,7 +24,7 @@ class PrinterService:
             f"Ofisiant: {order.waitress.get_full_name() if order.waitress else 'N/A'}\n"
             f"Zal: {order.table.room.name if order.table and order.table.room else 'N/A'} "
             f"{order.table.number if order.table else 'N/A'}\n"
-            + "-" * 24 + "\n"
+            + "-" * 20 + "\n"
         )
 
     @staticmethod
@@ -37,7 +37,7 @@ class PrinterService:
             price = item.meal.price
             line_total = quantity * price
             body.append(
-                f"{index}. {name:.<10} {quantity} x {price:,.2f} = {line_total:,.2f}\n"
+                f"{index}. {name:.<9} {quantity} x {price:,.2f} = {line_total:,.2f}\n"
             )
         return ''.join(body), sum(item.quantity * item.meal.price for item in items)
 
@@ -45,7 +45,7 @@ class PrinterService:
     def _generate_footer(total):
         """Generates the footer section of the receipt."""
         return (
-            "-" * 24 + "\n"
+            "-" * 20 + "\n"
             "\n"
             f"Ümumi məbləğ: {total:,.2f} AZN\n"
             "\n"
