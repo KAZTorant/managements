@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     # 3rd party apps
     'drf_yasg',
     'corsheaders',
+    'logentry_admin',
 ]
 
 MIDDLEWARE = [

@@ -32,6 +32,10 @@ class Order(models.Model):
     total_price = models.DecimalField(
         default=0, max_digits=10, decimal_places=2)
 
+    class Meta:
+        verbose_name = "Sifariş"
+        verbose_name_plural = "Sifarişlər"
+
     def __str__(self):
         return f"Order {self.id} for {self.table}"
 
@@ -59,6 +63,10 @@ class OrderItem(models.Model):
     is_prepared = models.BooleanField(
         default=False
     )
+
+    class Meta:
+        verbose_name = "Sifariş məhsulu"
+        verbose_name_plural = "Sifariş məhsulları"
 
     def __str__(self):
         return f"{self.quantity} x {self.meal.name} | Qiymət: {self.quantity*self.meal.price}"

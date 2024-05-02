@@ -11,6 +11,10 @@ class Room(DateTimeModel, models.Model):
     description = models.TextField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
 
+    class Meta:
+        verbose_name = "Otaq"
+        verbose_name_plural = "Otaqlar"
+
     def __str__(self):
         return self.name
 
@@ -24,6 +28,10 @@ class Table(DateTimeModel, models.Model):
         on_delete=models.SET_NULL,
         null=True
     )
+
+    class Meta:
+        verbose_name = "Stol"
+        verbose_name_plural = "Stollar"
 
     def __str__(self):
         return f"{self.number} | Ərazi {self.room.name} "
