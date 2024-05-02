@@ -60,7 +60,7 @@ class TableDetailSerializer(serializers.ModelSerializer):
     def get_waitress(self, obj: Table):
         if not obj.waitress:
             return {
-                "name": "",
+                "name": self.context['user'].get_full_name(),
                 "id": 0,
             }
 
@@ -111,7 +111,10 @@ class TableDetailAPIView(APIView):
                 status=status.HTTP_404_NOT_FOUND
             )
 
-        serializer = TableDetailSerializer(instance=table)
+        serializer = TableDetailSerializer(
+            instance=table,
+            context={"user": request.user}
+        )
 
         return Response(
             data=serializer.data,
