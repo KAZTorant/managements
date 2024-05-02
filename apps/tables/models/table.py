@@ -12,8 +12,8 @@ class Room(DateTimeModel, models.Model):
     is_active = models.BooleanField(default=True)
 
     class Meta:
-        verbose_name = "Otaq"
-        verbose_name_plural = "Otaqlar"
+        verbose_name = "Zal"
+        verbose_name_plural = "Zallar"
 
     def __str__(self):
         return self.name
