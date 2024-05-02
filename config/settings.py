@@ -10,8 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
-from pathlib import Path
 
+import os
+from pathlib import Path
+from dotenv import load_dotenv
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -26,7 +29,6 @@ SECRET_KEY = 'django-insecure-m5t0j_%cj*lz*#8jlrq$5ua4a4u-9zvh7%9@!4r*3acu3n1r8o
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
-
 
 # Application definition
 
@@ -183,3 +185,8 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
     'X-PIN',
 ]
+
+PRINTER_URL = os.environ.get(
+    "PRINTER_URL",
+    "http://localhost:3000/print/windows"
+)

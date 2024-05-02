@@ -7,3 +7,4 @@ django-cors-headers==4.3.1
 drf-yasg
 django-logentry-admin
 django-jazzmin==2.6.0
+python-dotenv

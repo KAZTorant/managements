@@ -2,10 +2,46 @@ from apps.tables.models import Table
 from apps.tables.models import Room
 
 from rest_framework.generics import ListAPIView
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
 from rest_framework import serializers
+from rest_framework import status
 
 
 class TableSerializer(serializers.ModelSerializer):
+
+    waitress = serializers.SerializerMethodField()
+    print_check = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Table
+        fields = (
+            "id",
+            "number",
+            "room",
+            "waitress",
+            "total_price",
+            "print_check",
+        )
+
+    def get_waitress(self, obj: Table):
+        if not obj.waitress:
+            return {
+                "name": "",
+                "id": 0,
+            }
+
+        return {
+            "name": obj.waitress.get_full_name(),
+            "id": obj.waitress.id,
+        }
+
+    def get_print_check(self, obj: Table):
+        return obj.current_order.is_check_printed if obj.current_order else False
+
+
+class TableDetailSerializer(serializers.ModelSerializer):
 
     waitress = serializers.SerializerMethodField()
     print_check = serializers.SerializerMethodField()
@@ -62,3 +98,22 @@ class RoomAPIView(ListAPIView):
 
     def get_queryset(self):
         return Room.objects.filter(is_active=True)
+
+
+class TableDetailAPIView(APIView):
+
+    def get(self, request, table_id):
+        table = Table.objects.filter(id=table_id).first()
+
+        if not table:
+            return Response(
+                {},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        serializer = TableDetailSerializer(instance=table)
+
+        return Response(
+            data=serializer.data,
+            status=status.HTTP_200_OK
+        )

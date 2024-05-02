@@ -9,7 +9,6 @@ from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-from django.db.models import F
 from django.db import transaction
 
 from drf_yasg.utils import swagger_auto_schema
@@ -17,7 +16,8 @@ from drf_yasg import openapi
 from apps.tables.models import Table
 
 from apps.users.permissions import IsWaitressOrOrCapitaonOrAdmin
-from apps.users.permissions import IsWaitressOrAdmin
+
+from django.db import transaction
 
 
 class CheckOrderAPIView(APIView):
@@ -92,39 +92,42 @@ class OrderItemSerializer(serializers.ModelSerializer):
         return value
 
     def create(self, validated_data):
-        meal = validated_data.pop('meal', None)
-        meal_id = meal.get("id", 0)
+        with transaction.atomic():
+            # Extract meal details and fetch the meal instance
+            meal_data = validated_data.pop('meal', None)
+            meal_id = meal_data.get("id", 0)
+            meal = Meal.objects.filter(id=meal_id).first()
 
-        # Default to 1 if not specified
-        quantity = validated_data.get('quantity', 1)
+            # Default to 1 if not specified
+            quantity = validated_data.get('quantity', 1)
 
-        meal = Meal.objects.get(id=meal_id)
-        order = Order.objects.get(id=self.context['order_id'])
+            # Fetch the order instance and lock it
+            order = Order.objects.select_for_update().get(
+                id=self.context['order_id'])
 
-        # Check if the order item already exists
-        order_item, created = OrderItem.objects.get_or_create(
-            meal=meal,
-            order=order,
-            defaults={
-                'quantity': quantity,
-                'price': meal.price*quantity
-            }
-        )
+            # Attempt to get or create the order item
+            order_item, created = OrderItem.objects.get_or_create(
+                meal=meal,
+                order=order,
+                defaults={
+                    'quantity': quantity,
+                    'price': meal.price * quantity
+                }
+            )
 
-        # If the order item was not created, it means it already exists, so update the quantity
-        if not created:
-            orderItem = OrderItem.objects.filter(id=order_item.id).first()
-            orderItem.quantity = orderItem.quantity + quantity
-            orderItem.price = orderItem.price + quantity * orderItem.meal.price
-            orderItem.save()
+            # If the order item was not created, it means it already exists, so update the quantity
+            if not created:
+                # Since we're in a transaction block with select_for_update, we can safely update
+                order_item.quantity += quantity
+                order_item.price += meal.price * quantity
+                order_item.save()
 
-        # Refresh from database to get updated quantity if it was updated
-        order_item.refresh_from_db()
+            # Update the total price of the order
+            order.update_total_price()
 
-        order.update_total_price()
+            # Ensure changes are persisted and visible outside this function
+            order_item.refresh_from_db()
 
-        # Refresh from database to get updated quantity if it was updated
-        order_item.refresh_from_db()
         return order_item
 
 

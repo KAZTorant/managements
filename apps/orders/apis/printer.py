@@ -1,4 +1,4 @@
-import os
+
 import requests
 
 from rest_framework.response import Response
@@ -10,13 +10,11 @@ from apps.users.permissions import IsAdmin
 from apps.tables.models import Table
 
 from datetime import datetime
+from django.conf import settings
 
 
 class PrinterService:
-    PRINTER_URL = os.environ.get(
-        "PRINTER_URL",
-        "http://localhost:3000/print/linux"
-    )
+    PRINTER_URL = settings.PRINTER_URL
 
     @staticmethod
     def _generate_header(order):
