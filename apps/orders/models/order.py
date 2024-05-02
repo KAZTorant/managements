@@ -41,11 +41,8 @@ class Order(models.Model):
 
     def update_total_price(self):
         total_price = self.order_items.aggregate(
-            total_price=Sum(
-                F('quantity') * F('meal__price'),
-                output_field=models.DecimalField()
-            )
-        )['total_price'] or Decimal(0)
+            total=Sum('price', output_field=models.DecimalField())
+        )['total'] or Decimal(0)
         self.total_price = total_price
         self.save()
 
@@ -63,6 +60,8 @@ class OrderItem(models.Model):
     is_prepared = models.BooleanField(
         default=False
     )
+    # Adjusted for total price
+    price = models.DecimalField(max_digits=9, decimal_places=2, default=0.00)
 
     class Meta:
         verbose_name = "Sifariş məhsulu"
@@ -70,3 +69,9 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.quantity} x {self.meal.name} | Qiymət: {self.quantity*self.meal.price}"
+
+    def save(self, *args, **kwargs):
+        if not self.pk:  # Check if this is a new item being created
+            # Calculate and set total price as quantity * meal's current price
+            self.price = self.quantity * self.meal.price
+        super(OrderItem, self).save(*args, **kwargs)
