@@ -29,3 +29,8 @@ class IsWaitressOrAdmin(permissions.BasePermission):
         return request.user.type in ['waitress', 'admin']
 
 
+class IsWaitressOrOrCapitaonOrAdmin(permissions.BasePermission):
+    message = 'You must be a waitress , captain or admin to access this endpoint.'
+
+    def has_permission(self, request, view):
+        return request.user.type in ['waitress', 'admin', 'captain_waitress']

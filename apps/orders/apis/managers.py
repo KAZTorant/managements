@@ -216,3 +216,33 @@ class ChangeWaitressAPIView(APIView):
             {'error': 'Ofisiant uğurla dəyişdirildi.'},
             status=status.HTTP_200_OK
         )
+
+
+class CloseTableOrderAPIView(APIView):
+    permission_classes = [IsAuthenticated, IsAdmin]
+
+    def delete(self, request, table_id):
+
+        table = Table.objects.filter(id=table_id).first()
+        if not table:
+            return Response(
+                {
+                    "errors": 'Masa tapılmadı.'
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        order: Order = table.current_order
+
+        if not order:
+            return Response(
+                {"success": False, "message": "Masada sifariş yoxdur."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        order.is_paid = True
+        order.save()
+        return Response(
+            {"success": True, "message": "Sifariş uğurla bağlamşdır."},
+            status=status.HTTP_200_OK
+        )

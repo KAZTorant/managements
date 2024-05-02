@@ -16,10 +16,8 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from apps.tables.models import Table
 
-from apps.users.permissions import IsWaitress
+from apps.users.permissions import IsWaitressOrOrCapitaonOrAdmin
 from apps.users.permissions import IsWaitressOrAdmin
-from apps.users.permissions import IsAdmin
-from apps.users.models import User
 
 # CreateOrderAPI
 
@@ -36,7 +34,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 class CreateOrderAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsWaitressOrAdmin]
+    permission_classes = [IsAuthenticated, IsWaitressOrOrCapitaonOrAdmin]
 
     def post(self, request, table_id):
         # Check if there is an existing unpaid order for this table
@@ -108,7 +106,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
 
 class AddOrderItemAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsWaitressOrAdmin]
+    permission_classes = [IsAuthenticated, IsWaitressOrOrCapitaonOrAdmin]
 
     @swagger_auto_schema(
         operation_description="Add an item to an existing unpaid order for the specified table.",
@@ -161,7 +159,7 @@ class OrderItemOutputSerializer(serializers.Serializer):
 
 
 class AddMultipleOrderItemsAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsWaitressOrAdmin]
+    permission_classes = [IsAuthenticated, IsWaitressOrOrCapitaonOrAdmin]
 
     @swagger_auto_schema(
         operation_description="Add multiple items to an existing unpaid order for a specified table.",
@@ -280,7 +278,7 @@ class ListOrderItemSerializer(serializers.ModelSerializer):
 
 class ListOrderItemsAPIView(ListAPIView):
     serializer_class = ListOrderItemSerializer
-    permission_classes = [IsAuthenticated, IsWaitressOrAdmin]
+    permission_classes = [IsAuthenticated, IsWaitressOrOrCapitaonOrAdmin]
 
     def get_queryset(self):
         table_id = self.kwargs.get("table_id", 0)
@@ -297,40 +295,3 @@ class ListOrderItemsAPIView(ListAPIView):
         response = super().list(request, *args, **kwargs)
 
         return response
-
-# Close the table order
-
-
-class CloseTableOrderAPIView(APIView):
-
-    def delete(self, request, table_id):
-
-        table = Table.objects.filter(id=table_id).first()
-        if not table:
-            return Response(
-                {
-                    "errors": 'Masa tapılmadı.'
-                },
-                status=status.HTTP_404_NOT_FOUND
-            )
-
-        order: Order = table.current_order
-
-        if not order:
-            return Response(
-                {"success": False, "message": "Masada sifariş yoxdur."},
-                status=status.HTTP_404_NOT_FOUND
-            )
-
-        if request.user.type == 'admin' or (request.user.type == 'waitress' and request.user == order.waitress):
-            order.is_paid = True
-            order.save()
-            return Response(
-                {"success": True, "message": "Sifariş uğurla bağlamşdır."},
-                status=status.HTTP_200_OK
-            )
-
-        return Response(
-            {"success": False, "message": "Sifariş bağlamaq mümkün deyil."},
-            status=status.HTTP_403_FORBIDDEN
-        )

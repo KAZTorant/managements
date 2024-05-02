@@ -6,6 +6,7 @@ class User(AbstractUser):
 
     TYPE_CHOICES = (
         ('waitress', 'Ofisiant'),
+        ('captain_waitress', 'Kapitan Ofisiant'),
         ('admin', 'Administrator'),
         ('restaurant', 'Restaurant Sahibi'),
     )
