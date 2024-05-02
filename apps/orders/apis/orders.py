@@ -89,19 +89,26 @@ class OrderItemSerializer(serializers.ModelSerializer):
         order_item, created = OrderItem.objects.get_or_create(
             meal=meal,
             order=order,
-            defaults={'quantity': quantity}
+            defaults={
+                'quantity': quantity,
+                'price': meal.price*quantity
+            }
         )
 
         # If the order item was not created, it means it already exists, so update the quantity
         if not created:
-            OrderItem.objects.filter(id=order_item.id).update(
-                quantity=F('quantity') + quantity)
+            orderItem = OrderItem.objects.filter(id=order_item.id).first()
+            orderItem.quantity = orderItem.quantity + quantity
+            orderItem.price = orderItem.price + quantity * orderItem.meal.price
+            orderItem.save()
 
         # Refresh from database to get updated quantity if it was updated
         order_item.refresh_from_db()
 
         order.update_total_price()
 
+        # Refresh from database to get updated quantity if it was updated
+        order_item.refresh_from_db()
         return order_item
 
 

@@ -69,9 +69,3 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.quantity} x {self.meal.name} | Qiymət: {self.quantity*self.meal.price}"
-
-    def save(self, *args, **kwargs):
-        if not self.pk:  # Check if this is a new item being created
-            # Calculate and set total price as quantity * meal's current price
-            self.price = self.quantity * self.meal.price
-        super(OrderItem, self).save(*args, **kwargs)
