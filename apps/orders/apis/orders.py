@@ -121,7 +121,7 @@ class AddOrderItemAPIView(APIView):
             is_paid=False
         ).first()
 
-        if request.user.type == "admin":
+        if request.user.type in ["admin", 'captain_waitress']:
             table = Table.objects.filter(id=table_id).first()
             order = table.current_order if table else None
 
@@ -201,7 +201,7 @@ class AddMultipleOrderItemsAPIView(APIView):
         """Retrieve and validate the order for the given table and user."""
         order = user.orders.filter(table__id=table_id, is_paid=False).first()
 
-        if user.type == "admin":
+        if user.type in ["admin", 'captain_waitress']:
             table = Table.objects.filter(id=table_id).first()
             order = table.current_order if table else None
 
