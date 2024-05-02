@@ -69,8 +69,7 @@ class PrinterService:
     def send_to_printer(self, text):
         response = requests.post(
             self.PRINTER_URL,
-            data=text,
-            headers={"Content-Type": "text/plain"}
+            json={"text": text}
         )
         return response
 
@@ -94,17 +93,14 @@ class PrinterService:
                 return False, "Aktiv sifariş tapılmadı."
 
             receipt_text = self.generate_receipt_text(order)
-            print(receipt_text)
-            # self.send_to_printer(receipt_text)
-            order.is_check_printed = True
-            order.save()
-            return True, "Çek uğurla print edildi"
-            # if response.status_code == 200:
-            #     order.is_check_printed = True
-            #     order.save()
-            #     return True, "Çek uğurla print edildi"
-            # else:
-            #     return False, "Çek print edilmədi. Printer API qoşulmayıb"
+
+            response = self.send_to_printer(receipt_text)
+            if response.status_code == 200:
+                order.is_check_printed = True
+                order.save()
+                return True, "Çek uğurla print edildi"
+            else:
+                return False, "Çek print edilmədi. Printer API qoşulmayıb"
         except Table.DoesNotExist:
             return False, "Table does not exist."
 
