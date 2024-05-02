@@ -19,9 +19,25 @@ from apps.tables.models import Table
 from apps.users.permissions import IsWaitressOrOrCapitaonOrAdmin
 from apps.users.permissions import IsWaitressOrAdmin
 
+
+class CheckOrderAPIView(APIView):
+    permission_classes = [IsAuthenticated, IsWaitressOrOrCapitaonOrAdmin]
+
+    def get(self, request, table_id):
+        # Check if there is an existing unpaid order for this table
+        if Order.objects.filter(table__id=table_id, is_paid=False).exists():
+            return Response(
+                {'message': 'Sifariş yaradılıb'},
+                status=status.HTTP_200_OK
+            )
+
+        return Response(
+            {'message': 'Sifariş yoxdur.'},
+            status=status.HTTP_404_NOT_FOUND
+        )
+
+
 # CreateOrderAPI
-
-
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order

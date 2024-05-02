@@ -1,6 +1,8 @@
 from django.urls import path
 
 from apps.orders.apis import CreateOrderAPIView
+from apps.orders.apis import CheckOrderAPIView
+
 from apps.orders.apis import AddOrderItemAPIView
 from apps.orders.apis import AddMultipleOrderItemsAPIView
 from apps.orders.apis import DeleteOrderItemAPIView
@@ -12,6 +14,12 @@ from apps.orders.apis import ChangeWaitressAPIView
 from apps.orders.apis import PrintCheckAPIView
 
 urlpatterns = [
+    path(
+        '<int:table_id>/check-status/',
+        CheckOrderAPIView.as_view(),
+        name='check-table-status'
+    ),
+
     path(
         '<int:table_id>/create/',
         CreateOrderAPIView.as_view(),
