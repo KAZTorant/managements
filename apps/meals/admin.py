@@ -5,4 +5,14 @@ from apps.meals.models import MealCategory
 from django.contrib import admin
 
 admin.site.register(MealCategory)
-admin.site.register(Meal)
+
+
+class MealAdmin(admin.ModelAdmin):
+    list_display = (
+        "name",
+        "category",
+        "price",
+    )
+
+
+admin.site.register(Meal, MealAdmin)
