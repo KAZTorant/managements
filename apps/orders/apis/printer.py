@@ -40,7 +40,7 @@ class PrinterService:
             price = item.meal.price
             line_total = quantity * price
             body.append(
-                f"{index}. {name:.<9} {quantity} x {price:,.2f} = {line_total:,.2f}\n"
+                f"{index}. {name:.<6} {quantity} x {price:,.1f} = {line_total:,.1f}\n"
             )
         return ''.join(body), sum(item.quantity * item.meal.price for item in items)
 
