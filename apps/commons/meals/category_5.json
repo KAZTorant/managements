@@ -1,0 +1,106 @@
+[
+    {
+        "model": "meals.MealCategory",
+        "pk": 5,
+        "fields": {
+            "name": "Seher yemekleri",
+            "description": "A selection of breakfast items"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 5,
+            "name": "Qaymaq",
+            "price": "1.50"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 5,
+            "name": "Bal",
+            "price": "1.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 5,
+            "name": "Pendir",
+            "price": "1.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 5,
+            "name": "Pomidor-yumurta",
+            "price": "3.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 5,
+            "name": "Qayganaq",
+            "price": "2.50"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 5,
+            "name": "Qlazok",
+            "price": "2.50"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 5,
+            "name": "SEKER TOZU",
+            "price": "0.50"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 5,
+            "name": "Sosiska yumurta",
+            "price": "2.50"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 5,
+            "name": "Sosiska-pomidor-yumurta",
+            "price": "3.50"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 5,
+            "name": "Soyutma sosiska 3ed",
+            "price": "2.50"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 5,
+            "name": "Soyutma yumurta 3ed",
+            "price": "2.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 5,
+            "name": "Yaq",
+            "price": "1.00"
+        }
+    }
+]

@@ -1,0 +1,266 @@
+[
+    {
+        "model": "meals.MealCategory",
+        "pk": 8,
+        "fields": {
+            "name": "Sular",
+            "description": "A selection of drinks and water"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "ENERJI 1",
+            "price": "1.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "Akroshka bakal",
+            "price": "1.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "Akroshka Qrafin",
+            "price": "4.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "Akroshka stekan",
+            "price": "0.50"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "Ayran bakal",
+            "price": "1.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "Ayran qrafinka",
+            "price": "4.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "Ayran stekan",
+            "price": "0.50"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "Badamli (0.60)",
+            "price": "2.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "dovga stekan",
+            "price": "1.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "Dushes, terxun",
+            "price": "2.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "ENERJI 2",
+            "price": "2.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "NAR SOKU 1 lt",
+            "price": "6.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "NAR SOKU STAKAN",
+            "price": "1.50"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "PEPSI 0.5",
+            "price": "1.50"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "PEPSI 1L",
+            "price": "2.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "PEPSI 2L",
+            "price": "3.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "PEPSI BAKAL",
+            "price": "1.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "PEPSI STAKAN",
+            "price": "0.50"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "PEPSI SUSE",
+            "price": "2.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "PEPSI (banka)",
+            "price": "2.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "PORTAGAL suyu (qrafin)",
+            "price": "5.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "PORTAGAL suyu (stekan)",
+            "price": "0.50"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "QAZLI SU 05 LT",
+            "price": "1.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "QAZLI SU 1lt",
+            "price": "1.50"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "QAZSIZ 05 LT",
+            "price": "1.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "QAZSIZ SU 1LT",
+            "price": "1.50"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "Reyhan bakal",
+            "price": "1.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "Reyhan qrafin",
+            "price": "4.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "Reyhant stekan",
+            "price": "0.50"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "SARIKIZ",
+            "price": "2.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "SIRE STEKAN",
+            "price": "1.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "Tebii shireler 1L",
+            "price": "3.00"
+        }
+    }
+]

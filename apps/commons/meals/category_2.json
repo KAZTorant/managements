@@ -1,0 +1,85 @@
+[
+    
+    {
+        "model": "meals.MealCategory",
+        "pk": 2,
+        "fields": {
+            "name": "Cay sufresi",
+            "description": "A selection of items served during tea"
+        }
+    },
+    
+
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 2,
+            "name": "Limon 0.5",
+            "price": "0.50"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 2,
+            "name": "CEREZ",
+            "price": "3.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 2,
+            "name": "Murebbe",
+            "price": "5.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 2,
+            "name": "PLETKA SHOKOLAD",
+            "price": "3.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 2,
+            "name": "SHIRNIYYAT 2.5",
+            "price": "2.50"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 2,
+            "name": "SIRNIYYAT 2",
+            "price": "2.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 2,
+            "name": "SIRNIYYAT 3",
+            "price": "3.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 2,
+            "name": "SIRNIYYAT 4",
+            "price": "4.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 2,
+            "name": "XURMA",
+            "price": "2.00"
+        }
+    }
+]

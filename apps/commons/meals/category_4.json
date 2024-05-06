@@ -1,0 +1,154 @@
+[
+    {
+        "model": "meals.MealCategory",
+        "pk": 4,
+        "fields": {
+            "name": "Salatlar",
+            "description": "A selection of salads and condiments"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 4,
+            "name": "Mayonez",
+            "price": "0.50"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 4,
+            "name": "Acika",
+            "price": "1.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 4,
+            "name": "Coban salati",
+            "price": "2.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 4,
+            "name": "COBAN SALATI PENDIR",
+            "price": "2.50"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 4,
+            "name": "Goyerti",
+            "price": "1.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 4,
+            "name": "Ketchup",
+            "price": "0.50"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 4,
+            "name": "MANQAL SALATI",
+            "price": "4.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 4,
+            "name": "Mimoza salati",
+            "price": "3.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 4,
+            "name": "Paytaxt salati",
+            "price": "3.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 4,
+            "name": "PENDIR",
+            "price": "1.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 4,
+            "name": "QARPIZ",
+            "price": "2.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 4,
+            "name": "Qatiq",
+            "price": "1.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 4,
+            "name": "Sveji balaca",
+            "price": "1.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 4,
+            "name": "Sveji boyuk",
+            "price": "2.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 4,
+            "name": "TOYUQ SALATI",
+            "price": "3.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 4,
+            "name": "Toyuq salati",
+            "price": "3.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 4,
+            "name": "Turshu BALACA",
+            "price": "1.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 4,
+            "name": "Turshu Boyuk",
+            "price": "2.00"
+        }
+    }
+]
