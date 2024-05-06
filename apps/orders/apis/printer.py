@@ -83,12 +83,13 @@ class PrinterService:
 
         try:
             # Step 1: Write the text to a .txt file
-            with open(file_path, "w") as file:
+            with open(file_path, "w", encoding="utf-8") as file:
                 file.write(text)
 
             # Step 2: Send the file via multipart/form-data
             with open(file_path, "rb") as file:
                 files = {'printFile': ('temp_print.txt', file, 'text/plain')}
+                print(self.PRINTER_URL)
                 response = requests.post(
                     self.PRINTER_URL,
                     files=files
