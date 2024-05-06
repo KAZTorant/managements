@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 
-from apps.users.permissions import IsAdmin
+from apps.users.permissions import IsAdminOrOwner
 from apps.tables.models import Table
 
 from datetime import datetime
@@ -136,7 +136,7 @@ class PrinterService:
 
 
 class PrintCheckAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsAdmin]
+    permission_classes = [IsAuthenticated, IsAdminOrOwner]
 
     def post(self, request, table_id):
         if not table_id:

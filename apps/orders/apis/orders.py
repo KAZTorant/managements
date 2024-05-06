@@ -15,13 +15,14 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from apps.tables.models import Table
 
-from apps.users.permissions import IsWaitressOrOrCapitaonOrAdmin
+from apps.users.permissions import IsWaitressOrOrCapitaonOrAdminOrOwner
 
 from django.db import transaction
 
 
 class CheckOrderAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsWaitressOrOrCapitaonOrAdmin]
+    permission_classes = [IsAuthenticated,
+                          IsWaitressOrOrCapitaonOrAdminOrOwner]
 
     def get(self, request, table_id):
         # Check if there is an existing unpaid order for this table
@@ -50,7 +51,8 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 class CreateOrderAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsWaitressOrOrCapitaonOrAdmin]
+    permission_classes = [IsAuthenticated,
+                          IsWaitressOrOrCapitaonOrAdminOrOwner]
 
     def post(self, request, table_id):
         # Check if there is an existing unpaid order for this table
@@ -132,7 +134,8 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
 
 class AddOrderItemAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsWaitressOrOrCapitaonOrAdmin]
+    permission_classes = [IsAuthenticated,
+                          IsWaitressOrOrCapitaonOrAdminOrOwner]
 
     @swagger_auto_schema(
         operation_description="Add an item to an existing unpaid order for the specified table.",
@@ -185,7 +188,8 @@ class OrderItemOutputSerializer(serializers.Serializer):
 
 
 class AddMultipleOrderItemsAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsWaitressOrOrCapitaonOrAdmin]
+    permission_classes = [IsAuthenticated,
+                          IsWaitressOrOrCapitaonOrAdminOrOwner]
 
     @swagger_auto_schema(
         operation_description="Add multiple items to an existing unpaid order for a specified table.",
@@ -304,7 +308,8 @@ class ListOrderItemSerializer(serializers.ModelSerializer):
 
 class ListOrderItemsAPIView(ListAPIView):
     serializer_class = ListOrderItemSerializer
-    permission_classes = [IsAuthenticated, IsWaitressOrOrCapitaonOrAdmin]
+    permission_classes = [IsAuthenticated,
+                          IsWaitressOrOrCapitaonOrAdminOrOwner]
 
     def get_queryset(self):
         table_id = self.kwargs.get("table_id", 0)
