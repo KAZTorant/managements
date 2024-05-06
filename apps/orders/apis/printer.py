@@ -1,6 +1,6 @@
 
 import requests
-
+import json
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -67,7 +67,10 @@ class PrinterService:
     def send_to_printer(self, text):
         response = requests.post(
             self.PRINTER_URL,
-            json={"text": text}
+            json={"text": text},
+            headers={
+                "Content-Type": "application/json"
+            }
         )
         return response
 
