@@ -15,7 +15,7 @@ from django.conf import settings
 
 
 class PrinterService:
-    PRINTER_URL = "http://localhost:3000/print/linux/file"
+    PRINTER_URL = settings.PRINTER_URL
 
     @staticmethod
     def _generate_header(order):
