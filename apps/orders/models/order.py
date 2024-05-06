@@ -68,4 +68,7 @@ class OrderItem(models.Model):
         verbose_name_plural = "Sifariş məhsulları"
 
     def __str__(self):
-        return f"{self.quantity} x {self.meal.name} | Qiymət: {self.quantity*self.meal.price}"
+        try:
+            return f"{self.quantity} x {self.meal.name} | Qiymət: {self.quantity*self.meal.price}"
+        except:
+            return "Yemek Yoxdur"

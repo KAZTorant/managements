@@ -34,7 +34,7 @@ class Table(DateTimeModel, models.Model):
         verbose_name_plural = "Stollar"
 
     def __str__(self):
-        return f"{self.number} | Ərazi {self.room.name} "
+        return f"{self.number} | Ərazi {self.room.name if self.room else ''} "
 
     @property
     def waitress(self) -> User:

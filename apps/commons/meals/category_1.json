@@ -1,16 +1,8 @@
 [
-    {
-        "model": "meals.MealCategory",
-        "pk": 1,
-        "fields": {
-            "name": "1Yemekler",
-            "description": "A variety of delicious meals"
-        }
-    },
+
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "3 baci Dolma",
             "price": "5.00"
         }
@@ -18,7 +10,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "As Qara",
             "price": "5.00"
         }
@@ -26,7 +17,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "As Qara 0.5",
             "price": "3.00"
         }
@@ -34,7 +24,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Buglama",
             "price": "5.00"
         }
@@ -42,7 +31,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Buglama 0.5",
             "price": "3.00"
         }
@@ -50,7 +38,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Choban qovurma",
             "price": "5.00"
         }
@@ -58,7 +45,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Choban qovurma 0.5",
             "price": "3.00"
         }
@@ -66,7 +52,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Ciqirtma",
             "price": "5.00"
         }
@@ -74,7 +59,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Ciqirtma (0.5)",
             "price": "3.00"
         }
@@ -82,7 +66,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Ciz-biz",
             "price": "5.00"
         }
@@ -90,7 +73,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Ciz-biz 0.5",
             "price": "3.00"
         }
@@ -98,7 +80,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Dolma",
             "price": "5.00"
         }
@@ -106,7 +87,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Dolma 0.5",
             "price": "3.00"
         }
@@ -114,7 +94,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Doseme Plov",
             "price": "5.00"
         }
@@ -122,7 +101,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Doseme Plov 0.5",
             "price": "3.00"
         }
@@ -130,7 +108,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "GOBELEKLI DANA qovurma",
             "price": "5.00"
         }
@@ -138,7 +115,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "GOBELEKLI DANA qovurma 0.5",
             "price": "3.00"
         }
@@ -146,7 +122,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Imishli qovurma",
             "price": "5.00"
         }
@@ -154,7 +129,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Imishli qovurma 0.5",
             "price": "3.00"
         }
@@ -162,7 +136,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "IZ QARA",
             "price": "4.00"
         }
@@ -170,7 +143,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Jarko",
             "price": "5.00"
         }
@@ -178,7 +150,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Jarko 0.5",
             "price": "3.00"
         }
@@ -186,7 +157,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "JULYEN",
             "price": "5.00"
         }
@@ -194,7 +164,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Langet",
             "price": "4.00"
         }
@@ -202,7 +171,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "LEVENGI rulet",
             "price": "5.00"
         }
@@ -210,7 +178,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "LEVENGI toyuq0.5",
             "price": "6.00"
         }
@@ -218,7 +185,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "MANASTR",
             "price": "5.00"
         }
@@ -226,7 +192,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Nar Qovurma",
             "price": "5.00"
         }
@@ -234,7 +199,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Nar Qovurma 0.5",
             "price": "3.00"
         }
@@ -242,7 +206,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Ozbek Ashi",
             "price": "4.00"
         }
@@ -250,7 +213,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Ozbek Ashi 0.5",
             "price": "3.00"
         }
@@ -258,7 +220,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Piti",
             "price": "6.00"
         }
@@ -266,7 +227,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Qaymaqli Toyuq",
             "price": "5.00"
         }
@@ -274,7 +234,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Qaymaqli Toyuq 0.5",
             "price": "3.00"
         }
@@ -282,7 +241,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "QULYAJ (et) 0.5",
             "price": "3.00"
         }
@@ -290,7 +248,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "QULYAJ (et)",
             "price": "5.00"
         }
@@ -298,7 +255,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "QULYAJ (toyuq)",
             "price": "5.00"
         }
@@ -306,7 +262,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "QULYAJ (toyuq) 0.5",
             "price": "3.00"
         }
@@ -314,7 +269,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Sac ici (toyuq)",
             "price": "5.00"
         }
@@ -322,7 +276,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Sac ici (toyuq) 0.5",
             "price": "3.00"
         }
@@ -330,7 +283,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "SAH Plov",
             "price": "5.00"
         }
@@ -338,7 +290,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Sireli dana qovurma",
             "price": "5.00"
         }
@@ -346,7 +297,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Sireli dana qovurma 0.5",
             "price": "3.00"
         }
@@ -354,7 +304,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Tabaka 1/4",
             "price": "3.00"
         }
@@ -362,7 +311,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Tabaka Tam",
             "price": "10.00"
         }
@@ -370,7 +318,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Tabaka1/2",
             "price": "5.00"
         }
@@ -378,7 +325,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Toyuq kotlet 1ed",
             "price": "1.50"
         }
@@ -386,7 +332,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Toyuq Souzu",
             "price": "4.00"
         }
@@ -394,7 +339,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Toyuq Souzu 0.5",
             "price": "2.50"
         }
@@ -402,7 +346,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Toyuqlu Duyu",
             "price": "5.00"
         }
@@ -410,7 +353,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Toyuqlu Duyu 0.5",
             "price": "3.00"
         }
@@ -418,7 +360,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "TSONKA",
             "price": "5.00"
         }
@@ -426,7 +367,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "TSONKA 0.5",
             "price": "3.00"
         }
@@ -434,7 +374,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Tursulu Et Qovurma",
             "price": "5.00"
         }
@@ -442,7 +381,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Tursulu et qovurma 0.5",
             "price": "3.00"
         }
@@ -450,7 +388,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Tursulu Toyuq",
             "price": "5.00"
         }
@@ -458,7 +395,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 1,
             "name": "Tursulu Toyuq",
             "price": "3.00"
         }
