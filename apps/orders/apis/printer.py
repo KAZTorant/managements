@@ -89,8 +89,6 @@ class PrinterService:
             # Step 2: Send the file via multipart/form-data
             with open(file_path, "rb") as file:
                 files = {'printFile': ('temp_print.txt', file, 'text/plain')}
-
-                print(self.PRINTER_URL)
                 response = requests.post(
                     self.PRINTER_URL,
                     files=files
