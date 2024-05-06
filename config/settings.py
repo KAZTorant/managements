@@ -188,5 +188,5 @@ CORS_ALLOW_HEADERS = [
 
 PRINTER_URL = os.environ.get(
     "PRINTER_URL",
-    "http://localhost:3000/print/windows"
+    "http://localhost:3000/print/linux/file"
 )

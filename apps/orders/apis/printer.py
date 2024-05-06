@@ -1,4 +1,5 @@
 
+import os
 import requests
 import json
 from rest_framework.response import Response
@@ -14,14 +15,16 @@ from django.conf import settings
 
 
 class PrinterService:
-    PRINTER_URL = settings.PRINTER_URL
+    PRINTER_URL = "http://localhost:3000/print/linux/file"
 
     @staticmethod
     def _generate_header(order):
         """Generates the header section of the receipt."""
         return (
-            f"Çek Tarixi: {datetime.now().strftime('%d.%m.%Y %H:%M:%S')}\n"
+            f"Tarix: {datetime.now().strftime('%d.%m.%Y %H:%M:%S')}\n"
+            "\n"
             f"Ofisiant: {order.waitress.get_full_name() if order.waitress else 'N/A'}\n"
+            "\n"
             f"Zal: {order.table.room.name if order.table and order.table.room else 'N/A'} "
             f"{order.table.number if order.table else 'N/A'}\n"
             + "-" * 25 + "\n"
@@ -64,15 +67,42 @@ class PrinterService:
 
         return f"\n{header}{body}{footer}\n"
 
+    # def send_to_printer(self, text):
+    #     response = requests.post(
+    #         self.PRINTER_URL,
+    #         json={"text": text},
+    #         headers={
+    #             "Content-Type": "application/json"
+    #         }
+    #     )
+    #     return response
+
     def send_to_printer(self, text):
-        response = requests.post(
-            self.PRINTER_URL,
-            json={"text": text},
-            headers={
-                "Content-Type": "application/json"
-            }
-        )
-        return response
+        # Define the file path for the temporary .txt file
+        file_path = "apps/files/temp_print.txt"
+
+        try:
+            # Step 1: Write the text to a .txt file
+            with open(file_path, "w") as file:
+                file.write(text)
+
+            # Step 2: Send the file via multipart/form-data
+            with open(file_path, "rb") as file:
+                files = {'printFile': ('temp_print.txt', file, 'text/plain')}
+
+                print(self.PRINTER_URL)
+                response = requests.post(
+                    self.PRINTER_URL,
+                    files=files
+                )
+
+            # Return the response from the server request
+            return response
+
+        finally:
+            # Step 3: Delete the temporary file
+            if os.path.exists(file_path):
+                os.remove(file_path)
 
     def soft_print_order(self, text):
         try:
