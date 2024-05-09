@@ -150,7 +150,7 @@ class AddOrderItemAPIView(APIView):
             is_paid=False
         ).first()
 
-        if request.user.type in ["admin", 'captain_waitress']:
+        if request.user.type in ["admin", 'captain_waitress', 'restaurant']:
             table = Table.objects.filter(id=table_id).first()
             order = table.current_order if table else None
 
