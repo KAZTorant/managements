@@ -135,6 +135,122 @@ class PrinterService:
             return False, "Table does not exist."
 
 
+class PrinterServiceMarkDown:
+    PRINTER_URL = settings.PRINTER_URL
+
+    @staticmethod
+    def _generate_header_md(order):
+        """Generates the header section in Markdown."""
+        return (
+            f"# Çek\n\n"
+            f"**Tarix**: {datetime.now().strftime('%d.%m.%Y %H:%M:%S')}\n"
+            f"**Ofisiant**: {order.waitress.get_full_name() if order.waitress else 'N/A'}\n"
+            f"**Zal**: {order.table.room.name if order.table and order.table.room else 'N/A'} "
+            f"{order.table.number if order.table else 'N/A'}\n"
+            "\n---\n"
+        )
+
+    @staticmethod
+    def _generate_body_md(items):
+        """Generates the body section in Markdown format."""
+        body = []
+        total = 0
+        for index, item in enumerate(items, start=1):
+            name = item.meal.name
+            quantity = item.quantity
+            price = item.meal.price
+            line_total = quantity * price
+            total += line_total
+            body.append(
+                f"{index}. **{name}**: {quantity} × {price:,.1f} = {line_total:,.1f} AZN\n"
+            )
+        return ''.join(body), total
+
+    @staticmethod
+    def _generate_footer_md(total):
+        """Generates the footer section in Markdown."""
+        return (
+            "---\n\n"
+            f"**Ümumi**: {total:,.2f} AZN\n\n"
+            "Nuş Olsun!\nTəşəkkür edirik!\n"
+        )
+
+    @staticmethod
+    def generate_receipt_md(order):
+        """
+        Generates a Markdown-formatted receipt from an order.
+        Delegates the creation of each receipt section to helper methods.
+        """
+        header = PrinterServiceMarkDown._generate_header_md(order)
+        body, total = PrinterServiceMarkDown._generate_body_md(order.order_items.all())
+        footer = PrinterServiceMarkDown._generate_footer_md(total)
+
+        return f"\n{header}{body}{footer}\n"
+
+    def send_to_printer(self, md_text):
+        """
+        Sends the Markdown-formatted receipt directly to the printer via the configured API URL.
+        """
+        # Define the file path for the temporary .md file
+        file_path = "apps/files/temp_print.md"
+
+        try:
+            # Step 1: Write the Markdown content to a temporary .md file
+            with open(file_path, "w", encoding="utf-8") as file:
+                file.write(md_text)
+
+            # Step 2: Send the file via multipart/form-data
+            with open(file_path, "rb") as file:
+                files = {'printFile': ('temp_print.md', file, 'text/markdown')}
+                response = requests.post(
+                    self.PRINTER_URL,
+                    files=files,
+                    timeout=30
+                )
+
+            # Return the response from the server request
+            return response
+
+        finally:
+            # Step 3: Delete the temporary file
+            if os.path.exists(file_path):
+                os.remove(file_path)
+
+    def soft_print_order(self, md_text):
+        """Generate a Markdown file for local use."""
+        try:
+            file_path = "receipt.md"
+            with open(file_path, "w") as file:
+                file.write(md_text)
+            return True, file_path
+        except Exception as e:
+            return False, str(e)
+
+    def print_order_for_table(self, table_id):
+        """Generate and send a Markdown receipt for a given table to the printer."""
+        try:
+            table = Table.objects.get(pk=table_id)
+            if not table.can_print_check():
+                return False, "No active order to print or check already printed."
+
+            order = table.current_order
+            if not order:
+                return False, "Aktiv sifariş tapılmadı."
+
+            receipt_md_text = self.generate_receipt_md(order)
+
+            response = self.send_to_printer(receipt_md_text)
+            if response.status_code == 200:
+                order.is_check_printed = True
+                order.save()
+                return True, "Receipt printed successfully"
+            else:
+                return False, "Failed to print receipt. Printer API may not be connected"
+
+        except Table.DoesNotExist:
+            return False, "Table does not exist."
+
+
 class PrintCheckAPIView(APIView):
     permission_classes = [IsAuthenticated, IsAdminOrOwner]
 
@@ -143,7 +259,7 @@ class PrintCheckAPIView(APIView):
             return Response({"error": "Table ID is required."}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            printer_service = PrinterService()
+            printer_service = PrinterServiceMarkDown()
 
             success, message = printer_service.print_order_for_table(table_id)
             if success:
@@ -172,18 +288,3 @@ class PrintCheckAPIView(APIView):
         table.save()
 
         return Response({"success": True, "message": "Masa üçün yenidən çek print etmək mümkündür."}, status=status.HTTP_200_OK)
-
-    # def get(self, request, table_id):
-    #     if not table_id:
-    #         return Response({"error": "Table ID is required."}, status=status.HTTP_400_BAD_REQUEST)
-
-    #     try:
-    #         printer_service = PrinterService()
-    #         success, message = printer_service.print_order_for_table(
-    #             table_id, soft=True)
-    #         if success:
-    #             return Response({"message": message}, status=status.HTTP_200_OK)
-    #         else:
-    #             return Response({"error": message}, status=status.HTTP_400_BAD_REQUEST)
-    #     except Exception as e:
-    #         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
