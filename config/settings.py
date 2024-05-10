@@ -188,5 +188,5 @@ CORS_ALLOW_HEADERS = [
 
 PRINTER_URL = os.environ.get(
     "PRINTER_URL",
-    "http://192.168.1.90:3000/print/file/escpos"
+    "http://192.168.1.90:3000/print"
 )
