@@ -1,24 +1,16 @@
 [
     {
         "model": "meals.MealCategory",
-        "pk": 8,
+        "pk": 20,
         "fields": {
             "name": "Sular",
-            "description": "A selection of drinks and water"
+            "description": "A variety of beverages and drinks"
         }
     },
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 8,
-            "name": "ENERJI 1",
-            "price": "1.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 8,
+            "category": 20,
             "name": "Akroshka bakal",
             "price": "1.00"
         }
@@ -26,7 +18,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 8,
+            "category": 20,
             "name": "Akroshka Qrafin",
             "price": "4.00"
         }
@@ -34,7 +26,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 8,
+            "category": 20,
             "name": "Akroshka stekan",
             "price": "0.50"
         }
@@ -42,7 +34,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 8,
+            "category": 20,
             "name": "Ayran bakal",
             "price": "1.00"
         }
@@ -50,7 +42,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 8,
+            "category": 20,
             "name": "Ayran qrafinka",
             "price": "4.00"
         }
@@ -58,7 +50,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 8,
+            "category": 20,
             "name": "Ayran stekan",
             "price": "0.50"
         }
@@ -66,7 +58,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 8,
+            "category": 20,
             "name": "Badamli (0.60)",
             "price": "2.00"
         }
@@ -74,7 +66,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 8,
+            "category": 20,
             "name": "dovga stekan",
             "price": "1.00"
         }
@@ -82,7 +74,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 8,
+            "category": 20,
             "name": "Dushes, terxun",
             "price": "2.00"
         }
@@ -90,7 +82,15 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 8,
+            "category": 20,
+            "name": "ENERJI 1",
+            "price": "1.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 20,
             "name": "ENERJI 2",
             "price": "2.00"
         }
@@ -98,7 +98,15 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 8,
+            "category": 20,
+            "name": "LIPTON 2",
+            "price": "2.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 20,
             "name": "NAR SOKU 1 lt",
             "price": "6.00"
         }
@@ -106,7 +114,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 8,
+            "category": 20,
             "name": "NAR SOKU STAKAN",
             "price": "1.50"
         }
@@ -114,7 +122,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 8,
+            "category": 20,
             "name": "PEPSI 0.5",
             "price": "1.50"
         }
@@ -122,7 +130,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 8,
+            "category": 20,
             "name": "PEPSI 1L",
             "price": "2.00"
         }
@@ -130,7 +138,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 8,
+            "category": 20,
             "name": "PEPSI 2L",
             "price": "3.00"
         }
@@ -138,7 +146,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 8,
+            "category": 20,
             "name": "PEPSI BAKAL",
             "price": "1.00"
         }
@@ -146,7 +154,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 8,
+            "category": 20,
             "name": "PEPSI STAKAN",
             "price": "0.50"
         }
@@ -154,7 +162,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 8,
+            "category": 20,
             "name": "PEPSI SUSE",
             "price": "2.00"
         }
@@ -162,7 +170,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 8,
+            "category": 20,
             "name": "PEPSI (banka)",
             "price": "2.00"
         }
@@ -170,7 +178,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 8,
+            "category": 20,
             "name": "PORTAGAL suyu (qrafin)",
             "price": "5.00"
         }
@@ -178,7 +186,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 8,
+            "category": 20,
             "name": "PORTAGAL suyu (stekan)",
             "price": "0.50"
         }
@@ -186,7 +194,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 8,
+            "category": 20,
             "name": "QAZLI SU 05 LT",
             "price": "1.00"
         }
@@ -194,7 +202,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 8,
+            "category": 20,
             "name": "QAZLI SU 1lt",
             "price": "1.50"
         }
@@ -202,7 +210,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 8,
+            "category": 20,
             "name": "QAZSIZ 05 LT",
             "price": "1.00"
         }
@@ -210,7 +218,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 8,
+            "category": 20,
             "name": "QAZSIZ SU 1LT",
             "price": "1.50"
         }
@@ -218,7 +226,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 8,
+            "category": 20,
             "name": "Reyhan bakal",
             "price": "1.00"
         }
@@ -226,7 +234,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 8,
+            "category": 20,
             "name": "Reyhan qrafin",
             "price": "4.00"
         }
@@ -234,7 +242,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 8,
+            "category": 20,
             "name": "Reyhant stekan",
             "price": "0.50"
         }
@@ -242,7 +250,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 8,
+            "category": 20,
             "name": "SARIKIZ",
             "price": "2.00"
         }
@@ -250,7 +258,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 8,
+            "category": 20,
             "name": "SIRE STEKAN",
             "price": "1.00"
         }
@@ -258,7 +266,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 8,
+            "category": 20,
             "name": "Tebii shireler 1L",
             "price": "3.00"
         }
