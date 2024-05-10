@@ -1,9 +1,10 @@
 from decimal import Decimal
 from django.db import models
 from django.contrib.auth import get_user_model
+from apps.commons.models import DateTimeModel
 from apps.meals.models import Meal
 from apps.tables.models import Table
-from django.db.models import F, Sum
+from django.db.models import Sum
 
 
 User = get_user_model()
@@ -49,7 +50,7 @@ class Order(models.Model):
 # Intermediate model for Order and Meal relationship
 
 
-class OrderItem(models.Model):
+class OrderItem(DateTimeModel, models.Model):
     order = models.ForeignKey(
         Order,
         on_delete=models.CASCADE,

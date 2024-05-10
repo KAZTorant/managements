@@ -1,8 +1,10 @@
 from django.db import models
 
+from apps.commons.models import DateTimeModel
+
 
 # Model for Meal Category
-class MealCategory(models.Model):
+class MealCategory(DateTimeModel, models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
 
@@ -15,7 +17,7 @@ class MealCategory(models.Model):
 
 
 # Model for Meal
-class Meal(models.Model):
+class Meal(DateTimeModel, models.Model):
     category = models.ForeignKey(
         MealCategory,
         related_name='meals',

@@ -1,40 +1,16 @@
 [
     {
         "model": "meals.MealCategory",
-        "pk": 4,
+        "pk": 24,
         "fields": {
             "name": "Salatlar",
-            "description": "A selection of salads and condiments"
+            "description": "A variety of fresh salads and dressings"
         }
     },
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 4,
-            "name": "Mayonez",
-            "price": "0.50"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 4,
-            "name": "Acika",
-            "price": "1.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 4,
-            "name": "Coban salati",
-            "price": "2.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 4,
+            "category": 24,
             "name": "COBAN SALATI PENDIR",
             "price": "2.50"
         }
@@ -42,7 +18,23 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 4,
+            "category": 24,
+            "name": "Acika",
+            "price": "1.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 24,
+            "name": "Coban salati",
+            "price": "2.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 24,
             "name": "Goyerti",
             "price": "1.00"
         }
@@ -50,7 +42,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 4,
+            "category": 24,
             "name": "Ketchup",
             "price": "0.50"
         }
@@ -58,7 +50,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 4,
+            "category": 24,
             "name": "MANQAL SALATI",
             "price": "4.00"
         }
@@ -66,7 +58,15 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 4,
+            "category": 24,
+            "name": "Mayonez",
+            "price": "0.50"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 24,
             "name": "Mimoza salati",
             "price": "3.00"
         }
@@ -74,7 +74,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 4,
+            "category": 24,
             "name": "Paytaxt salati",
             "price": "3.00"
         }
@@ -82,7 +82,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 4,
+            "category": 24,
             "name": "PENDIR",
             "price": "1.00"
         }
@@ -90,7 +90,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 4,
+            "category": 24,
             "name": "QARPIZ",
             "price": "2.00"
         }
@@ -98,7 +98,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 4,
+            "category": 24,
             "name": "Qatiq",
             "price": "1.00"
         }
@@ -106,7 +106,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 4,
+            "category": 24,
             "name": "Sveji balaca",
             "price": "1.00"
         }
@@ -114,7 +114,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 4,
+            "category": 24,
             "name": "Sveji boyuk",
             "price": "2.00"
         }
@@ -122,7 +122,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 4,
+            "category": 24,
             "name": "TOYUQ SALATI",
             "price": "3.00"
         }
@@ -130,7 +130,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 4,
+            "category": 24,
             "name": "Toyuq salati",
             "price": "3.00"
         }
@@ -138,7 +138,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 4,
+            "category": 24,
             "name": "Turshu BALACA",
             "price": "1.00"
         }
@@ -146,7 +146,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 4,
+            "category": 24,
             "name": "Turshu Boyuk",
             "price": "2.00"
         }

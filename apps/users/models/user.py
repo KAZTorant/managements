@@ -1,8 +1,10 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+from apps.commons.models import DateTimeModel
 
-class User(AbstractUser):
+
+class User(DateTimeModel, AbstractUser):
 
     TYPE_CHOICES = (
         ('waitress', 'Ofisiant'),

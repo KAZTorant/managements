@@ -317,7 +317,7 @@ class ListOrderItemsAPIView(ListAPIView):
         order = table.current_order if table else None
 
         return (
-            order.order_items.all()
+            order.order_items.order_by('-updated_at').all()
             if order else
             OrderItem.objects.none()
         )

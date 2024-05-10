@@ -1,24 +1,24 @@
 [
     {
         "model": "meals.MealCategory",
-        "pk": 6,
+        "pk": 22,
         "fields": {
             "name": "SET Menyu",
-            "description": "A variety of sets available in the menu"
+            "description": "A selection of set menus and special combinations"
         }
     },
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 6,
-            "name": "SET 25",
+            "category": 22,
+            "name": "QREYFURT PREMIUM 25",
             "price": "25.00"
         }
     },
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 6,
+            "category": 22,
             "name": "CASKA 10",
             "price": "10.00"
         }
@@ -26,15 +26,31 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 6,
-            "name": "CASKA PREMIUM",
+            "category": 22,
+            "name": "CASKA 7",
+            "price": "7.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 22,
+            "name": "CASKA 5",
+            "price": "5.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 22,
+            "name": "CASKA PREMIUM 17",
             "price": "17.00"
         }
     },
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 6,
+            "category": 22,
             "name": "QELYAN kompaniya 1+1",
             "price": "15.00"
         }
@@ -42,7 +58,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 6,
+            "category": 22,
             "name": "QELYAN QREYFURT 15",
             "price": "15.00"
         }
@@ -50,7 +66,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 6,
+            "category": 22,
             "name": "QREYFURT 2 EDED",
             "price": "20.00"
         }
@@ -58,15 +74,15 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 6,
-            "name": "QREYFURT PREMIUM",
+            "category": 22,
+            "name": "SET 25",
             "price": "25.00"
         }
     },
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 6,
+            "category": 22,
             "name": "SET 35",
             "price": "35.00"
         }
@@ -74,7 +90,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 6,
+            "category": 22,
             "name": "SET 18",
             "price": "18.00"
         }
@@ -82,15 +98,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 6,
-            "name": "SET 7",
-            "price": "7.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 6,
+            "category": 22,
             "name": "SET 17",
             "price": "17.00"
         }
