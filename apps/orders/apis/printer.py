@@ -88,7 +88,7 @@ class PrinterService:
 
             # Step 2: Send the file via multipart/form-data
             with open(file_path, "rb") as file:
-                files = {'printFile': ('temp_print.txt', file, 'text/plain')}
+                files = {'textFile': ('temp_print.txt', file, 'text/plain')}
                 print(self.PRINTER_URL)
                 response = requests.post(
                     self.PRINTER_URL,
@@ -201,7 +201,7 @@ class PrinterServiceMarkDown:
 
             # Step 2: Send the file via multipart/form-data
             with open(file_path, "rb") as file:
-                files = {'printFile': ('temp_print.md', file, 'text/markdown')}
+                files = {'markdownFile': ('temp_print.md', file, 'text/markdown')}
                 response = requests.post(
                     self.PRINTER_URL,
                     files=files,
@@ -259,7 +259,7 @@ class PrintCheckAPIView(APIView):
             return Response({"error": "Table ID is required."}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            printer_service = PrinterServiceMarkDown()
+            printer_service = PrinterService()
 
             success, message = printer_service.print_order_for_table(table_id)
             if success:
