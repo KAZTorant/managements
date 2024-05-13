@@ -12,26 +12,28 @@ User = get_user_model()
 # Model for Order
 
 
-class Order(models.Model):
+class Order(DateTimeModel, models.Model):
     table = models.ForeignKey(
         Table,
         related_name='orders',
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        verbose_name="Stol"
     )
-    meals = models.ManyToManyField(Meal, through='OrderItem')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    is_paid = models.BooleanField(default=False)
-    is_check_printed = models.BooleanField(default=False)
+    meals = models.ManyToManyField(Meal, through='OrderItem', verbose_name="Yemək")
+    is_paid = models.BooleanField(default=False, verbose_name="Ödənilib")
+    is_check_printed = models.BooleanField(default=False, verbose_name="Çek çıxarılıb")
     waitress = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name="orders",
         blank=True,
-        null=True
+        null=True,
+        verbose_name="Ofisiant"
     )
     total_price = models.DecimalField(
-        default=0, max_digits=10, decimal_places=2)
+        default=0, max_digits=10, decimal_places=2,
+        verbose_name="Ümumi"
+        )
 
     class Meta:
         verbose_name = "Sifariş"
