@@ -126,6 +126,10 @@ class Statistics(DateTimeModel, models.Model):
 
     objects = StatisticsManager()
 
+    class Meta:
+        verbose_name = "Statistika"
+        verbose_name_plural = "Statistikalar"
+
     def __str__(self) -> str:
         if self.title == "per_waitress":
             return f"{self.waitress_info} Statistics for {self.date}"
