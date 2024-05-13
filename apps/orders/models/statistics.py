@@ -7,13 +7,14 @@ from django.db.models import Sum
 from apps.orders.models import Order
 
 import datetime, calendar
+from datetime import timedelta
 
 
 class StatisticsManager(models.Manager):
 
     def calculate_per_waitress(self, date=None):
         if not date:
-            date = timezone.localdate()  # Default to today if no date is provided
+            date = timezone.localdate() - timedelta(days=1)  # Default to today if no date is provided
         
         waitresses_orders = Order.objects.filter(
             created_at__date=date,
@@ -35,7 +36,7 @@ class StatisticsManager(models.Manager):
 
     def calculate_daily(self, date=None):
         if not date:
-            date = timezone.localdate()  # Default to today if no date is provided
+            date = timezone.localdate() - timedelta(days=1) # Default to today if no date is provided
 
         self.calculate_per_waitress(date=date)
 
@@ -59,7 +60,7 @@ class StatisticsManager(models.Manager):
 
     def calculate_monthly(self, date=None):
         if not date:
-            date = timezone.localdate()  # Default to this month if no date is provided
+            date = timezone.localdate() - timedelta(days=1) # Default to this month if no date is provided
         first_of_month = date.replace(day=1)
         last_day = date.replace(day=calendar.monthrange(date.year, date.month)[1])
 
@@ -80,7 +81,7 @@ class StatisticsManager(models.Manager):
 
     def calculate_yearly(self, date=None):
         if not date:
-            date = timezone.localdate()  # Default to this year if no date is provided
+            date = timezone.localdate() - timedelta(days=1) # Default to this year if no date is provided
         first_of_year = date.replace(month=1, day=1)
         last_month = date.month
 
@@ -99,6 +100,19 @@ class StatisticsManager(models.Manager):
             defaults={'total': yearly_total}
         )
         return yearly_stat
+
+    def delete_orders_for_statistics_day(self, date):
+        # First check if statistics exist for the day, if not calculate them
+        self.calculate_daily(date)
+
+        start_of_day = timezone.make_aware(datetime.datetime.combine(date, datetime.time.min))
+        end_of_day = timezone.make_aware(datetime.datetime.combine(date, datetime.time.max))
+
+        # Filter and delete orders within the specified range that are paid
+        orders = Order.objects.filter(created_at__range=(start_of_day, end_of_day), is_paid=True)
+        count = orders.count()  # Count orders before deletion for reporting
+        orders.delete()
+        return count  # Return the number of deleted orders for confirmation/logging
 
 
 class Statistics(DateTimeModel, models.Model):
@@ -136,16 +150,12 @@ class Statistics(DateTimeModel, models.Model):
         return f"{self.title} Statistics for {self.date}"
 
     @property
-    def day(self):
-        return self.created_at.day
-
-    @property
-    def month(self):
-        return self.created_at.month
-
-    @property
-    def year(self):
-        return self.created_at.year
+    def print_check(self):
+        return f"""
+            Tarix:{self.date.strftime('%d.%m.%Y %H:%M:%S')}
+            Məbləğ: {self.total}
+            Başlıq: {self.get_title_display()}
+        """
 
     def save(self, *args, **kwargs):
         return super().save(*args, **kwargs)
