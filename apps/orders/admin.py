@@ -1,3 +1,4 @@
+from apps.orders.apis.printer import PrinterService
 from apps.orders.models import Order
 from apps.orders.models import OrderItem
 from apps.orders.models import Statistics
@@ -66,6 +67,23 @@ class StatisticsAdmin(admin.ModelAdmin):
         Statistics.objects.calculate_yearly()
         self.message_user(request, "İllik statistika uğurla əlavə edildi.")
         return HttpResponseRedirect("../")
+
+    def z_check(self, obj):
+        Statistics.objects.delete_orders_for_statistics_day(obj.date)
+        try:
+            PrinterService().send_to_printer(text=obj.print_check)
+        except Exception as e:
+            print("Exception", e)
+            return False
+        return True
+
+    def response_change(self, request, obj):
+        if "_z-cek" in request.POST:
+            self.z_check(obj=obj)
+            self.message_user(request, "Z-Çek processed for %s." % obj.date)
+            # Optionally redirect or perform additional actions
+            return HttpResponseRedirect(".")
+        return super().response_change(request, obj)
 
 
 admin.site.register(Statistics, StatisticsAdmin)
