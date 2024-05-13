@@ -12,15 +12,13 @@ User = get_user_model()
 # Model for Order
 
 
-class Order(models.Model):
+class Order(DateTimeModel, models.Model):
     table = models.ForeignKey(
         Table,
         related_name='orders',
         on_delete=models.CASCADE
     )
     meals = models.ManyToManyField(Meal, through='OrderItem')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
     is_paid = models.BooleanField(default=False)
     is_check_printed = models.BooleanField(default=False)
     waitress = models.ForeignKey(
