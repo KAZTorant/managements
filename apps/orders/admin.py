@@ -6,6 +6,11 @@ from apps.orders.models import Statistics
 from django.contrib import admin
 from django.urls import path
 from django.http import HttpResponseRedirect
+from django.http import JsonResponse
+from django.utils import timezone
+from django.db.models import Sum
+
+import datetime
 
 
 class OrderAdmin(admin.ModelAdmin):
@@ -37,22 +42,32 @@ class StatisticsAdmin(admin.ModelAdmin):
     list_display = ('title', 'total', 'date', "waitress_info")
     change_list_template = "admin/statistics_change_list.html"
     list_filter = ("title", "date", "waitress_info")
-    
+
     def get_urls(self):
         urls = super().get_urls()
         custom_urls = [
-            path('calculate-daily/', self.admin_site.admin_view(self.calculate_daily_stats), name='orders_statistics_calculate_daily'),
-            path('calculate-monthly/', self.admin_site.admin_view(self.calculate_monthly_stats), name='orders_statistics_calculate_monthly'),
-            path('calculate-yearly/', self.admin_site.admin_view(self.calculate_yearly_stats), name='orders_statistics_calculate_yearly'),
-            path('calculate-per-waitress/', self.admin_site.admin_view(self.calculate_per_waitress_stats), name='orders_statistics_calculate_per_waitress'),
+            path('calculate-daily/', self.admin_site.admin_view(self.calculate_daily_stats),
+                 name='orders_statistics_calculate_daily'),
+            path('calculate-monthly/', self.admin_site.admin_view(self.calculate_monthly_stats),
+                 name='orders_statistics_calculate_monthly'),
+            path('calculate-yearly/', self.admin_site.admin_view(self.calculate_yearly_stats),
+                 name='orders_statistics_calculate_yearly'),
+            path('calculate-per-waitress/', self.admin_site.admin_view(
+                self.calculate_per_waitress_stats), name='orders_statistics_calculate_per_waitress'),
+            path('todays-orders/', self.admin_site.admin_view(self.todays_orders),
+                 name='orders_statistics_todays_orders'),  # New URL
+
+
+
         ]
         return custom_urls + urls
 
     def calculate_per_waitress_stats(self, request):
         Statistics.objects.calculate_per_waitress()
-        self.message_user(request, "Ofisiant statistikası uğurla əlavə edildi.")
+        self.message_user(
+            request, "Ofisiant statistikası uğurla əlavə edildi.")
         return HttpResponseRedirect("../")
-    
+
     def calculate_daily_stats(self, request):
         Statistics.objects.calculate_daily()
         self.message_user(request, "Günlük statistika uğurla əlavə edildi.")
@@ -83,7 +98,25 @@ class StatisticsAdmin(admin.ModelAdmin):
             self.message_user(request, "Z-Çek processed for %s." % obj.date)
             # Optionally redirect or perform additional actions
             return HttpResponseRedirect(".")
+
         return super().response_change(request, obj)
+
+    def todays_orders(self, request):
+        today = timezone.now().date()
+        start_of_day = timezone.make_aware(
+            datetime.datetime.combine(today, datetime.time.min))
+        end_of_day = timezone.make_aware(
+            datetime.datetime.combine(today, datetime.time.max))
+
+        paid_orders_sum = Order.objects.filter(created_at__range=(
+            start_of_day, end_of_day), is_paid=True).aggregate(total_paid=Sum('total_price'))['total_paid'] or 0
+        unpaid_orders_sum = Order.objects.filter(created_at__range=(
+            start_of_day, end_of_day), is_paid=False).aggregate(total_unpaid=Sum('total_price'))['total_unpaid'] or 0
+
+        return JsonResponse({
+            'total_paid': paid_orders_sum,
+            'total_unpaid': unpaid_orders_sum,
+        })
 
 
 admin.site.register(Statistics, StatisticsAdmin)
