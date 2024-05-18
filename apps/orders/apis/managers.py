@@ -243,7 +243,8 @@ class CloseTableOrderAPIView(APIView):
 
         try:
             printer_service = PrinterService()
-            success, message = printer_service.print_order_for_table(table_id)
+            success, message = printer_service.print_order_for_table(
+                table_id, False)
         except Exception as e:
             print("Printer error", str(e))
 

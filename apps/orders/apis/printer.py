@@ -111,10 +111,10 @@ class PrinterService:
         except Exception as e:
             return False, str(e)
 
-    def print_order_for_table(self, table_id):
+    def print_order_for_table(self, table_id, force_print=False):
         try:
             table = Table.objects.get(pk=table_id)
-            if not table.can_print_check():
+            if not table.can_print_check() and not force_print:
                 return False, "No active order to print or check already printed."
 
             order = table.current_order
@@ -181,7 +181,8 @@ class PrinterServiceMarkDown:
         Delegates the creation of each receipt section to helper methods.
         """
         header = PrinterServiceMarkDown._generate_header_md(order)
-        body, total = PrinterServiceMarkDown._generate_body_md(order.order_items.all())
+        body, total = PrinterServiceMarkDown._generate_body_md(
+            order.order_items.all())
         footer = PrinterServiceMarkDown._generate_footer_md(total)
 
         return f"\n{header}{body}{footer}\n"
@@ -200,7 +201,8 @@ class PrinterServiceMarkDown:
 
             # Step 2: Send the file via multipart/form-data
             with open(file_path, "rb") as file:
-                files = {'markdownFile': ('temp_print.md', file, 'text/markdown')}
+                files = {'markdownFile': (
+                    'temp_print.md', file, 'text/markdown')}
                 response = requests.post(
                     self.PRINTER_URL,
                     files=files,
