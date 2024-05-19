@@ -4,5 +4,9 @@
 {% block submit_buttons_bottom %}
     {{ block.super }}
     <br>
-    <input type="submit" name="_z-cek" value="{% trans 'Z-Çek' %}" class="btn btn-danger form-control" />
+    {% if object.title == "till_now" %}
+        <input type="submit" name="_z-cek-till-now" value="{% trans 'Z-Çek' %}" class="btn btn-warning form-control mt-2" />
+    {% else %}
+        <input type="submit" name="_z-cek" value="{% trans 'Z-Çek' %}" class="btn btn-warning form-control" />
+    {% endif %}
 {% endblock %}

@@ -24,7 +24,7 @@
             margin: 15% auto; /* 15% from the top and centered */
             padding: 20px;
             border: 1px solid #888;
-            width: 30%; /* Smaller width */
+            width: 50%; /* Smaller width */
             text-align: center; /* Center text */
             position: relative; /* To position the close button at bottom right */
         }
@@ -114,17 +114,41 @@
                 modal.style.display = "none";
             }
         }
+    
+        document.addEventListener('DOMContentLoaded', function() {
+            var toggleButton = document.getElementById('toggleStatisticsLinks');
+            var statisticsLinks = document.getElementById('statisticsLinks');
+
+            toggleButton.addEventListener('click', function() {
+                if (statisticsLinks.style.display === 'none' || statisticsLinks.style.display === '') {
+                    statisticsLinks.style.display = 'block';
+                } else {
+                    statisticsLinks.style.display = 'none';
+                }
+            });
+        });
+
+        function showStatisticsModal() {
+            var modalBody = document.getElementById('modal-body');
+            var linksHTML = `
+                <button onclick="location.href='{% url 'admin:orders_statistics_calculate_per_waitress' %}'" class="btn btn-primary mt-2">{% trans "Ofisiantların Hesabatı" %}</button>
+                <button onclick="location.href='{% url 'admin:orders_statistics_calculate_daily' %}'" class="btn btn-success mt-2">{% trans "Bu Günün Hesabatı" %}</button>
+                <button onclick="location.href='{% url 'admin:orders_statistics_calculate_monthly' %}'" class="btn btn-warning mt-2">{% trans "Bu Ayın Hesabatı" %}</button>
+                <button onclick="location.href='{% url 'admin:orders_statistics_calculate_yearly' %}'" class="btn btn-primary mt-2">{% trans "Bu İlin Hesabatı" %}</button>`;
+            modalBody.innerHTML = linksHTML;
+            document.getElementById('ordersModal').style.display = "block";
+        }
     </script>
 {% endblock %}
 
 {% block object-tools-items %}
-    <button type="button" class="btn btn-primary" onclick="fetchTodaysOrders()">{% trans "Günün sifarişləri" %}</button>
-    |
-    <a href="{% url 'admin:orders_statistics_calculate_per_waitress' %}" class="btn btn-primary">{% trans "Ofisiantların Nəticəsi" %}</a>
-    <a href="{% url 'admin:orders_statistics_calculate_daily' %}" class="btn btn-success">{% trans "Bu Günün Nəticəsi" %}</a>
-    <a href="{% url 'admin:orders_statistics_calculate_monthly' %}" class="btn btn-warning">{% trans "Bu Ayın Nəticəsi" %}</a>
-    <a href="{% url 'admin:orders_statistics_calculate_yearly' %}" class="btn btn-primary">{% trans "Bu İlin Nəticəsi" %}</a>
-    ||||
+    <button type="button" class="btn btn-primary" onclick="fetchTodaysOrders()">{% trans "Günün sifarişlərinə bax" %}</button>
+    <button type="button" class="btn btn-primary ml-2" onclick="location.href='{% url 'admin:orders_statistics_calculate_till_now' %}'">{% trans "Bu günə kimi olan hesabatı hazırla" %}</button>
+
+    <button class="btn btn-secondary ml-2 mr-2" type="button" onclick="showStatisticsModal()">
+        {% trans "Hesabat" %}
+    </button>
+
     {{ block.super }}
 {% endblock %}
 
@@ -136,10 +160,10 @@
         <!-- Modal content -->
         <div class="modal-content">
             <div id="modal-body">
-                <!-- Orders data will be injected here by JavaScript -->
+                <!-- Statistics links will be injected here by JavaScript -->
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary close-btn" onclick="closeModal()">Close</button>
+                <button type="button" class="btn btn-warning close-btn" onclick="closeModal()">Bağla</button>
             </div>
         </div>
     </div>

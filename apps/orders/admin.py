@@ -9,6 +9,7 @@ from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from django.utils import timezone
 from django.db.models import Sum
+from django.urls import reverse
 
 import datetime
 
@@ -46,6 +47,8 @@ class StatisticsAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super().get_urls()
         custom_urls = [
+            path('calculate-till-now/', self.admin_site.admin_view(self.calculate_till_now),
+                 name='orders_statistics_calculate_till_now'),
             path('calculate-daily/', self.admin_site.admin_view(self.calculate_daily_stats),
                  name='orders_statistics_calculate_daily'),
             path('calculate-monthly/', self.admin_site.admin_view(self.calculate_monthly_stats),
@@ -83,8 +86,24 @@ class StatisticsAdmin(admin.ModelAdmin):
         self.message_user(request, "İllik statistika uğurla əlavə edildi.")
         return HttpResponseRedirect("../")
 
+    def calculate_till_now(self, request):
+        Statistics.objects.calculate_till_now()
+        self.message_user(
+            request, "Bu günə kimi olan statistika uğurla əlavə edildi."
+        )
+        return HttpResponseRedirect("../")
+
     def z_check(self, obj):
         Statistics.objects.delete_orders_for_statistics_day(obj.date)
+        try:
+            PrinterService().send_to_printer(text=obj.print_check)
+        except Exception as e:
+            print("Exception", e)
+            return False
+        return True
+
+    def z_check_till_now(self, obj):
+        Statistics.objects.delete_orders_till_now()
         try:
             PrinterService().send_to_printer(text=obj.print_check)
         except Exception as e:
@@ -95,7 +114,14 @@ class StatisticsAdmin(admin.ModelAdmin):
     def response_change(self, request, obj):
         if "_z-cek" in request.POST:
             self.z_check(obj=obj)
-            self.message_user(request, "Z-Çek processed for %s." % obj.date)
+            self.message_user(request, "Z-Çek hazırlandı %s." % obj.date)
+            # Optionally redirect or perform additional actions
+            return HttpResponseRedirect(".")
+
+        if "_z-cek-till-now" in request.POST:
+            self.z_check_till_now(obj=obj)
+            self.message_user(
+                request, "Z-Çek bu günə kimi hazırlandı %s." % obj.date)
             # Optionally redirect or perform additional actions
             return HttpResponseRedirect(".")
 
@@ -117,6 +143,13 @@ class StatisticsAdmin(admin.ModelAdmin):
             'total_paid': paid_orders_sum,
             'total_unpaid': unpaid_orders_sum,
         })
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        obj = self.get_object(request, object_id)
+        if extra_context is None:
+            extra_context = {}
+        extra_context['object'] = obj
+        return super().change_view(request, object_id, form_url, extra_context=extra_context)
 
 
 admin.site.register(Statistics, StatisticsAdmin)
