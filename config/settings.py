@@ -96,7 +96,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-print("DB_DEFAULT", DB_DEFAULT)
 if DB_DEFAULT:
     DATABASES = {
         'default': {
