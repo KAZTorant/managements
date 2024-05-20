@@ -10,3 +10,4 @@ build
 BirC.spec
 staticfiles
 output_postgres.sql
+data.json
