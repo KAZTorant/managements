@@ -59,17 +59,8 @@ class DeleteOrderItemSerializer(serializers.Serializer):
             order_item.save()
         else:
             order_item.delete()
-
-        self.update_total_price(order)
-        print("AFTER", order.total_price)
-
-    def update_total_price(self, order):
-        total_price = order.order_items.aggregate(
-            total=Sum('price', output_field=models.DecimalField())
-        )['total'] or Decimal(0)
-        order.total_price = total_price
-        print(total_price)
-        order.save()
+        order.refresh_from_db()
+        order.update_total_price()
 
 
 class DeleteOrderItemAPIView(APIView):
