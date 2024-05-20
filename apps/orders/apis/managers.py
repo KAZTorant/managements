@@ -145,6 +145,12 @@ class DeleteOrderItemAPIViewV2(APIView):
         order.total_price = total_price
         order.save()
 
+        if not order.order_items.exists():
+            order.delete()
+            return Response(
+                {'error': 'Sifariş yoxdur və ya ödəniş edilib'},
+            )
+
         return Response({}, status=status.HTTP_200_OK)
 
 
