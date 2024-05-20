@@ -1,5 +1,6 @@
 import sqlite3
 from pathlib import Path
+
 BASE_DIR = Path(__file__).resolve().parent
 
 # SQLite database path
@@ -22,7 +23,7 @@ def convert_schema(sqlite_schema):
     return pg_schema
 
 
-with open(output_sql_file, 'w') as f:
+with open(output_sql_file, 'w', encoding='utf-8') as f:
     # Retrieve tables from SQLite database
     sqlite_cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
     tables = sqlite_cursor.fetchall()
