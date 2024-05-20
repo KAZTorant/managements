@@ -27,6 +27,10 @@ class MealCategoryAPIView(ListAPIView):
     serializer_class = MealCategorySerializer
     queryset = MealCategory.objects.all()
 
+    @method_decorator(cache_page(settings.CACHE_TIME_IN_SECONDS))
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
 
 class MealSerializer(serializers.ModelSerializer):
     class Meta:
@@ -50,6 +54,11 @@ class MealAPIView(ListAPIView):
         description="Filter meals by the meal category ID",
         type=openapi.TYPE_INTEGER
     )
+
+    @method_decorator(cache_page(settings.CACHE_TIME_IN_SECONDS))
+    @swagger_auto_schema(manual_parameters=[meal_category_id_param])
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 
     def get_queryset(self):
         meal_category_id = self.request.GET.get("meal_category_id", 0)
