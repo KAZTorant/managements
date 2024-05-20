@@ -19,6 +19,7 @@ from apps.tables.models import Table
 from apps.users.models import User
 
 from apps.users.permissions import IsAdminOrOwner, IsRestaurantOwner
+from django.db import transaction
 
 
 # DeleteOrderItemAPIView
@@ -39,22 +40,23 @@ class DeleteOrderItemSerializer(serializers.Serializer):
     def save(self):
         meal_id = self.validated_data.get('meal_id', 0)
         quantity_to_decrease = self.validated_data.get('quantity', 0)
-        order = self.context['order']
+        order: Order = self.context['order']
 
         # Try to find the order item within the order
         order_item = OrderItem.objects.filter(
-            order=order, meal_id=meal_id).first()
+            order=order, meal_id=meal_id
+        ).first()
         if not order_item:
             raise serializers.ValidationError("Order item not found")
 
         # Decrease quantity or delete if necessary
         new_quantity = order_item.quantity - quantity_to_decrease
         if new_quantity > 0:
-            OrderItem.objects.filter(id=order_item.id).update(
-                quantity=new_quantity)
+            order_item.quantity = new_quantity
+            order_item.save()
         else:
             order_item.delete()
-
+        order.refresh_from_db()
         order.update_total_price()
 
 

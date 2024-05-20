@@ -17,8 +17,6 @@ from apps.tables.models import Table
 
 from apps.users.permissions import IsWaitressOrOrCapitaonOrAdminOrOwner
 
-from django.db import transaction
-
 
 class CheckOrderAPIView(APIView):
     permission_classes = [IsAuthenticated,
