@@ -103,7 +103,7 @@ if DB_DEFAULT:
             'NAME': 'mydatabase',
             'USER': 'myuser',
             'PASSWORD': 'adminadmin',
-            'HOST': '192.168.1.93',
+            'HOST': 'localhost',
             'PORT': '5432',
         }
     }
