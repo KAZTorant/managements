@@ -103,10 +103,6 @@ class RoomAPIView(ListAPIView):
     def get_queryset(self):
         return Room.objects.filter(is_active=True)
 
-    @method_decorator(cache_page(settings.CACHE_TIME_IN_SECONDS))
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
-
 
 class TableDetailAPIView(APIView):
 
