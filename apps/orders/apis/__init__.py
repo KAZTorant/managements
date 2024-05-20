@@ -9,5 +9,6 @@ from apps.orders.apis.managers import DeleteOrderItemAPIView
 from apps.orders.apis.managers import ChangeOrderTableAPIView
 from apps.orders.apis.managers import ListWaitressAPIView
 from apps.orders.apis.managers import ChangeWaitressAPIView
+from apps.orders.apis.managers import DeleteOrderItemAPIViewV2
 
 from apps.orders.apis.printer import PrintCheckAPIView

@@ -12,6 +12,7 @@ from apps.orders.apis import CloseTableOrderAPIView
 from apps.orders.apis import ListWaitressAPIView
 from apps.orders.apis import ChangeWaitressAPIView
 from apps.orders.apis import PrintCheckAPIView
+from apps.orders.apis import DeleteOrderItemAPIViewV2
 
 urlpatterns = [
     path(
@@ -40,7 +41,7 @@ urlpatterns = [
 
     path(
         '<int:table_id>/delete-order-item/',
-        DeleteOrderItemAPIView.as_view(),
+        DeleteOrderItemAPIViewV2.as_view(),
         name='delete-order-item'
     ),
 
