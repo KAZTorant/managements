@@ -93,7 +93,7 @@ class TableAPIView(ListAPIView):
 
     def get_queryset(self):
         room_id = self.kwargs.get("room_id", None)
-        return Table.objects.filter(room__id=room_id)
+        return Table.objects.filter(room__id=room_id).order_by("-id")
 
 
 class RoomAPIView(ListAPIView):
