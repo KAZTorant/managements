@@ -113,17 +113,24 @@ class StatisticsManager(models.Manager):
         return yearly_stat
 
     def calculate_till_now(self):
-        till_now_total = Order.objects.filter(is_paid=True).aggregate(
-            Sum('total_price'))['total_price__sum'] or 0
+        orders = Order.objects.filter(is_paid=True)
+        till_now_total = orders.aggregate(
+            Sum('total_price')
+        )['total_price__sum'] or 0
 
         if not till_now_total:
-            return
+            return self
 
         till_now_stat, created = self.update_or_create(
             title='till_now',
-            date=timezone.localdate(),
-            defaults={'total': till_now_total}
+            is_z_checked=False,
+            defaults={
+                'total': till_now_total,
+                'date': timezone.localdate(),
+            }
         )
+        till_now_stat.orders.add(*orders)
+        till_now_stat.save()
         return till_now_stat
 
     def delete_orders_for_statistics_day(self, date):
@@ -141,16 +148,6 @@ class StatisticsManager(models.Manager):
         count = orders.count()  # Count orders before deletion for reporting
         orders.delete()
         return count  # Return the number of deleted orders for confirmation/logging
-
-    def delete_orders_till_now(self):
-        # Calculate the till_now statistic if it doesn't exist
-        self.calculate_till_now()
-
-        # Filter and delete all paid orders up to the current date
-        orders = Order.objects.filter(is_paid=True)
-        count = orders.count()  # Count orders before deletion for reporting
-        orders.delete()
-        return count
 
 
 class Statistics(DateTimeModel, models.Model):
@@ -177,7 +174,10 @@ class Statistics(DateTimeModel, models.Model):
         help_text="Ofisiant kodu və adı.",
         verbose_name="Ofisiant"
     )
-
+    is_z_checked = models.BooleanField(default=False)
+    orders = models.ManyToManyField(
+        Order, blank=True, related_name="statistics"
+    )
     objects = StatisticsManager()
 
     class Meta:
@@ -199,3 +199,12 @@ class Statistics(DateTimeModel, models.Model):
 
     def save(self, *args, **kwargs):
         return super().save(*args, **kwargs)
+
+    def delete_orders_till_now(self):
+        # Filter and delete all paid orders up to the current date
+        orders = self.orders.all()
+        count = orders.count()  # Count orders before deletion for reporting
+        orders.delete()
+        self.is_z_checked = True
+        self.save()
+        return count

@@ -9,7 +9,6 @@ from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from django.utils import timezone
 from django.db.models import Sum
-from django.urls import reverse
 
 import datetime
 
@@ -40,7 +39,7 @@ admin.site.register(OrderItem)
 
 
 class StatisticsAdmin(admin.ModelAdmin):
-    list_display = ('title', 'total', 'date', "waitress_info")
+    list_display = ('title', 'total', 'date', "is_z_checked")
     change_list_template = "admin/statistics_change_list.html"
     list_filter = ("title", "date", "waitress_info")
 
@@ -103,7 +102,7 @@ class StatisticsAdmin(admin.ModelAdmin):
         return True
 
     def z_check_till_now(self, obj):
-        Statistics.objects.delete_orders_till_now()
+        obj.delete_orders_till_now()
         try:
             PrinterService().send_to_printer(text=obj.print_check)
         except Exception as e:
