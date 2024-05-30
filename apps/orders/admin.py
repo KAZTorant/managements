@@ -1,19 +1,19 @@
-from apps.orders.apis.printer import PrinterService
-from apps.orders.models import Order
-from apps.orders.models import OrderItem
-from apps.orders.models import Statistics
-
 from django.contrib import admin
+from simple_history.admin import SimpleHistoryAdmin
+from simple_history.utils import get_history_model_for_model
+from apps.orders.apis.printer import PrinterService
+from apps.orders.models import Order, OrderItem, Statistics
 from django.urls import path
-from django.http import HttpResponseRedirect
-from django.http import JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse
 from django.utils import timezone
 from django.db.models import Sum
-
 import datetime
 
+# Register the Order model with SimpleHistoryAdmin
 
-class OrderAdmin(admin.ModelAdmin):
+
+@admin.register(Order)
+class OrderAdmin(SimpleHistoryAdmin):
     list_display = ('id', 'table', 'is_active_order',
                     'waitress', 'total_price', 'created_at')
     list_filter = ('is_paid', 'waitress', 'created_at')
@@ -33,9 +33,16 @@ class OrderAdmin(admin.ModelAdmin):
         queryset = super().get_queryset(request).select_related('table', 'waitress')
         return queryset
 
+# Register the OrderItem model
 
-admin.site.register(Order, OrderAdmin)
-admin.site.register(OrderItem)
+
+@admin.register(OrderItem)
+class OrderItemAdmin(admin.ModelAdmin):
+    list_display = ('order', 'meal', 'quantity', 'is_prepared', 'price')
+    list_filter = ('is_prepared',)
+    search_fields = ('order__id', 'meal__name')
+
+# Register the Statistics model
 
 
 class StatisticsAdmin(admin.ModelAdmin):
@@ -58,9 +65,6 @@ class StatisticsAdmin(admin.ModelAdmin):
                 self.calculate_per_waitress_stats), name='orders_statistics_calculate_per_waitress'),
             path('todays-orders/', self.admin_site.admin_view(self.todays_orders),
                  name='orders_statistics_todays_orders'),  # New URL
-
-
-
         ]
         return custom_urls + urls
 
@@ -88,8 +92,7 @@ class StatisticsAdmin(admin.ModelAdmin):
     def calculate_till_now(self, request):
         Statistics.objects.calculate_till_now()
         self.message_user(
-            request, "Bu günə kimi olan statistika uğurla əlavə edildi."
-        )
+            request, "Bu günə kimi olan statistika uğurla əlavə edildi.")
         return HttpResponseRedirect("../")
 
     def z_check(self, obj):
@@ -114,14 +117,12 @@ class StatisticsAdmin(admin.ModelAdmin):
         if "_z-cek" in request.POST:
             self.z_check(obj=obj)
             self.message_user(request, "Z-Çek hazırlandı %s." % obj.date)
-            # Optionally redirect or perform additional actions
             return HttpResponseRedirect(".")
 
         if "_z-cek-till-now" in request.POST:
             self.z_check_till_now(obj=obj)
             self.message_user(
                 request, "Z-Çek bu günə kimi hazırlandı %s." % obj.date)
-            # Optionally redirect or perform additional actions
             return HttpResponseRedirect(".")
 
         return super().response_change(request, obj)
@@ -152,3 +153,25 @@ class StatisticsAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Statistics, StatisticsAdmin)
+
+# Dynamically get the historical models
+HistoricalOrder = get_history_model_for_model(Order)
+HistoricalOrderItem = get_history_model_for_model(OrderItem)
+
+# Register the historical models in the admin
+
+
+@admin.register(HistoricalOrder)
+class HistoricalOrderAdmin(admin.ModelAdmin):
+    list_display = ['history_date', 'id', 'table',
+                    'is_paid', 'waitress', 'total_price', 'history_type']
+    search_fields = ['id', 'table__number', 'waitress__username']
+    list_filter = ['history_type', 'history_date', 'is_paid']
+
+
+@admin.register(HistoricalOrderItem)
+class HistoricalOrderItemAdmin(admin.ModelAdmin):
+    list_display = ['history_date', 'order', 'meal',
+                    'quantity', 'is_prepared', 'price', 'history_type']
+    search_fields = ['order__id', 'meal__name']
+    list_filter = ['history_type', 'history_date', 'is_prepared']

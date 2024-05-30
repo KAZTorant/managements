@@ -33,3 +33,4 @@ setuptools
 requests
 pyinstaller
 psycopg2-binary
+django-simple-history

@@ -6,6 +6,8 @@ from apps.meals.models import Meal
 from apps.tables.models import Table
 from django.db.models import Sum
 
+from simple_history.models import HistoricalRecords
+
 
 User = get_user_model()
 
@@ -19,9 +21,11 @@ class Order(DateTimeModel, models.Model):
         on_delete=models.CASCADE,
         verbose_name="Stol"
     )
-    meals = models.ManyToManyField(Meal, through='OrderItem', verbose_name="Yemək")
+    meals = models.ManyToManyField(
+        Meal, through='OrderItem', verbose_name="Yemək")
     is_paid = models.BooleanField(default=False, verbose_name="Ödənilib")
-    is_check_printed = models.BooleanField(default=False, verbose_name="Çek çıxarılıb")
+    is_check_printed = models.BooleanField(
+        default=False, verbose_name="Çek çıxarılıb")
     waitress = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -33,7 +37,8 @@ class Order(DateTimeModel, models.Model):
     total_price = models.DecimalField(
         default=0, max_digits=10, decimal_places=2,
         verbose_name="Ümumi"
-        )
+    )
+    history = HistoricalRecords()
 
     class Meta:
         verbose_name = "Sifariş"
@@ -65,6 +70,7 @@ class OrderItem(DateTimeModel, models.Model):
     )
     # Adjusted for total price
     price = models.DecimalField(max_digits=9, decimal_places=2, default=0.00)
+    history = HistoricalRecords()
 
     class Meta:
         verbose_name = "Sifariş məhsulu"
