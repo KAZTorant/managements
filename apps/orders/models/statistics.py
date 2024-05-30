@@ -162,7 +162,7 @@ class Statistics(DateTimeModel, models.Model):
     title = models.CharField(
         max_length=32,
         choices=TITLE_CHOICES,
-        default=TITLE_CHOICES[0][0],
+        default="daily",
         verbose_name="Başlıq"
     )
     total = models.DecimalField(
