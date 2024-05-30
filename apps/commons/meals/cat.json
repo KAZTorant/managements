@@ -2,34 +2,6 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "name": "0.50 QEPIK",
-            "price": "0.50"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "name": "BALLI CAY",
-            "price": "1.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "name": "BALLI CAYNIK",
-            "price": "5.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "name": "BILINCIQ",
-            "price": "1.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
             "name": "CAY (CAYNIK)",
             "price": "3.00"
         }
@@ -44,85 +16,22 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "name": "DONDURMA 3",
-            "price": "3.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "name": "DONDURMA 1.5",
-            "price": "1.50"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "name": "DONDURMA 2",
-            "price": "2.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "name": "DONDURMA 2.5",
-            "price": "2.50"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "name": "DONDURMA 3.5",
-            "price": "3.50"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "name": "DONDURMA 1",
-            "price": "1.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "name": "DONER",
-            "price": "2.50"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "name": "DONER BASDIRMA",
-            "price": "3.50"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "name": "GURCU XENGELI",
-            "price": "0.80"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "name": "IFTAR MENYU 11",
+            "name": "IFTAR menu",
             "price": "11.00"
         }
     },
     {
         "model": "meals.Meal",
         "fields": {
-            "name": "IFTAR MENYU 21",
-            "price": "21.00"
+            "name": "IMSAK menu",
+            "price": "7.00"
         }
     },
     {
         "model": "meals.Meal",
         "fields": {
-            "name": "LANC 9",
-            "price": "9.00"
+            "name": "LUNCH 5",
+            "price": "5.00"
         }
     },
     {
@@ -135,49 +44,7 @@
     {
         "model": "meals.Meal",
         "fields": {
-            "name": "LUNCH 7",
-            "price": "7.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "name": "PERASKI",
-            "price": "0.50"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "name": "PIZZA 2",
-            "price": "2.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "name": "SARJ APARATI",
-            "price": "0.50"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
             "name": "SERVIZ",
-            "price": "2.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "name": "XACAPUR ET",
-            "price": "2.50"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "name": "XACAPUR PENDIR",
             "price": "2.00"
         }
     },
@@ -186,6 +53,13 @@
         "fields": {
             "name": "Yemek 1",
             "price": "1.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "name": "Yemek 12",
+            "price": "12.00"
         }
     },
     {

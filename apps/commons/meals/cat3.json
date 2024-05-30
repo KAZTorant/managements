@@ -1,106 +1,82 @@
 [
     {
         "model": "meals.MealCategory",
-        "pk": 22,
+        "pk": 3,
         "fields": {
-            "name": "SET Menyu",
-            "description": "A selection of set menus and special combinations"
+            "name": "KABABLAR",
+            "description": "A variety of kebabs"
         }
     },
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 22,
-            "name": "QREYFURT PREMIUM 25",
-            "price": "25.00"
+            "category": 3,
+            "name": "ANTRIKOT kabab",
+            "price": "8.00"
         }
     },
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 22,
-            "name": "CASKA 10",
-            "price": "10.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 22,
-            "name": "CASKA 7",
+            "category": 3,
+            "name": "BASDIRMA",
             "price": "7.00"
         }
     },
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 22,
-            "name": "CASKA 5",
+            "category": 3,
+            "name": "COP toyuq",
+            "price": "2.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 3,
+            "name": "KARTOF QUYRUQ",
+            "price": "4.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 3,
+            "name": "LULE (quzu) kabab",
+            "price": "6.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 3,
+            "name": "LULE toyuq",
             "price": "5.00"
         }
     },
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 22,
-            "name": "CASKA PREMIUM 17",
-            "price": "17.00"
+            "category": 3,
+            "name": "TEREVEZ 1eded",
+            "price": "0.50"
         }
     },
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 22,
-            "name": "QELYAN kompaniya 1+1",
-            "price": "15.00"
+            "category": 3,
+            "name": "TIKE kabab",
+            "price": "7.00"
         }
     },
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 22,
-            "name": "QELYAN QREYFURT 15",
-            "price": "15.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 22,
-            "name": "QREYFURT 2 EDED",
-            "price": "20.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 22,
-            "name": "SET 25",
-            "price": "25.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 22,
-            "name": "SET 35",
-            "price": "35.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 22,
-            "name": "SET 18",
-            "price": "18.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 22,
-            "name": "SET 17",
-            "price": "17.00"
+            "category": 3,
+            "name": "TOYUQ kababi",
+            "price": "5.00"
         }
     }
 ]

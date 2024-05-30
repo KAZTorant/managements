@@ -1,82 +1,146 @@
 [
     {
         "model": "meals.MealCategory",
-        "pk": 27,
+        "pk": 8,
         "fields": {
-            "name": "Cay sufresi",
-            "description": "Tea time snacks and refreshments."
+            "name": "Shorbalar",
+            "description": "A variety of soups"
         }
     },
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 27,
-            "name": "Limon 0.5",
-            "price": "0.50"
+            "category": 8,
+            "name": "Borsh",
+            "price": "3.50"
         }
     },
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 27,
-            "name": "CEREZ",
-            "price": "3.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 27,
-            "name": "Murebbe",
-            "price": "5.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 27,
-            "name": "PLETKA SHOKOLAD",
-            "price": "3.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 27,
-            "name": "SHIRNIYYAT 2.5",
+            "category": 8,
+            "name": "Borsh 0,5",
             "price": "2.50"
         }
     },
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 27,
-            "name": "SIRNIYYAT 2",
+            "category": 8,
+            "name": "Dovga kasa",
             "price": "2.00"
         }
     },
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 27,
-            "name": "SIRNIYYAT 3",
+            "category": 8,
+            "name": "Dovga kasa 0.5",
+            "price": "1.50"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "Dovga(stekan)",
+            "price": "1.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "Dushbere",
             "price": "3.00"
         }
     },
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 27,
-            "name": "SIRNIYYAT 4",
+            "category": 8,
+            "name": "Dushbere(05)",
+            "price": "2.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "Fasulye",
             "price": "4.00"
         }
     },
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 27,
-            "name": "XURMA",
+            "category": 8,
+            "name": "Fasulye (0.5)",
+            "price": "2.50"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "Merci",
             "price": "2.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "Merci 0,5",
+            "price": "1.50"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "Toyuq supu",
+            "price": "3.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "Toyuq supu 0,5",
+            "price": "2.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "XARCO",
+            "price": "4.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "XARCO 0.5",
+            "price": "2.50"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "YAYLA",
+            "price": "2.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 8,
+            "name": "YAYLA 0,5",
+            "price": "1.50"
         }
     }
 ]

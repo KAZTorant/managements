@@ -1,185 +1,81 @@
 [
     {
         "model": "meals.MealCategory",
-        "pk": 21,
+        "pk": 2,
         "fields": {
-            "name": "Shorbalar",
-            "description": "A selection of soups"
+            "name": "Cay sufresi",
+            "description": "A variety of snacks and treats"
         }
     },
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 21,
-            "name": "Borsh",
+            "category": 2,
+            "name": "CEREZ",
+            "price": "4.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 2,
+            "name": "Limon 0.5",
+            "price": "0.50"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 2,
+            "name": "Murebbe",
+            "price": "4.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 2,
+            "name": "MUREBBE 5",
+            "price": "5.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 2,
+            "name": "PLETKA SHOKOLAD",
             "price": "3.00"
         }
     },
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 21,
-            "name": "Borsh 0.5",
+            "category": 2,
+            "name": "SHIRNIYYAT 2.5",
+            "price": "2.50"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 2,
+            "name": "SIRNIYYAT 2",
             "price": "2.00"
         }
     },
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 21,
-            "name": "DOVGA BAKAL",
-            "price": "2.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 21,
-            "name": "Dovga kasa",
+            "category": 2,
+            "name": "SIRNIYYAT 3",
             "price": "3.00"
         }
     },
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 21,
-            "name": "Dovga kasa 0.5",
-            "price": "2.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 21,
-            "name": "Dovga (stekan)",
-            "price": "1.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 21,
-            "name": "Dushbere",
-            "price": "3.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 21,
-            "name": "Dushbere (0.5)",
-            "price": "2.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 21,
-            "name": "ERISTE",
-            "price": "3.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 21,
-            "name": "ERISTE 0.5",
-            "price": "2.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 21,
-            "name": "Fasulye",
-            "price": "3.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 21,
-            "name": "Fasulye (0.5)",
-            "price": "2.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 21,
-            "name": "GOBELEK SUPU",
-            "price": "3.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 21,
-            "name": "GOBELEK SUPU 0.5",
-            "price": "2.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 21,
-            "name": "Merci",
-            "price": "3.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 21,
-            "name": "Merci 0.5",
-            "price": "2.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 21,
-            "name": "Toyuq supu",
-            "price": "3.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 21,
-            "name": "Toyuq supu 0.5",
-            "price": "2.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 21,
-            "name": "XARCO",
-            "price": "3.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 21,
-            "name": "XARCO 0.5",
-            "price": "2.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 21,
-            "name": "YAYLA",
-            "price": "3.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 21,
-            "name": "YAYLA 0.5",
+            "category": 2,
+            "name": "TURK paxlava 3eded",
             "price": "2.00"
         }
     }

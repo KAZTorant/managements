@@ -1,114 +1,114 @@
 [
     {
         "model": "meals.MealCategory",
-        "pk": 23,
+        "pk": 4,
         "fields": {
-            "name": "Seher yemekleri",
-            "description": "Breakfast dishes including a variety of options to start the day right"
+            "name": "Qarnirler",
+            "description": "A variety of side dishes"
         }
     },
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 23,
-            "name": "Bal",
+            "category": 4,
+            "name": "BULQUR",
             "price": "2.00"
         }
     },
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 23,
-            "name": "Pendir",
+            "category": 4,
+            "name": "BULQUR 0.5",
             "price": "1.00"
         }
     },
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 23,
-            "name": "Pomidor-yumurta",
+            "category": 4,
+            "name": "EV SAYAGI KARTOF",
             "price": "3.00"
         }
     },
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 23,
-            "name": "Qayganaq",
-            "price": "2.50"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 23,
-            "name": "Qaymaq",
+            "category": 4,
+            "name": "EV SAYAGI KARTOF 0.5",
             "price": "2.00"
         }
     },
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 23,
-            "name": "Qlazok",
-            "price": "2.50"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 23,
-            "name": "SEKER TOZU",
-            "price": "0.50"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 23,
-            "name": "Sosiska yumurta",
-            "price": "2.50"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 23,
-            "name": "Sosiska-pomidor-yumurta",
-            "price": "3.50"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 23,
-            "name": "Soyutma sosiska 3ed",
-            "price": "3.00"
-        }
-    },
-    {
-        "model": "meals.Meal",
-        "fields": {
-            "category": 23,
-            "name": "Soyutma yumurta 3ed",
+            "category": 4,
+            "name": "MILLI AG DUYU",
             "price": "2.00"
         }
     },
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 23,
-            "name": "Yaq",
+            "category": 4,
+            "name": "MILLI AG DUYU 0.5",
             "price": "1.00"
         }
     },
     {
         "model": "meals.Meal",
         "fields": {
-            "category": 23,
-            "name": "ZEYTUN 2",
+            "category": 4,
+            "name": "Pizza (1 dilim)",
+            "price": "2.50"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 4,
+            "name": "PURE",
+            "price": "3.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 4,
+            "name": "PURE 0.5",
             "price": "2.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 4,
+            "name": "QRECHKA",
+            "price": "2.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 4,
+            "name": "QRECHKA 0.5",
+            "price": "1.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 4,
+            "name": "SPAGETTI",
+            "price": "2.00"
+        }
+    },
+    {
+        "model": "meals.Meal",
+        "fields": {
+            "category": 4,
+            "name": "SPAGETTI 0.5",
+            "price": "1.00"
         }
     }
 ]
