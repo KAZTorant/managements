@@ -204,7 +204,7 @@ CORS_ALLOW_HEADERS = [
 
 PRINTER_URL = os.environ.get(
     "PRINTER_URL",
-    "http://192.168.1.93:3000/print"
+    "http://localhost:3000/print"
 )
 
 CACHES = {
