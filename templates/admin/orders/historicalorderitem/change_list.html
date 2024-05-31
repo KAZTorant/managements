@@ -1,0 +1,27 @@
+{% extends "admin/change_list.html" %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Retrieve aggregated data from Django context
+            var totalQuantity = "{{ total_quantity|default:0 }}";
+            var totalPrice = "{{ total_price|default:0 }}";
+
+            // Find table headers
+            var headers = document.querySelector("#result_list").querySelector("thead").querySelectorAll("th");
+            headers.forEach(function(header) {
+                console.log(header.querySelector("a"))
+                if (header?.querySelector("a")?.innerText.includes("Miqdar")) {
+                    header.querySelector("a").innerText = `Miqdar: ${totalQuantity}`;
+                } else if (header?.querySelector("a")?.innerText.includes("Məbləğ")) {
+                    header.querySelector("a").innerText = `Məbləğ: ${totalPrice} ₼`;
+                }
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block result_list %}
+    {{ block.super }}
+{% endblock %}

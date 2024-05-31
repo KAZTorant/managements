@@ -1,23 +1,38 @@
+from rangefilter.filters import DateRangeFilter
+from django.contrib import admin
+from simple_history.admin import SimpleHistoryAdmin
+from simple_history.utils import get_history_model_for_model
 from apps.orders.apis.printer import PrinterService
 from apps.orders.models import Order
 from apps.orders.models import OrderItem
 from apps.orders.models import Statistics
-
-from django.contrib import admin
 from django.urls import path
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from django.utils import timezone
 from django.db.models import Sum
-
 import datetime
 
+# Register the Order model with SimpleHistoryAdmin
 
-class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'table', 'is_active_order',
-                    'waitress', 'total_price', 'created_at')
-    list_filter = ('is_paid', 'waitress', 'created_at')
-    search_fields = ('table__number', 'waitress__username')
+
+@admin.register(Order)
+class OrderAdmin(SimpleHistoryAdmin):
+    list_display = [
+        'table',
+
+        'waitress',
+        'total_price',
+        'created_at',
+        'is_paid',
+        'is_active_order',
+    ]
+    list_filter = [
+        'waitress',
+        'table',
+        ('created_at', DateRangeFilter)
+    ]
+
     date_hierarchy = 'created_at'
 
     def is_active_order(self, obj):
@@ -33,9 +48,26 @@ class OrderAdmin(admin.ModelAdmin):
         queryset = super().get_queryset(request).select_related('table', 'waitress')
         return queryset
 
+# Register the OrderItem model
 
-admin.site.register(Order, OrderAdmin)
-admin.site.register(OrderItem)
+
+@admin.register(OrderItem)
+class OrderItemAdmin(admin.ModelAdmin):
+    list_display = [
+        'order',
+        'meal',
+        'quantity',
+        'price',
+        'created_at',
+    ]
+    list_filter = [
+        'meal',
+        'order__waitress',
+        'order__table',
+        ('created_at', DateRangeFilter)
+    ]
+
+# Register the Statistics model
 
 
 class StatisticsAdmin(admin.ModelAdmin):
@@ -58,9 +90,6 @@ class StatisticsAdmin(admin.ModelAdmin):
                 self.calculate_per_waitress_stats), name='orders_statistics_calculate_per_waitress'),
             path('todays-orders/', self.admin_site.admin_view(self.todays_orders),
                  name='orders_statistics_todays_orders'),  # New URL
-
-
-
         ]
         return custom_urls + urls
 
@@ -88,8 +117,7 @@ class StatisticsAdmin(admin.ModelAdmin):
     def calculate_till_now(self, request):
         Statistics.objects.calculate_till_now()
         self.message_user(
-            request, "Bu günə kimi olan statistika uğurla əlavə edildi."
-        )
+            request, "Bu günə kimi olan statistika uğurla əlavə edildi.")
         return HttpResponseRedirect("../")
 
     def z_check(self, obj):
@@ -114,14 +142,12 @@ class StatisticsAdmin(admin.ModelAdmin):
         if "_z-cek" in request.POST:
             self.z_check(obj=obj)
             self.message_user(request, "Z-Çek hazırlandı %s." % obj.date)
-            # Optionally redirect or perform additional actions
             return HttpResponseRedirect(".")
 
         if "_z-cek-till-now" in request.POST:
             self.z_check_till_now(obj=obj)
             self.message_user(
                 request, "Z-Çek bu günə kimi hazırlandı %s." % obj.date)
-            # Optionally redirect or perform additional actions
             return HttpResponseRedirect(".")
 
         return super().response_change(request, obj)
@@ -152,3 +178,67 @@ class StatisticsAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Statistics, StatisticsAdmin)
+
+# Dynamically get the historical models
+HistoricalOrder = get_history_model_for_model(Order)
+HistoricalOrderItem = get_history_model_for_model(OrderItem)
+
+HistoricalOrder._meta.verbose_name = 'Sifariş tarixçəsi'
+HistoricalOrder._meta.verbose_name_plural = 'Sifarişlər tarixçəsi'
+
+
+HistoricalOrderItem._meta.verbose_name = 'Sifariş məhsulu tarixçəsi'
+HistoricalOrderItem._meta.verbose_name_plural = 'Sifariş məhsulları tarixçəsi'
+
+# Register the historical models in the admin
+
+
+@admin.register(HistoricalOrder)
+class HistoricalOrderAdmin(admin.ModelAdmin):
+    list_display = [
+        'table',
+        'is_paid',
+        'waitress',
+        'total_price',
+        'history_type',
+        'created_at',
+    ]
+    list_filter = [
+        'waitress',
+        'table',
+        ('created_at', DateRangeFilter)
+    ]
+
+
+@admin.register(HistoricalOrderItem)
+class HistoricalOrderItemAdmin(admin.ModelAdmin):
+    list_display = [
+        'order',
+        'meal',
+        'quantity',
+        'price',
+        'history_type',
+        'created_at',
+    ]
+    list_filter = [
+        'meal',
+        'order__waitress',
+        'order__table',
+        ('created_at', DateRangeFilter)
+    ]
+
+    def changelist_view(self, request, extra_context=None):
+        response = super().changelist_view(request, extra_context)
+        try:
+            queryset = response.context_data['cl'].queryset
+            aggregated_data = queryset.aggregate(
+                total_quantity=Sum('quantity'),
+                total_price=Sum('price')
+            )
+            extra_context = extra_context or {}
+            extra_context['total_quantity'] = aggregated_data['total_quantity']
+            extra_context['total_price'] = aggregated_data['total_price']
+            response.context_data.update(extra_context)
+        except (AttributeError, KeyError):
+            pass
+        return response
