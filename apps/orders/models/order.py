@@ -73,6 +73,7 @@ class OrderItem(DateTimeModel, models.Model):
     # Adjusted for total price
     price = models.DecimalField(
         max_digits=9, decimal_places=2, default=0.00, verbose_name="Məbləğ")
+    is_deleted_by_adminstrator = models.BooleanField(default=False)
     history = HistoricalRecords()
 
     class Meta:

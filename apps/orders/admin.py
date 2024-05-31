@@ -10,8 +10,8 @@ from django.urls import path
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from django.utils import timezone
-from django.db.models import Sum
 import datetime
+from django.db.models import Subquery, OuterRef, Sum, Max
 
 # Register the Order model with SimpleHistoryAdmin
 
@@ -213,10 +213,12 @@ class HistoricalOrderAdmin(admin.ModelAdmin):
 @admin.register(HistoricalOrderItem)
 class HistoricalOrderItemAdmin(admin.ModelAdmin):
     list_display = [
+        'id',
         'order',
         'meal',
         'quantity',
         'price',
+        'is_deleted_by_adminstrator',
         'history_type',
         'created_at',
     ]
@@ -231,7 +233,16 @@ class HistoricalOrderItemAdmin(admin.ModelAdmin):
         response = super().changelist_view(request, extra_context)
         try:
             queryset = response.context_data['cl'].queryset
-            aggregated_data = queryset.aggregate(
+
+            # Create a subquery to get the latest history_date for each id
+            subquery = queryset.exclude(is_deleted_by_adminstrator=True).filter(id=OuterRef('id')).order_by(
+                '-history_date').values('history_date')[:1]
+
+            # Filter the queryset to include only the latest records
+            latest_records = queryset.filter(history_date=Subquery(subquery))
+
+            # Perform the aggregation on the filtered queryset
+            aggregated_data = latest_records.aggregate(
                 total_quantity=Sum('quantity'),
                 total_price=Sum('price')
             )

@@ -131,6 +131,8 @@ class DeleteOrderItemAPIViewV2(APIView):
             )
 
         if order_item.quantity == 1:
+            order_item.is_deleted_by_adminstrator = True
+            order_item.save()
             order_item.delete()
         else:
             new_quantity = order_item.quantity - 1
