@@ -5,7 +5,7 @@ from apps.commons.models import DateTimeModel
 from apps.meals.models import Meal
 from apps.tables.models import Table
 from django.db.models import Sum
-
+from django.utils import timezone
 from simple_history.models import HistoricalRecords
 
 
@@ -74,6 +74,8 @@ class OrderItem(DateTimeModel, models.Model):
     price = models.DecimalField(
         max_digits=9, decimal_places=2, default=0.00, verbose_name="Məbləğ")
     is_deleted_by_adminstrator = models.BooleanField(default=False)
+    item_added_at = models.DateTimeField(
+        default=timezone.now, blank=True, null=True)
     history = HistoricalRecords()
 
     class Meta:
