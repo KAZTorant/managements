@@ -38,6 +38,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('backend/admin/', admin.site.urls),
     path('api/', include('apps.urls')),
+    path('backend/api/', include('apps.urls')),
 
 
     # SWAGGER
