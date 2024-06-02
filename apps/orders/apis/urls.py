@@ -30,15 +30,10 @@ urlpatterns = [
 
     path(
         '<int:table_id>/add-order-item/',
-        AddOrderItemAPIView.as_view(),
-        name='add-order-item'
-    ),
-
-    path(
-        '<int:table_id>/add-order-item/',
         AddOrderItemAPIViewV2.as_view(),
         name='add-order-item'
     ),
+
 
     path(
         '<int:table_id>/add-multiple-order-items/',

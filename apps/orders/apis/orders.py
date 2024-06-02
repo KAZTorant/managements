@@ -1,4 +1,5 @@
 
+from django.utils import timezone
 from apps.meals.models import Meal
 from apps.orders.models import Order
 from apps.orders.models import OrderItem
@@ -122,6 +123,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                 # Since we're in a transaction block with select_for_update, we can safely update
                 order_item.quantity += quantity
                 order_item.price += meal.price * quantity
+                order_item.item_added_at = timezone.now()
                 order_item.save()
 
             # Update the total price of the order
@@ -228,14 +230,20 @@ class AddOrderItemAPIViewV2(APIView):
         return Response({'message': 'Order item updated successfully'}, status=status.HTTP_200_OK)
 
     def update_order_item(self, order_item, meal):
-        order_item.quantity = F('quantity') + 1
-        order_item.price = F('price') + meal.price
-        order_item.save(update_fields=['quantity', 'price'])
+        order_item.quantity += 1
+        order_item.price += meal.price
+        order_item.item_added_at = timezone.now()
+        order_item.save(update_fields=['quantity', 'price', 'item_added_at'])
         order_item.refresh_from_db()
 
     def create_order_item(self, order, meal):
         OrderItem.objects.create(
-            meal=meal, price=meal.price, order=order, quantity=1)
+            meal=meal,
+            price=meal.price,
+            order=order,
+            quantity=1
+        )
+
 
 # AddMultipleOrderItemsAPIView
 
@@ -382,7 +390,7 @@ class ListOrderItemsAPIView(ListAPIView):
         order = table.current_order if table else None
 
         return (
-            order.order_items.order_by('-updated_at').all()
+            order.order_items.order_by('-item_added_at').all()
             if order else
             OrderItem.objects.none()
         )
