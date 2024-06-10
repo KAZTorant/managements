@@ -4,6 +4,14 @@
 {% block extrahead %}
     {{ block.super }}
     <style>
+        .card-green {
+            background-color: #d4edda; /* Light green */
+        }
+
+        .card-orange {
+            background-color: #fff3cd; /* Light orange */
+        }
+
         .card {
             margin-bottom: 20px;
         }
@@ -169,7 +177,10 @@
     <div class="row">
         {% for table in cl.result_list %}
         <div class="col-md-4 table-card" data-room="{{ table.room }}">
-            <div class="card">
+                <div class="card 
+                {% if table.current_order.is_check_printed %}card-green 
+                {% elif table.has_unpaid_orders %}card-orange
+                {% endif %}">
                 <div class="card-body">
                     <h5 class="card-title">{{table.number}} {{table.room}}</h5>
                     <br>
