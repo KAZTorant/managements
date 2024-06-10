@@ -1,0 +1,201 @@
+{% extends "admin/change_list.html" %}
+{% load i18n static %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <style>
+        .card {
+            margin-bottom: 20px;
+        }
+    
+        /* The Modal (background) */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+    
+        /* Modal Content/Box */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%; /* Smaller width */
+            text-align: center; /* Center text */
+            position: relative; /* To position the close button at bottom right */
+        }
+    
+        /* The Close Button at top right */
+        .close {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 28px;
+            font-weight: bold;
+        }
+    
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    
+        /* Centering the table */
+        .modal-body table {
+            margin: 0 auto; /* Center table */
+            width: 100%;
+            border-collapse: collapse;
+        }
+    
+        .modal-body th, .modal-body td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+    
+        .modal-body th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: center;
+            background-color: #f2f2f2;
+        }
+    
+        /* The Close Button at bottom right */
+        .modal-footer .close-btn {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+        }
+    </style>
+    
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            function showOrdersModal(tableId) {
+                const urlTemplate = "{% url 'admin:table_active_order' 0 %}";
+                const url = urlTemplate.replace('0', tableId);
+                fetch(url)
+                    .then(response => response.text())
+                    .then(data => {
+                        document.getElementById('ordersModalBody').innerHTML = data;
+                        document.getElementById('ordersModal').style.display = 'block';
+                    })
+                    .catch(error => {
+                        alert('An error occurred while fetching the orders.');
+                    });
+            }
+
+            function closeModal() {
+                document.getElementById('ordersModal').style.display = 'none';
+            }
+
+            document.querySelectorAll('.close').forEach(function(element) {
+                element.addEventListener('click', closeModal);
+            });
+
+            window.addEventListener('click', function(event) {
+                if (event.target == document.getElementById('ordersModal')) {
+                    closeModal();
+                }
+            });
+
+            document.querySelectorAll('.view-orders-btn').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    const tableId = this.dataset.tableId;
+                    showOrdersModal(tableId);
+                });
+            });
+
+            // Room filtering
+            document.querySelectorAll('.room-filter-btn').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    const room = this.dataset.room;
+                    filterTablesByRoom(room);
+                });
+            });
+
+            function filterTablesByRoom(room) {
+                const allRoomsButton = document.querySelector('[data-room="all"]');
+                const firstRoomButton = document.querySelector('.room-filter-btn[data-room]:not([data-room="all"])');
+                
+                let roomToFilter = room;
+
+                if (!roomToFilter || roomToFilter === '') {
+                    roomToFilter = firstRoomButton ? firstRoomButton.dataset.room : 'all';
+                }
+
+                if (roomToFilter === 'all' && allRoomsButton) {
+                    roomToFilter = 'all';
+                }
+
+                document.querySelectorAll('.table-card').forEach(function(card) {
+                    if (roomToFilter === 'all' || card.dataset.room === roomToFilter) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+            
+            
+            filterTablesByRoom();
+        });
+    
+        function closeModal() {
+                document.getElementById('ordersModal').style.display = "none";
+            }
+    </script>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-3">
+        <div class="col-12">
+            {% for room in cl.rooms %}
+            <button class="btn btn-secondary room-filter-btn" data-room="{{ room }}">{{ room }}</button>
+            {% endfor %}
+            <button class="btn btn-secondary room-filter-btn" data-room="all">{% trans 'All Rooms' %}</button>
+        </div>
+    </div>
+    <div class="row">
+        {% for table in cl.result_list %}
+        <div class="col-md-4 table-card" data-room="{{ table.room }}">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{table.number}} {{table.room}}</h5>
+                    <br>
+                    <p class="card-text">Sifariş məhsullarına baxmaq üçün kliklə</p>
+                    {% if table.has_unpaid_orders %}
+                    <button class="btn btn-primary view-orders-btn" data-table-id="{{ table.id }}">Sifarişlərə bax</button>
+                    {% else %}
+                    <p class="text-muted">Masa boşdur.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div id="ordersModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div id="ordersModalBody">
+            <!-- Orders content will be loaded here -->
+        </div>
+        <button class="btn btn-secondary close-btn" onclick="closeModal()">Bağla</button>
+
+    </div>
+</div>
+
+
+{% endblock %}

@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'apps.orders.apps.OrdersConfig',
     'apps.meals.apps.MealsConfig',
 
+
     # 3rd party apps
     'drf_yasg',
     'corsheaders',
