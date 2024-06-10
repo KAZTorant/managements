@@ -67,6 +67,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'simple_history.middleware.HistoryRequestMiddleware',
 
+    'apps.tables.middleware.DisableCSRFMiddleware',
+
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -238,3 +240,5 @@ LOGGING = {
         },
     },
 }
+
+
