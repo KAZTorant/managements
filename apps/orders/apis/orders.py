@@ -1,24 +1,23 @@
-
-from django.utils import timezone
-from apps.meals.models import Meal
-from apps.orders.models import Order
-from apps.orders.models import OrderItem
-from rest_framework import serializers
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView
 
-from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+
 from django.db import transaction
+from django.utils import timezone
 
-from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+
+from apps.orders.models import Order
+from apps.orders.models import OrderItem
+from apps.orders.serializers import OrderSerializer
+from apps.orders.serializers import ListOrderItemSerializer
 from apps.tables.models import Table
-
+from apps.meals.models import Meal
 from apps.users.permissions import IsWaitressOrOrCapitaonOrAdminOrOwner
-
-from django.db.models import F
 
 
 class CheckOrderAPIView(APIView):
@@ -27,7 +26,8 @@ class CheckOrderAPIView(APIView):
 
     def get(self, request, table_id):
         # Check if there is an existing unpaid order for this table
-        if Order.objects.filter(table__id=table_id, is_paid=False).exists():
+        orders = Order.objects.filter(table__id=table_id, is_paid=False)
+        if orders.exists():
             return Response(
                 {'message': 'Sifariş yaradılıb'},
                 status=status.HTTP_200_OK
@@ -37,18 +37,6 @@ class CheckOrderAPIView(APIView):
             {'message': 'Sifariş yoxdur.'},
             status=status.HTTP_404_NOT_FOUND
         )
-
-
-# CreateOrderAPI
-class OrderSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Order
-        fields = ('id', 'table')
-
-    def create(self, validated_data):
-        validated_data["waitress"] = self.context['request'].user
-        order = Order.objects.create(**validated_data)
-        return order
 
 
 class CreateOrderAPIView(APIView):
@@ -72,111 +60,7 @@ class CreateOrderAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# AddOrderItemAPI
-class OrderItemSerializer(serializers.ModelSerializer):
-    meal_id = serializers.IntegerField(
-        write_only=True,
-        source='meal.id',
-        help_text="ID of the meal"
-    )
-
-    class Meta:
-        model = OrderItem
-        # 'meal' and 'order' are for serialization
-        fields = ['meal_id', 'quantity', 'meal', 'order']
-        # These are for serialization only
-        read_only_fields = ['meal', 'order']
-
-    def validate_meal_id(self, value):
-        try:
-            Meal.objects.get(id=value)
-        except Meal.DoesNotExist:
-            raise serializers.ValidationError("Meal not found")
-        return value
-
-    def create(self, validated_data):
-        with transaction.atomic():
-            # Extract meal details and fetch the meal instance
-            meal_data = validated_data.pop('meal', None)
-            meal_id = meal_data.get("id", 0)
-            meal = Meal.objects.filter(id=meal_id).first()
-
-            # Default to 1 if not specified
-            quantity = validated_data.get('quantity', 1)
-
-            # Fetch the order instance and lock it
-            order = Order.objects.select_for_update().get(
-                id=self.context['order_id'])
-
-            # Attempt to get or create the order item
-            order_item, created = OrderItem.objects.get_or_create(
-                meal=meal,
-                order=order,
-                defaults={
-                    'quantity': quantity,
-                    'price': meal.price * quantity
-                }
-            )
-
-            # If the order item was not created, it means it already exists, so update the quantity
-            if not created:
-                # Since we're in a transaction block with select_for_update, we can safely update
-                order_item.quantity += quantity
-                order_item.price += meal.price * quantity
-                order_item.item_added_at = timezone.now()
-                order_item.save()
-
-            # Update the total price of the order
-            order.update_total_price()
-
-            # Ensure changes are persisted and visible outside this function
-            order_item.refresh_from_db()
-
-        return order_item
-
-
 class AddOrderItemAPIView(APIView):
-    permission_classes = [IsAuthenticated,
-                          IsWaitressOrOrCapitaonOrAdminOrOwner]
-
-    @swagger_auto_schema(
-        operation_description="Add an item to an existing unpaid order for the specified table.",
-        request_body=OrderItemSerializer,
-        responses={201: OrderItemSerializer,
-                   404: 'Order not found or payment already made', 400: 'Invalid data'}
-    )
-    def post(self, request, table_id):
-        # Check if there is an existing unpaid order and if it belongs to the user
-        order = request.user.orders.filter(
-            table__id=table_id,
-            is_paid=False
-        ).first()
-
-        if request.user.type in ["admin", 'captain_waitress', 'restaurant']:
-            table = Table.objects.filter(id=table_id).first()
-            order = table.current_order if table else None
-
-        if not order:
-            return Response(
-                {'error': 'Order not found or payment has been made already.'},
-                status=status.HTTP_404_NOT_FOUND
-            )
-
-        # Proceed to add a new order item to the found order
-        serializer = OrderItemSerializer(
-            data=request.data,
-            context={
-                'request': request,
-                'order_id': order.id,
-            }
-        )
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class AddOrderItemAPIViewV2(APIView):
     permission_classes = [IsAuthenticated,
                           IsWaitressOrOrCapitaonOrAdminOrOwner]
 
@@ -243,21 +127,6 @@ class AddOrderItemAPIViewV2(APIView):
             order=order,
             quantity=1
         )
-
-
-# AddMultipleOrderItemsAPIView
-
-
-class OrderItemInputSerializer(serializers.Serializer):
-    meal_id = serializers.IntegerField(
-        required=True, help_text="ID of the meal to add to the order.")
-    quantity = serializers.IntegerField(
-        required=True, min_value=1, help_text="Quantity of the meal to order.")
-
-
-class OrderItemOutputSerializer(serializers.Serializer):
-    meal_id = serializers.IntegerField(read_only=True)
-    quantity = serializers.IntegerField(read_only=True)
 
 
 class AddMultipleOrderItemsAPIView(APIView):
@@ -358,31 +227,12 @@ class AddMultipleOrderItemsAPIView(APIView):
             return None, Response({'error': f'Meal with ID {meal_id} not found'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-# Orders List view
-class ListOrderItemSerializer(serializers.ModelSerializer):
-
-    meal = serializers.SerializerMethodField()
-
-    class Meta:
-        model = OrderItem
-        fields = (
-            "meal",
-            "quantity",
-        )
-
-    def get_meal(self, obj: OrderItem):
-        return {
-            "id": obj.meal.id,
-            "name": obj.meal.name,
-            "price": obj.meal.price,
-            "description": obj.meal.description,
-        }
-
-
 class ListOrderItemsAPIView(ListAPIView):
     serializer_class = ListOrderItemSerializer
-    permission_classes = [IsAuthenticated,
-                          IsWaitressOrOrCapitaonOrAdminOrOwner]
+    permission_classes = [
+        IsAuthenticated,
+        IsWaitressOrOrCapitaonOrAdminOrOwner
+    ]
 
     def get_queryset(self):
         table_id = self.kwargs.get("table_id", 0)
