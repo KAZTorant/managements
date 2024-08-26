@@ -4,16 +4,14 @@ from apps.orders.apis import CreateOrderAPIView
 from apps.orders.apis import CheckOrderAPIView
 
 from apps.orders.apis import AddOrderItemAPIView
-from apps.orders.apis import AddOrderItemAPIViewV2
 from apps.orders.apis import AddMultipleOrderItemsAPIView
-from apps.orders.apis import DeleteOrderItemAPIView
 from apps.orders.apis import ListOrderItemsAPIView
 from apps.orders.apis import ChangeOrderTableAPIView
 from apps.orders.apis import CloseTableOrderAPIView
 from apps.orders.apis import ListWaitressAPIView
 from apps.orders.apis import ChangeWaitressAPIView
 from apps.orders.apis import PrintCheckAPIView
-from apps.orders.apis import DeleteOrderItemAPIViewV2
+from apps.orders.apis import DeleteOrderItemAPIView
 
 urlpatterns = [
     path(
@@ -30,7 +28,7 @@ urlpatterns = [
 
     path(
         '<int:table_id>/add-order-item/',
-        AddOrderItemAPIViewV2.as_view(),
+        AddOrderItemAPIView.as_view(),
         name='add-order-item'
     ),
 
@@ -43,7 +41,7 @@ urlpatterns = [
 
     path(
         '<int:table_id>/delete-order-item/',
-        DeleteOrderItemAPIViewV2.as_view(),
+        DeleteOrderItemAPIView.as_view(),
         name='delete-order-item'
     ),
 

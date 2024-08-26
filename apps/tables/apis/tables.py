@@ -1,90 +1,18 @@
+from rest_framework import status
+from rest_framework.generics import ListAPIView
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from django.conf import settings
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+
 from apps.tables.models import Table
 from apps.tables.models import Room
 
-from rest_framework.generics import ListAPIView
-from rest_framework.views import APIView
-from rest_framework.response import Response
-
-from rest_framework import serializers
-from rest_framework import status
-
-from django.utils.decorators import method_decorator
-from django.views.decorators.cache import cache_page
-from django.conf import settings
-
-
-class TableSerializer(serializers.ModelSerializer):
-
-    waitress = serializers.SerializerMethodField()
-    print_check = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Table
-        fields = (
-            "id",
-            "number",
-            "room",
-            "waitress",
-            "total_price",
-            "print_check",
-        )
-
-    def get_waitress(self, obj: Table):
-        if not obj.waitress:
-            return {
-                "name": "",
-                "id": 0,
-            }
-
-        return {
-            "name": obj.waitress.get_full_name(),
-            "id": obj.waitress.id,
-        }
-
-    def get_print_check(self, obj: Table):
-        return obj.current_order.is_check_printed if obj.current_order else False
-
-
-class TableDetailSerializer(serializers.ModelSerializer):
-
-    waitress = serializers.SerializerMethodField()
-    print_check = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Table
-        fields = (
-            "id",
-            "number",
-            "room",
-            "waitress",
-            "total_price",
-            "print_check",
-        )
-
-    def get_waitress(self, obj: Table):
-        if not obj.waitress:
-            return {
-                "name": self.context['user'].get_full_name(),
-                "id": 0,
-            }
-
-        return {
-            "name": obj.waitress.get_full_name(),
-            "id": obj.waitress.id,
-        }
-
-    def get_print_check(self, obj: Table):
-        return obj.current_order.is_check_printed if obj.current_order else False
-
-
-class RoomSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Room
-        fields = (
-            "id",
-            "name",
-            "description"
-        )
+from apps.tables.serializers import TableSerializer
+from apps.tables.serializers import TableDetailSerializer
+from apps.tables.serializers import RoomSerializer
 
 
 class TableAPIView(ListAPIView):

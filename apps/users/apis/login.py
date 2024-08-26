@@ -1,15 +1,13 @@
-from rest_framework import serializers
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+
 from django.contrib.auth import get_user_model
 from drf_yasg.utils import swagger_auto_schema
 
+from apps.users.serializers import PinLoginSerializer
+
 User = get_user_model()
-
-
-class PinLoginSerializer(serializers.Serializer):
-    pin = serializers.CharField(max_length=32, min_length=4)
 
 
 class PinLoginAPIView(APIView):
