@@ -14,15 +14,17 @@ from drf_yasg.utils import swagger_auto_schema
 from apps.orders.models import Order
 from apps.orders.models import OrderItem
 from apps.orders.serializers import OrderSerializer
+from apps.orders.serializers import OrderItemSerializer
 from apps.orders.serializers import ListOrderItemSerializer
+from apps.orders.serializers import OrderItemOutputSerializer
 from apps.tables.models import Table
 from apps.meals.models import Meal
-from apps.users.permissions import IsWaitressOrOrCapitaonOrAdminOrOwner
+from apps.users.permissions import IsWaitressOrCapitaonOrAdminOrOwner
 
 
 class CheckOrderAPIView(APIView):
     permission_classes = [IsAuthenticated,
-                          IsWaitressOrOrCapitaonOrAdminOrOwner]
+                          IsWaitressOrCapitaonOrAdminOrOwner]
 
     def get(self, request, table_id):
         # Check if there is an existing unpaid order for this table
@@ -41,7 +43,7 @@ class CheckOrderAPIView(APIView):
 
 class CreateOrderAPIView(APIView):
     permission_classes = [IsAuthenticated,
-                          IsWaitressOrOrCapitaonOrAdminOrOwner]
+                          IsWaitressOrCapitaonOrAdminOrOwner]
 
     def post(self, request, table_id):
         # Check if there is an existing unpaid order for this table
@@ -62,7 +64,7 @@ class CreateOrderAPIView(APIView):
 
 class AddOrderItemAPIView(APIView):
     permission_classes = [IsAuthenticated,
-                          IsWaitressOrOrCapitaonOrAdminOrOwner]
+                          IsWaitressOrCapitaonOrAdminOrOwner]
 
     @swagger_auto_schema(
         operation_description="Add an item to an existing unpaid order for the specified table.",
@@ -131,7 +133,7 @@ class AddOrderItemAPIView(APIView):
 
 class AddMultipleOrderItemsAPIView(APIView):
     permission_classes = [IsAuthenticated,
-                          IsWaitressOrOrCapitaonOrAdminOrOwner]
+                          IsWaitressOrCapitaonOrAdminOrOwner]
 
     @swagger_auto_schema(
         operation_description="Add multiple items to an existing unpaid order for a specified table.",
@@ -231,7 +233,7 @@ class ListOrderItemsAPIView(ListAPIView):
     serializer_class = ListOrderItemSerializer
     permission_classes = [
         IsAuthenticated,
-        IsWaitressOrOrCapitaonOrAdminOrOwner
+        IsWaitressOrCapitaonOrAdminOrOwner
     ]
 
     def get_queryset(self):
