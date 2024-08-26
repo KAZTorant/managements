@@ -16,7 +16,7 @@ from apps.orders.models import OrderItem
 from apps.orders.serializers import OrderSerializer
 from apps.orders.serializers import OrderItemSerializer
 from apps.orders.serializers import ListOrderItemSerializer
-from apps.orders.serializers import OrderItemOutputSerializer
+from apps.orders.serializers import OrderItemsSerializer
 from apps.tables.models import Table
 from apps.meals.models import Meal
 from apps.users.permissions import IsWaitressOrCapitaonOrAdminOrOwner
@@ -149,7 +149,32 @@ class ListOrderItemsAPIView(ListAPIView):
             OrderItem.objects.none()
         )
 
-    def list(self, request, *args, **kwargs):
-        response = super().list(request, *args, **kwargs)
 
-        return response
+class ListOrderItemsAPIViewV2(APIView):
+    permission_classes = [
+        IsAuthenticated,
+        IsWaitressOrCapitaonOrAdminOrOwner
+    ]
+
+    def get(self, request, *args, **kwargs):
+        try:
+            table_id = kwargs.get("table_id", 0)
+            table = Table.objects.get(id=table_id)
+            orders = table.orders.filter(is_paid=False)
+            items = self.get_items(orders)
+            return Response(items, status=status.HTTP_200_OK)
+        except Table.DoesNotExist:
+            return Response([], status=status.HTTP_404_NOT_FOUND)
+
+    def get_items(self, orders):
+        return [
+            {
+                "is_moved": order.is_moved,
+                "order_id": order.id,
+                "items": OrderItemsSerializer(
+                    instance=order.order_items.all(),
+                    many=True
+                ).data
+            }
+            for order in orders
+        ]

@@ -110,3 +110,23 @@ class ListOrderItemSerializer(serializers.ModelSerializer):
             "price": obj.meal.price,
             "description": obj.meal.description,
         }
+
+
+class OrderItemsSerializer(serializers.ModelSerializer):
+
+    meal = serializers.SerializerMethodField()
+
+    class Meta:
+        model = OrderItem
+        fields = (
+            "meal",
+            "quantity",
+        )
+
+    def get_meal(self, obj: OrderItem):
+        return {
+            "id": obj.meal.id,
+            "name": obj.meal.name,
+            "price": obj.meal.price,
+            "description": obj.meal.description,
+        }

@@ -5,6 +5,7 @@ from apps.orders.apis import CheckOrderAPIView
 
 from apps.orders.apis import AddOrderItemAPIView
 from apps.orders.apis import ListOrderItemsAPIView
+from apps.orders.apis import ListOrderItemsAPIViewV2
 from apps.orders.apis import ChangeOrderTableAPIView
 from apps.orders.apis import CloseTableOrderAPIView
 from apps.orders.apis import ListWaitressAPIView
@@ -43,7 +44,13 @@ urlpatterns = [
     path(
         '<int:table_id>/list-order-items/',
         ListOrderItemsAPIView.as_view(),
-        name='list-order-itemsm'
+        name='list-order-items'
+    ),
+
+    path(
+        '<int:table_id>/list-order-items-v2/',
+        ListOrderItemsAPIViewV2.as_view(),
+        name='list-order-items-v2'
     ),
 
     path(

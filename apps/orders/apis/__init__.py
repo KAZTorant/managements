@@ -3,6 +3,7 @@ from apps.orders.apis.orders import CheckOrderAPIView
 from apps.orders.apis.orders import AddOrderItemAPIView
 
 from apps.orders.apis.orders import ListOrderItemsAPIView
+from apps.orders.apis.orders import ListOrderItemsAPIViewV2
 from apps.orders.apis.managers import CloseTableOrderAPIView
 
 from apps.orders.apis.managers import DeleteOrderItemAPIView

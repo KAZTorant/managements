@@ -21,11 +21,6 @@ class Order(DateTimeModel, models.Model):
         on_delete=models.CASCADE,
         verbose_name="Stol"
     )
-    meals = models.ManyToManyField(
-        Meal, through='OrderItem', verbose_name="Yemək")
-    is_paid = models.BooleanField(default=False, verbose_name="Ödənilib")
-    is_check_printed = models.BooleanField(
-        default=False, verbose_name="Çek çıxarılıb")
     waitress = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -34,6 +29,22 @@ class Order(DateTimeModel, models.Model):
         null=True,
         verbose_name="Ofisiant"
     )
+    meals = models.ManyToManyField(
+        Meal,
+        through='OrderItem',
+        verbose_name="Yemək"
+
+    )
+    is_paid = models.BooleanField(default=False, verbose_name="Ödənilib")
+    is_check_printed = models.BooleanField(
+        default=False,
+        verbose_name="Çek çıxarılıb"
+    )
+    is_moved = models.BooleanField(
+        default=False,
+        verbose_name="Birləşmiş sifariş"
+    )
+
     total_price = models.DecimalField(
         default=0, max_digits=10, decimal_places=2,
         verbose_name="Ümumi"
