@@ -1,25 +1,15 @@
-from apps.meals.models import Meal
-from apps.meals.models import MealCategory
-
-from rest_framework.generics import ListAPIView
-from rest_framework import serializers
-
-from drf_yasg.utils import swagger_auto_schema
-from drf_yasg import openapi
+from django.conf import settings
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 
-from django.conf import settings
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework.generics import ListAPIView
 
-
-class MealCategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MealCategory
-        fields = (
-            "id",
-            "name",
-            "description",
-        )
+from apps.meals.models import Meal
+from apps.meals.models import MealCategory
+from apps.meals.serializers import MealSerializer
+from apps.meals.serializers import MealCategorySerializer
 
 
 class MealCategoryAPIView(ListAPIView):
@@ -30,17 +20,6 @@ class MealCategoryAPIView(ListAPIView):
     @method_decorator(cache_page(settings.CACHE_TIME_IN_SECONDS))
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
-
-
-class MealSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Meal
-        fields = (
-            "id",
-            "name",
-            "description",
-            "price"
-        )
 
 
 class MealAPIView(ListAPIView):
