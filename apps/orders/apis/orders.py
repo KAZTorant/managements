@@ -92,7 +92,7 @@ class AddOrderItemAPIView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    def get_order(self, request, table_id):
+    def get_order(self, request, table_id) -> Order:
         order = request.user.orders.select_for_update().filter(
             table__id=table_id, is_paid=False).first()
         if request.user.type in ["admin", 'captain_waitress', 'restaurant']:
@@ -178,3 +178,13 @@ class ListOrderItemsAPIViewV2(APIView):
             }
             for order in orders
         ]
+
+
+class AddOrderItemAPIViewV2(APIView):
+    permission_classes = [
+        IsAuthenticated,
+        IsWaitressOrCapitaonOrAdminOrOwner
+    ]
+
+    def post(self, request, *args, **kwargs):
+        pass
