@@ -1,73 +1,18 @@
-from rangefilter.filters import DateRangeFilter
-from django.contrib import admin
+import datetime
+
 from simple_history.admin import SimpleHistoryAdmin
-from simple_history.utils import get_history_model_for_model
-from apps.orders.apis.printer import PrinterService
-from apps.orders.models import Order
-from apps.orders.models import OrderItem
-from apps.orders.models import Statistics
+
+from django.contrib import admin
+from django.db.models import Sum
 from django.urls import path
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from django.utils import timezone
-import datetime
-from django.db.models import Subquery, OuterRef, Sum, Max
 
-# Register the Order model with SimpleHistoryAdmin
-
-
-@admin.register(Order)
-class OrderAdmin(SimpleHistoryAdmin):
-    list_display = [
-        'table',
-
-        'waitress',
-        'total_price',
-        'created_at',
-        'is_paid',
-        'is_active_order',
-    ]
-    list_filter = [
-        'waitress',
-        'table',
-        ('created_at', DateRangeFilter)
-    ]
-
-    date_hierarchy = 'created_at'
-
-    def is_active_order(self, obj):
-        # Considering an order as active if it has not been paid yet
-        return not obj.is_paid
-
-    is_active_order.short_description = 'Aktiv'
-    # This will display a nice icon instead of True/False
-    is_active_order.boolean = True
-
-    def get_queryset(self, request):
-        # Optimizing queryset to include related data to reduce database hits
-        queryset = super().get_queryset(request).select_related('table', 'waitress')
-        return queryset
-
-# Register the OrderItem model
-
-
-@admin.register(OrderItem)
-class OrderItemAdmin(SimpleHistoryAdmin):
-    list_display = [
-        'order',
-        'meal',
-        'quantity',
-        'price',
-        'created_at',
-    ]
-    list_filter = [
-        'meal',
-        'order__waitress',
-        'order__table',
-        ('created_at', DateRangeFilter)
-    ]
-
-# Register the Statistics model
+from apps.orders.apis.printer import PrinterService
+from apps.orders.models import Statistics
+from apps.orders.models import Order
+# from apps.orders.models import OrderItem
 
 
 class StatisticsAdmin(SimpleHistoryAdmin):
@@ -178,78 +123,3 @@ class StatisticsAdmin(SimpleHistoryAdmin):
 
 
 admin.site.register(Statistics, StatisticsAdmin)
-
-# Dynamically get the historical models
-HistoricalOrder = get_history_model_for_model(Order)
-HistoricalOrderItem = get_history_model_for_model(OrderItem)
-
-HistoricalOrder._meta.verbose_name = 'Arxiv (Sifariş)'
-HistoricalOrder._meta.verbose_name_plural = 'Arxiv (Sifarişlər) 🎞️'
-
-
-HistoricalOrderItem._meta.verbose_name = 'Arxiv (Sifariş məhsulu)'
-HistoricalOrderItem._meta.verbose_name_plural = 'Arxiv (Sifariş məhsulu) 🎞️'
-
-# Register the historical models in the admin
-
-
-@admin.register(HistoricalOrder)
-class HistoricalOrderAdmin(admin.ModelAdmin):
-    list_display = [
-        'table',
-        'is_paid',
-        'waitress',
-        'total_price',
-        'history_type',
-        'created_at',
-    ]
-    list_filter = [
-        'waitress',
-        'table',
-        ('created_at', DateRangeFilter)
-    ]
-
-
-@admin.register(HistoricalOrderItem)
-class HistoricalOrderItemAdmin(admin.ModelAdmin):
-    list_display = [
-        'id',
-        'order',
-        'meal',
-        'quantity',
-        'price',
-        'is_deleted_by_adminstrator',
-        'history_type',
-        'created_at',
-    ]
-    list_filter = [
-        'meal',
-        'order__waitress',
-        'order__table',
-        ('created_at', DateRangeFilter)
-    ]
-
-    def changelist_view(self, request, extra_context=None):
-        response = super().changelist_view(request, extra_context)
-        try:
-            queryset = response.context_data['cl'].queryset
-
-            # Create a subquery to get the latest history_date for each id
-            subquery = queryset.exclude(is_deleted_by_adminstrator=True).filter(id=OuterRef('id')).order_by(
-                '-history_date').values('history_date')[:1]
-
-            # Filter the queryset to include only the latest records
-            latest_records = queryset.filter(history_date=Subquery(subquery))
-
-            # Perform the aggregation on the filtered queryset
-            aggregated_data = latest_records.aggregate(
-                total_quantity=Sum('quantity'),
-                total_price=Sum('price')
-            )
-            extra_context = extra_context or {}
-            extra_context['total_quantity'] = aggregated_data['total_quantity']
-            extra_context['total_price'] = aggregated_data['total_price']
-            response.context_data.update(extra_context)
-        except (AttributeError, KeyError):
-            pass
-        return response
