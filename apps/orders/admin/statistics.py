@@ -268,18 +268,18 @@ class StatisticsAdmin(SimpleHistoryAdmin):
                     <td style="padding: 10px; border-bottom: 1px solid #ddd;">{total_served} (AZN)</td>
                 </tr>
             """
-            # Adding total row at the end
-            table_html += f"""
-                <tr style="font-weight: bold; background-color: #e6e6e6;">
-                    <td style="padding: 10px; border-bottom: 1px solid #ddd;">Cəmi</td>
-                    <td></td>
-                    <td style="padding: 10px; border-bottom: 1px solid #ddd;">{total_server_by_waitresses} (AZN)</td>
-                </tr>
-            """
+        # Adding total row at the end
+        table_html += f"""
+            <tr style="font-weight: bold; background-color: #e6e6e6;">
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;">Cəmi</td>
+                <td></td>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;">{total_server_by_waitresses} (AZN)</td>
+            </tr>
+        """
 
-            table_html += "</tbody></table> <br>"
-            table_html += help_text_html
-            return format_html(table_html)
+        table_html += "</tbody></table> <br>"
+        table_html += help_text_html
+        return format_html(table_html)
 
     def create_table_for_order_items(self, order_items, oldest_order, latest_order):
         # Format dates to include time (hours and minutes)
