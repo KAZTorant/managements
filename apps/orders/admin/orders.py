@@ -23,7 +23,6 @@ class OrderAdmin(SimpleHistoryAdmin):
         'waitress',
         'table',
         ('created_at', DateRangeFilter),
-        'is_deleted',
     ]
 
     date_hierarchy = 'created_at'
