@@ -49,7 +49,7 @@ class DeleteOrderItemAPIView(APIView):
         meal_id = request.data.get("meal_id", 0)
 
         if not order.order_items.exists():
-            order.delete()
+            order.is_deleted = True
             return Response(
                 {'error': 'Sifariş yoxdur və ya ödəniş edilib'},
                 status=status.HTTP_404_NOT_FOUND
@@ -83,7 +83,7 @@ class DeleteOrderItemAPIView(APIView):
         order.save()
 
         if not order.order_items.exists():
-            order.delete()
+            order.is_deleted = True
             return Response(
                 {'error': 'Sifariş yoxdur və ya ödəniş edilib'},
             )

@@ -10,6 +10,8 @@ import datetime
 import calendar
 from datetime import timedelta
 
+from simple_history.models import HistoricalRecords
+
 
 class StatisticsManager(models.Manager):
 
@@ -146,7 +148,7 @@ class StatisticsManager(models.Manager):
         orders = Order.objects.filter(created_at__range=(
             start_of_day, end_of_day), is_paid=True)
         count = orders.count()  # Count orders before deletion for reporting
-        orders.delete()
+        orders.update(is_deleted=True)
         return count  # Return the number of deleted orders for confirmation/logging
 
 
@@ -179,10 +181,11 @@ class Statistics(DateTimeModel, models.Model):
         Order, blank=True, related_name="statistics"
     )
     objects = StatisticsManager()
+    history = HistoricalRecords()
 
     class Meta:
         verbose_name = "Statistika"
-        verbose_name_plural = "Statistikalar"
+        verbose_name_plural = "Statistikalar 📊"
 
     def __str__(self) -> str:
         if self.title == "per_waitress":
@@ -204,7 +207,7 @@ class Statistics(DateTimeModel, models.Model):
         # Filter and delete all paid orders up to the current date
         orders = self.orders.all()
         count = orders.count()  # Count orders before deletion for reporting
-        orders.delete()
+        orders.update(is_deleted=True)
         self.is_z_checked = True
         self.save()
         return count

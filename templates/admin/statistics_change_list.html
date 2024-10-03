@@ -1,6 +1,7 @@
 {% extends "admin/change_list.html" %}
 {% load i18n static %}
 
+
 {% block extrahead %}
     {{ block.super }}
     <style>
@@ -73,7 +74,7 @@
     <script>
         function fetchTodaysOrders() {
             $.ajax({
-                url: "{% url 'admin:orders_statistics_todays_orders' %}",
+                url: "{% url 'admin:orders_statistics_active_orders' %}",
                 method: "GET",
                 success: function (data) {
                     var tableHTML = `
@@ -142,11 +143,11 @@
 {% endblock %}
 
 {% block object-tools-items %}
-    <button type="button" class="btn btn-primary" onclick="fetchTodaysOrders()">{% trans "Günün sifarişlərinə bax" %}</button>
-    <button type="button" class="btn btn-primary ml-2" onclick="location.href='{% url 'admin:orders_statistics_calculate_till_now' %}'">{% trans "Bu günə kimi olan hesabatı hazırla" %}</button>
+    <button type="button" class="btn btn-primary" onclick="fetchTodaysOrders()">{% trans "Aktiv sifarişlər" %}</button>
+    <button type="button" class="btn btn-primary ml-2" onclick="location.href='{% url 'admin:orders_statistics_calculate_till_now' %}'">{% trans "Hesabatı hazırla" %}</button>
 
     <button class="btn btn-secondary ml-2 mr-2" type="button" onclick="showStatisticsModal()">
-        {% trans "Hesabat" %}
+        {% trans "Digər hesabatlar" %}
     </button>
 
     {{ block.super }}

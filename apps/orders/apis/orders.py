@@ -28,7 +28,8 @@ class CheckOrderAPIView(APIView):
 
     def get(self, request, table_id):
         # Check if there is an existing unpaid order for this table
-        orders = Order.objects.filter(table__id=table_id, is_paid=False)
+        orders = Order.objects.filter(
+            table__id=table_id, is_paid=False)
         if orders.exists():
             return Response(
                 {'message': 'Sifariş yaradılıb'},
