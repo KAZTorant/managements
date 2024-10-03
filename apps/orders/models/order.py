@@ -14,6 +14,12 @@ User = get_user_model()
 # Model for Order
 
 
+class OrderManager(models.Manager):
+    def get_queryset(self):
+        # Override the default queryset to exclude deleted objects
+        return super().get_queryset().filter(is_deleted=False)
+
+
 class Order(DateTimeModel, models.Model):
     table = models.ForeignKey(
         Table,
@@ -26,6 +32,7 @@ class Order(DateTimeModel, models.Model):
     is_paid = models.BooleanField(default=False, verbose_name="Ödənilib")
     is_check_printed = models.BooleanField(
         default=False, verbose_name="Çek çıxarılıb")
+    is_deleted = models.BooleanField(default=False)
     waitress = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -39,10 +46,11 @@ class Order(DateTimeModel, models.Model):
         verbose_name="Ümumi"
     )
     history = HistoricalRecords()
+    objects = OrderManager()
 
     class Meta:
         verbose_name = "Sifariş"
-        verbose_name_plural = "Sifarişlər"
+        verbose_name_plural = "Sifarişlər 🍽️"
 
     def __str__(self):
         return f"Order {self.id} for {self.table}"
@@ -55,6 +63,12 @@ class Order(DateTimeModel, models.Model):
         self.save()
 
 # Intermediate model for Order and Meal relationship
+
+
+class OrderItemManager(models.Manager):
+    def get_queryset(self):
+        # Override the default queryset to exclude deleted objects
+        return super().get_queryset().filter(order__is_deleted=False)
 
 
 class OrderItem(DateTimeModel, models.Model):
@@ -77,10 +91,11 @@ class OrderItem(DateTimeModel, models.Model):
     item_added_at = models.DateTimeField(
         default=timezone.now, blank=True, null=True)
     history = HistoricalRecords()
+    objects = OrderItemManager()
 
     class Meta:
         verbose_name = "Sifariş məhsulu"
-        verbose_name_plural = "Sifariş məhsulları"
+        verbose_name_plural = "Sifariş məhsulları 🥘"
 
     def __str__(self):
         try:

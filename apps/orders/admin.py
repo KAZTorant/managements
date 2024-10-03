@@ -52,7 +52,7 @@ class OrderAdmin(SimpleHistoryAdmin):
 
 
 @admin.register(OrderItem)
-class OrderItemAdmin(admin.ModelAdmin):
+class OrderItemAdmin(SimpleHistoryAdmin):
     list_display = [
         'order',
         'meal',
@@ -70,7 +70,7 @@ class OrderItemAdmin(admin.ModelAdmin):
 # Register the Statistics model
 
 
-class StatisticsAdmin(admin.ModelAdmin):
+class StatisticsAdmin(SimpleHistoryAdmin):
     list_display = ('title', 'total', 'date', "is_z_checked")
     change_list_template = "admin/statistics_change_list.html"
     list_filter = ("title", "date", "waitress_info")
@@ -183,12 +183,12 @@ admin.site.register(Statistics, StatisticsAdmin)
 HistoricalOrder = get_history_model_for_model(Order)
 HistoricalOrderItem = get_history_model_for_model(OrderItem)
 
-HistoricalOrder._meta.verbose_name = 'Sifariş tarixçəsi'
-HistoricalOrder._meta.verbose_name_plural = 'Sifarişlər tarixçəsi'
+HistoricalOrder._meta.verbose_name = 'Arxiv (Sifariş)'
+HistoricalOrder._meta.verbose_name_plural = 'Arxiv (Sifarişlər) 🎞️'
 
 
-HistoricalOrderItem._meta.verbose_name = 'Sifariş məhsulu tarixçəsi'
-HistoricalOrderItem._meta.verbose_name_plural = 'Sifariş məhsulları tarixçəsi'
+HistoricalOrderItem._meta.verbose_name = 'Arxiv (Sifariş məhsulu)'
+HistoricalOrderItem._meta.verbose_name_plural = 'Arxiv (Sifariş məhsulu) 🎞️'
 
 # Register the historical models in the admin
 

@@ -57,7 +57,8 @@ class CustomTableAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super().get_urls()
         custom_urls = [
-            path('table/<int:table_id>/orders/', self.admin_site.admin_view(self.orders_view), name='table_active_order'),
+            path('table/<int:table_id>/orders/',
+                 self.admin_site.admin_view(self.orders_view), name='table_active_order'),
         ]
         return custom_urls + urls
 
@@ -65,8 +66,10 @@ class CustomTableAdmin(admin.ModelAdmin):
         table = get_object_or_404(Table, pk=table_id)
         if table.current_order:
             order_items = table.current_order.order_items.all()
-            total_quantity = order_items.aggregate(total_quantity=Sum('quantity'))['total_quantity'] or 0
-            total_price = order_items.aggregate(total_price=Sum(F('quantity') * F('price')))['total_price'] or 0
+            total_quantity = order_items.aggregate(total_quantity=Sum('quantity'))[
+                'total_quantity'] or 0
+            total_price = order_items.aggregate(total_price=Sum(
+                F('quantity') * F('price')))['total_price'] or 0
             num_items = order_items.count()
         else:
             total_quantity = 0
@@ -74,10 +77,10 @@ class CustomTableAdmin(admin.ModelAdmin):
             num_items = 0
 
         return render(
-            request, 
-            'admin/orders_modal.html', 
+            request,
+            'admin/orders_modal.html',
             {
-                'table': table, 
+                'table': table,
                 'order': table.current_order,
                 'total_quantity': total_quantity,
                 'total_price': total_price,
@@ -92,7 +95,8 @@ class CustomTableAdmin(admin.ModelAdmin):
             cl.result_list = cl.result_list.order_by('room').order_by('number')
             cl.rooms = Room.objects.all()
             for table in cl.result_list:
-                table.has_unpaid_orders = Order.objects.filter(table=table, is_paid=False).exists()
+                table.has_unpaid_orders = Order.objects.exclude(
+                    is_deleted=True).filter(table=table, is_paid=False).exists()
         except (AttributeError, KeyError):
             pass
         return response
