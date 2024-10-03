@@ -15,6 +15,9 @@ User = get_user_model()
 
 
 class OrderManager(models.Manager):
+    def all_orders(self):
+        return super().get_queryset()
+
     def get_queryset(self):
         # Override the default queryset to exclude deleted objects
         return super().get_queryset().filter(is_deleted=False)
@@ -66,6 +69,9 @@ class Order(DateTimeModel, models.Model):
 
 
 class OrderItemManager(models.Manager):
+    def all_order_items(self):
+        return super().get_queryset()
+
     def get_queryset(self):
         # Override the default queryset to exclude deleted objects
         return super().get_queryset().filter(order__is_deleted=False)

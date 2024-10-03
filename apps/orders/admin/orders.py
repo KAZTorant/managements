@@ -11,34 +11,35 @@ from apps.orders.models import OrderItem
 @admin.register(Order)
 class OrderAdmin(SimpleHistoryAdmin):
     list_display = [
-        'table',
-
+        'table_number',
+        'room',
         'waitress',
         'total_price',
-        'created_at',
         'is_paid',
-        'is_active_order',
+        'created_at',
+
     ]
     list_filter = [
         'waitress',
         'table',
-        ('created_at', DateRangeFilter)
+        ('created_at', DateRangeFilter),
+        'is_deleted',
     ]
 
     date_hierarchy = 'created_at'
 
-    def is_active_order(self, obj):
-        # Considering an order as active if it has not been paid yet
-        return not obj.is_paid
+    def table_number(self, order: Order):
+        return order.table.number
 
-    is_active_order.short_description = 'Aktiv'
-    # This will display a nice icon instead of True/False
-    is_active_order.boolean = True
+    def room(self, order: Order):
+        return order.table.room
+
+    table_number.short_description = 'Stol'
+    room.short_description = 'Zal'
 
     def get_queryset(self, request):
-        # Optimizing queryset to include related data to reduce database hits
-        queryset = super().get_queryset(request).select_related('table', 'waitress')
-        return queryset
+        return super().get_queryset(request).select_related('table', 'waitress')
+
 
 # Register the OrderItem model
 
@@ -56,5 +57,6 @@ class OrderItemAdmin(SimpleHistoryAdmin):
         'meal',
         'order__waitress',
         'order__table',
+
         ('created_at', DateRangeFilter)
     ]
