@@ -242,15 +242,15 @@ class StatisticsAdmin(SimpleHistoryAdmin):
         # Start building the table
         table_html = """
         <hr>
-        <table class='table table-striped'>
-            <caption style="caption-side: top; text-align: center; font-weight: bold; font-size: 1.2rem; padding-bottom: 8px;">
+        <table class='table table-striped' style="border-collapse: collapse; width: 100%; margin-top: 20px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
+            <caption style="caption-side: top; text-align: center; font-weight: bold; font-size: 1.5rem; padding-bottom: 8px; color: #444;">
                 Ofisiantların xidməti
             </caption>
-            <thead>
+            <thead style="background-color: #f2f2f2;">
                 <tr>
-                    <th>#</th>
-                    <th>Ofisiant</th>
-                    <th>Ümumi Məbləğ</th>
+                    <th style="padding: 10px; border-bottom: 1px solid #ddd;">#</th>
+                    <th style="padding: 10px; border-bottom: 1px solid #ddd;">Ofisiant</th>
+                    <th style="padding: 10px; border-bottom: 1px solid #ddd;">Ümumi Məbləğ</th>
                 </tr>
             </thead>
             <tbody>
@@ -262,24 +262,24 @@ class StatisticsAdmin(SimpleHistoryAdmin):
             total_served = waitress['total_served'] or 0
             total_server_by_waitresses += float(total_served)
             table_html += f"""
-                <tr>
-                    <td>{index}</td>
-                    <td>{waitress_name}</td>
-                    <td>{total_served} (AZN)</td>
+                <tr style="background-color: {'#ffffff' if index % 2 == 0 else '#f9f9f9'};">
+                    <td style="padding: 10px; border-bottom: 1px solid #ddd;">{index}</td>
+                    <td style="padding: 10px; border-bottom: 1px solid #ddd;">{waitress_name}</td>
+                    <td style="padding: 10px; border-bottom: 1px solid #ddd;">{total_served} (AZN)</td>
                 </tr>
             """
-        # Adding total row at the end
-        table_html += f"""
-            <tr style="font-weight: bold;">
-                <td>Cəmi</td>
-                <td></td>
-                <td>{total_server_by_waitresses}</td>
-            </tr>
-        """
+            # Adding total row at the end
+            table_html += f"""
+                <tr style="font-weight: bold; background-color: #e6e6e6;">
+                    <td style="padding: 10px; border-bottom: 1px solid #ddd;">Cəmi</td>
+                    <td></td>
+                    <td style="padding: 10px; border-bottom: 1px solid #ddd;">{total_server_by_waitresses} (AZN)</td>
+                </tr>
+            """
 
-        table_html += "</tbody></table> <br>"
-        table_html += help_text_html
-        return format_html(table_html)
+            table_html += "</tbody></table> <br>"
+            table_html += help_text_html
+            return format_html(table_html)
 
     def create_table_for_order_items(self, order_items, oldest_order, latest_order):
         # Format dates to include time (hours and minutes)
@@ -296,16 +296,16 @@ class StatisticsAdmin(SimpleHistoryAdmin):
         # Start building the table
         table_html = """
         <hr>
-        <table class='table table-striped'>
-            <caption style="caption-side: top; text-align: center; font-weight: bold; font-size: 1.2rem; padding-bottom: 8px;">
+        <table class='table table-striped' style="border-collapse: collapse; width: 100%; margin-top: 20px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
+            <caption style="caption-side: top; text-align: center; font-weight: bold; font-size: 1.5rem; padding-bottom: 8px; color: #444;">
                 Satılmış Məhsullar
             </caption>
-            <thead>
+            <thead style="background-color: #f2f2f2;">
                 <tr>
-                    <th>#</th>
-                    <th>Məhsul</th>
-                    <th>Miqdar</th>
-                    <th>Qiymət</th>
+                    <th style="padding: 10px; border-bottom: 1px solid #ddd;">#</th>
+                    <th style="padding: 10px; border-bottom: 1px solid #ddd;">Məhsul</th>
+                    <th style="padding: 10px; border-bottom: 1px solid #ddd;">Miqdar</th>
+                    <th style="padding: 10px; border-bottom: 1px solid #ddd;">Qiymət</th>
                 </tr>
             </thead>
             <tbody>
@@ -319,21 +319,21 @@ class StatisticsAdmin(SimpleHistoryAdmin):
 
             # Adding numbered rows
             table_html += f"""
-                <tr>
-                    <td>{index}</td>
-                    <td>{item["meal__name"]}</td>
-                    <td>{item["total_quantity"]}</td>
-                    <td>{item["total_price"]}</td>
+                <tr style="background-color: {'#ffffff' if index % 2 == 0 else '#f9f9f9'};">
+                    <td style="padding: 10px; border-bottom: 1px solid #ddd;">{index}</td>
+                    <td style="padding: 10px; border-bottom: 1px solid #ddd;">{item["meal__name"]}</td>
+                    <td style="padding: 10px; border-bottom: 1px solid #ddd;">{item["total_quantity"]}</td>
+                    <td style="padding: 10px; border-bottom: 1px solid #ddd;">{item["total_price"]} (AZN)</td>
                 </tr>
             """
 
         # Adding total row at the end
         table_html += f"""
-            <tr style="font-weight: bold;">
-                <td>Cəmi</td>
+            <tr style="font-weight: bold; background-color: #e6e6e6;">
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;">Cəmi</td>
                 <td></td>
-                <td>{total_quantity}</td>
-                <td>{total_price}</td>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;">{total_quantity}</td>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;">{total_price} (AZN)</td>
             </tr>
         """
 
