@@ -2,8 +2,10 @@ from simple_history.admin import SimpleHistoryAdmin
 
 from django.contrib import admin
 from django.db.models import Sum
+from django.db.models import Min
+from django.db.models import Max
 from django.urls import path
-from django.http import HttpResponseRedirect
+from django.http import HttpRequest, HttpResponseRedirect
 from django.http import JsonResponse
 from django.utils.dateformat import format
 from django.utils.timezone import localtime
@@ -57,6 +59,18 @@ class OrderInline(admin.TabularInline):
     is_paid.short_description = "Ödənilib"
     is_paid.boolean = True
     created_at.short_description = "Yaradılma Tarixi"
+
+    def has_add_permission(self, *args, **kwargs) -> bool:
+        return False
+
+    def has_change_permission(self, *args, **kwargs) -> bool:
+        return False
+
+    def has_delete_permission(self, *args, **kwargs) -> bool:
+        return False
+
+    def has_module_permission(self, *args, **kwargs) -> bool:
+        return False
 
 
 class StatisticsAdmin(SimpleHistoryAdmin):
@@ -169,6 +183,15 @@ class StatisticsAdmin(SimpleHistoryAdmin):
         # Get all orders related to this statistic
         related_orders = Order.objects.all_orders().filter(statistics=obj)
 
+        # Get the oldest and latest created_at dates
+        order_dates = related_orders.aggregate(
+            oldest_order=Min('created_at'),
+            latest_order=Max('created_at')
+        )
+
+        oldest_order = order_dates['oldest_order']
+        latest_order = order_dates['latest_order']
+
         # Get all order items related to these orders
         order_items = OrderItem.objects.all_order_items().filter(order__in=related_orders)
         order_items = order_items.values('meal__name').annotate(
@@ -177,9 +200,23 @@ class StatisticsAdmin(SimpleHistoryAdmin):
 
         if not order_items.exists():
             return "No orders found."
-        return self.create_table(order_items)
+        return self.create_table(order_items, oldest_order, latest_order)
 
-    def create_table(self, order_items):
+    display_order_items.short_description = ""
+
+    def create_table(self, order_items, oldest_order, latest_order):
+        # Format dates to include time (hours and minutes)
+        oldest_order_str = oldest_order.strftime('%d %B %Y, %H:%M')
+        latest_order_str = latest_order.strftime('%d %B %Y, %H:%M')
+
+        # Styled help text
+        help_text_html = f"""
+        <small style="display: block; font-size: 0.9rem; color: #666; margin-bottom: 10px;">
+            <span> Sifarişlər <span style="font-weight: bold;">{oldest_order_str}</span> tarixdən <span style="font-weight: bold;">{latest_order_str}</span> tarixədək satılıb.</span>
+        </small>
+        """
+
+        # Start building the table
         table_html = """
         <hr>
         <table class='table table-striped'>
@@ -199,9 +236,10 @@ class StatisticsAdmin(SimpleHistoryAdmin):
 
         total_price, total_quantity = 0, 0
         for index, item in enumerate(order_items, start=1):
-            # Summing total price
+            # Summing total price and quantity
             total_price += float(item["total_price"])
             total_quantity += int(item["total_quantity"])
+
             # Adding numbered rows
             table_html += f"""
                 <tr>
@@ -222,11 +260,9 @@ class StatisticsAdmin(SimpleHistoryAdmin):
             </tr>
         """
 
-        table_html += "</tbody></table>"
-
+        table_html += "</tbody></table> <br>"
+        table_html += help_text_html
         return format_html(table_html)
-
-    display_order_items.short_description = ""
 
 
 admin.site.register(Statistics, StatisticsAdmin)
