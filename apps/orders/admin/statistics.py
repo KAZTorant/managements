@@ -79,8 +79,12 @@ class StatisticsAdmin(SimpleHistoryAdmin):
     change_list_template = "admin/statistics_change_list.html"
     list_filter = ("title", "date", "waitress_info")
     readonly_fields = (
-        'title', 'date', 'is_z_checked',
-        'waitress_info', 'display_order_items')
+        'title', 'date',
+        'is_z_checked',
+        'waitress_info',
+        'display_order_items',
+        'display_per_waitress',
+    )
     inlines = [OrderInline]
 
     def get_urls(self):
@@ -179,12 +183,31 @@ class StatisticsAdmin(SimpleHistoryAdmin):
 
         return super().change_view(request, object_id, form_url, extra_context=extra_context)
 
-    def display_order_items(self, obj):
+    def display_per_waitress(self, obj):
         # Get all orders related to this statistic
-        related_orders = Order.objects.all_orders().filter(statistics=obj)
+        orders = Order.objects.all_orders().filter(statistics=obj)
 
         # Get the oldest and latest created_at dates
-        order_dates = related_orders.aggregate(
+        order_dates = orders.aggregate(
+            oldest_order=Min('created_at'),
+            latest_order=Max('created_at')
+        )
+
+        oldest_order = order_dates['oldest_order']
+        latest_order = order_dates['latest_order']
+
+        # Group by waitress and sum the total_price
+        waitress_totals = orders.values('waitress__first_name', 'waitress__last_name').annotate(
+            total_served=Sum('total_price')
+        )
+        return self.create_table_for_per_waitress(waitress_totals, oldest_order, latest_order)
+
+    def display_order_items(self, obj):
+        # Get all orders related to this statistic
+        orders = Order.objects.all_orders().filter(statistics=obj)
+
+        # Get the oldest and latest created_at dates
+        order_dates = orders.aggregate(
             oldest_order=Min('created_at'),
             latest_order=Max('created_at')
         )
@@ -193,18 +216,72 @@ class StatisticsAdmin(SimpleHistoryAdmin):
         latest_order = order_dates['latest_order']
 
         # Get all order items related to these orders
-        order_items = OrderItem.objects.all_order_items().filter(order__in=related_orders)
+        order_items = OrderItem.objects.all_order_items().filter(order__in=orders)
         order_items = order_items.values('meal__name').annotate(
             total_quantity=Sum('quantity')
         ).annotate(total_price=Sum('price'))
 
         if not order_items.exists():
             return "No orders found."
-        return self.create_table(order_items, oldest_order, latest_order)
+        return self.create_table_for_order_items(order_items, oldest_order, latest_order)
 
-    display_order_items.short_description = ""
+    def create_table_for_per_waitress(self, waitress_totals, oldest_order, latest_order):
+        # Format dates to include time (hours and minutes)
+        oldest_order_str = oldest_order.strftime('%d %B %Y, %H:%M')
+        latest_order_str = latest_order.strftime('%d %B %Y, %H:%M')
 
-    def create_table(self, order_items, oldest_order, latest_order):
+        # Styled help text
+        help_text_html = f"""
+        <small style="display: block; font-size: 0.9rem; color: #666; margin-bottom: 10px;">
+            <span> Hər ofisiantın xidmət etdiyi sifarişlərin cəm məbləğidir.
+            <br>
+            *<span style="font-weight: bold;">{oldest_order_str}</span> tarixdən <span style="font-weight: bold;">{latest_order_str}</span> tarixədək</span>
+        </small>
+        """
+
+        # Start building the table
+        table_html = """
+        <hr>
+        <table class='table table-striped'>
+            <caption style="caption-side: top; text-align: center; font-weight: bold; font-size: 1.2rem; padding-bottom: 8px;">
+                Ofisiantların xidməti
+            </caption>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Ofisiant</th>
+                    <th>Ümumi Məbləğ</th>
+                </tr>
+            </thead>
+            <tbody>
+        """
+        total_server_by_waitresses = 0
+        # Iterate through each waitress and display their total served amount
+        for index, waitress in enumerate(waitress_totals, start=1):
+            waitress_name = f"{waitress['waitress__first_name']} {waitress['waitress__last_name']}" or "Məlum deyil"
+            total_served = waitress['total_served'] or 0
+            total_server_by_waitresses += float(total_served)
+            table_html += f"""
+                <tr>
+                    <td>{index}</td>
+                    <td>{waitress_name}</td>
+                    <td>{total_served} (AZN)</td>
+                </tr>
+            """
+        # Adding total row at the end
+        table_html += f"""
+            <tr style="font-weight: bold;">
+                <td>Cəmi</td>
+                <td></td>
+                <td>{total_server_by_waitresses}</td>
+            </tr>
+        """
+
+        table_html += "</tbody></table> <br>"
+        table_html += help_text_html
+        return format_html(table_html)
+
+    def create_table_for_order_items(self, order_items, oldest_order, latest_order):
         # Format dates to include time (hours and minutes)
         oldest_order_str = oldest_order.strftime('%d %B %Y, %H:%M')
         latest_order_str = latest_order.strftime('%d %B %Y, %H:%M')
@@ -263,6 +340,9 @@ class StatisticsAdmin(SimpleHistoryAdmin):
         table_html += "</tbody></table> <br>"
         table_html += help_text_html
         return format_html(table_html)
+
+    display_order_items.short_description = ""
+    display_per_waitress.short_description = ""
 
 
 admin.site.register(Statistics, StatisticsAdmin)
