@@ -64,27 +64,20 @@ class CustomTableAdmin(admin.ModelAdmin):
 
     def orders_view(self, request, table_id):
         table = get_object_or_404(Table, pk=table_id)
-        if table.current_order:
-            order_items = table.current_order.order_items.all()
-            total_quantity = order_items.aggregate(total_quantity=Sum('quantity'))[
-                'total_quantity'] or 0
-            total_price = order_items.aggregate(total_price=Sum(
-                F('quantity') * F('price')))['total_price'] or 0
-            num_items = order_items.count()
-        else:
-            total_quantity = 0
-            total_price = 0
-            num_items = 0
+        orders = Order.objects.filter(table=table, is_paid=False)
+        total_quantity = orders.aggregate(total_quantity=Sum(
+            'order_items__quantity'))['total_quantity'] or 0
+        total_price = orders.aggregate(total_price=Sum(
+            F('order_items__quantity') * F('order_items__price')))['total_price'] or 0
 
         return render(
             request,
             'admin/orders_modal.html',
             {
                 'table': table,
-                'order': table.current_order,
+                'orders': orders,
                 'total_quantity': total_quantity,
                 'total_price': total_price,
-                'num_items': num_items,
             }
         )
 

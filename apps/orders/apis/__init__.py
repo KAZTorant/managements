@@ -6,9 +6,10 @@ from apps.orders.apis.order_items.remove import DeleteOrderItemAPIView
 from apps.orders.apis.orders.create import CreateOrderAPIView
 from apps.orders.apis.orders.check import CheckOrderAPIView
 from apps.orders.apis.orders.close import CloseTableOrderAPIView
-from apps.orders.apis.orders.change_table import ChangeOrderTableAPIView
-from apps.orders.apis.orders.list_waitress import ListWaitressAPIView
-from apps.orders.apis.orders.change_waitress import ChangeWaitressAPIView
+from apps.orders.apis.orders.table_change import ChangeOrderTableAPIView
+from apps.orders.apis.orders.table_join import JoinTableOrdersAPIView
+from apps.orders.apis.orders.waitress_list import ListWaitressAPIView
+from apps.orders.apis.orders.waitress_change import ChangeWaitressAPIView
 
 from apps.orders.apis.printer import PrintCheckAPIView
 
