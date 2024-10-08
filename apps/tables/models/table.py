@@ -46,7 +46,7 @@ class Table(DateTimeModel, models.Model):
     @property
     def total_price(self):
         price = 0
-        for order in self.orders:
+        for order in self.current_orders:
             price += order.total_price
         return price
 

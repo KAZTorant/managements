@@ -67,7 +67,7 @@ class ChangeTableOrderAPIView(APIView):
                 status=status.HTTP_404_NOT_FOUND
             )
 
-        orders.update(table=table)
+        orders.update(table=new_table)
 
         return Response(
             {'message': 'Masa uğurla dəyişdirildi.'},

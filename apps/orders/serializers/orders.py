@@ -25,11 +25,17 @@ class OrderItemSerializer(serializers.ModelSerializer):
         source='meal.id',
         help_text="ID of the meal"
     )
+    order_id = serializers.IntegerField(
+        write_only=True,
+        source='order.id',
+        help_text="ID of the Order",
+        required=False
+    )
 
     class Meta:
         model = OrderItem
         # 'meal' and 'order' are for serialization
-        fields = ['meal_id', 'quantity', 'meal', 'order']
+        fields = ['meal_id', 'quantity', 'meal', 'order', 'order_id',]
         # These are for serialization only
         read_only_fields = ['meal', 'order']
 
