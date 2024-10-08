@@ -16,7 +16,7 @@ from apps.tables.models import Table
 from apps.users.permissions import IsAdminOrOwner
 
 
-class ChangeOrderTableAPIView(APIView):
+class ChangeTableOrderAPIView(APIView):
     permission_classes = [IsAuthenticated, IsAdminOrOwner]
 
     @swagger_auto_schema(

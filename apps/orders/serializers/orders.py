@@ -14,6 +14,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data["waitress"] = self.context['request'].user
+        validated_data["is_main"] = True
         order = Order.objects.create(**validated_data)
         return order
 
@@ -110,3 +111,12 @@ class ListOrderItemSerializer(serializers.ModelSerializer):
             "price": obj.meal.price,
             "description": obj.meal.description,
         }
+
+
+class ListOrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = (
+            "pk",
+            "is_main",
+        )

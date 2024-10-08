@@ -5,13 +5,17 @@ from apps.orders.apis import CheckOrderAPIView
 
 from apps.orders.apis import AddOrderItemAPIView
 from apps.orders.apis import ListOrderItemsAPIView
-from apps.orders.apis import ChangeOrderTableAPIView
+from apps.orders.apis import DeleteOrderItemAPIView
+
 from apps.orders.apis import CloseTableOrderAPIView
+from apps.orders.apis import ChangeTableOrderAPIView
+from apps.orders.apis import JoinTableOrdersAPIView
+from apps.orders.apis import ListTableOrdersAPIView
+
 from apps.orders.apis import ListWaitressAPIView
 from apps.orders.apis import ChangeWaitressAPIView
+
 from apps.orders.apis import PrintCheckAPIView
-from apps.orders.apis import DeleteOrderItemAPIView
-from apps.orders.apis.orders.table_join import JoinTableOrdersAPIView
 
 urlpatterns = [
     path(
@@ -42,12 +46,18 @@ urlpatterns = [
     path(
         '<int:table_id>/list-order-items/',
         ListOrderItemsAPIView.as_view(),
-        name='list-order-itemsm'
+        name='list-order-items'
+    ),
+
+    path(
+        '<int:table_id>/list-orders/',
+        ListTableOrdersAPIView.as_view(),
+        name='list-orders'
     ),
 
     path(
         '<int:table_id>/change-table-for-order/',
-        ChangeOrderTableAPIView.as_view(),
+        ChangeTableOrderAPIView.as_view(),
         name='change-table-for-order'
     ),
 
