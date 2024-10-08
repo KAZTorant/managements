@@ -49,16 +49,15 @@ class ChangeWaitressAPIView(APIView):
                 status=status.HTTP_404_NOT_FOUND
             )
 
-        order: Order = table.current_order
+        orders = table.current_orders
 
-        if not order:
+        if not orders.exists():
             return Response(
                 {'error': 'Sifariş yoxdur və ya ödəniş edilib.'},
                 status=status.HTTP_404_NOT_FOUND
             )
 
-        order.waitress = new_waitress
-        order.save()
+        orders.update(waitress=new_waitress)
         return Response(
             {'error': 'Ofisiant uğurla dəyişdirildi.'},
             status=status.HTTP_200_OK

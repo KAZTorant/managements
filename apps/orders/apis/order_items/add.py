@@ -15,6 +15,7 @@ from rest_framework.views import APIView
 
 from apps.meals.models import Meal
 from apps.orders.models import OrderItem
+from apps.orders.models.order import Order
 from apps.orders.serializers import OrderItemSerializer
 from apps.tables.models import Table
 from apps.users.permissions import IsWaitressOrCapitaonOrAdminOrOwner
@@ -37,7 +38,8 @@ class AddOrderItemAPIView(APIView):
     def post(self, request, table_id):
         try:
             with transaction.atomic():
-                order = self.get_order(request, table_id)
+                order_id = request.data.get("order_id", None)
+                order = self.get_order(request, table_id, order_id)
                 if not order:
                     return Response({
                         'error': 'Order not found or payment has been made already.'},
@@ -54,13 +56,16 @@ class AddOrderItemAPIView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=HTTP_500_INTERNAL_SERVER_ERROR)
 
-    def get_order(self, request, table_id):
-        order = request.user.orders.select_for_update().filter(
-            table__id=table_id, is_paid=False).first()
-        if request.user.type in ["admin", 'captain_waitress', 'restaurant']:
-            table = Table.objects.filter(id=table_id).first()
-            order = table.current_order if table else None
-        return order
+    def get_order(self, request, table_id, order_id):
+        table = Table.objects.filter(id=table_id).first()
+        order: Order = table.current_order \
+            if not order_id else \
+            table.current_orders.filter(id=order_id).first()
+
+        if request.user.type in ["admin", 'captain_waitress', 'restaurant'] or order.waitress == request.user:
+            return order
+
+        return Order.objects.none()
 
     def get_meal(self, meal_id):
         return Meal.objects.filter(id=meal_id).first()

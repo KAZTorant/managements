@@ -33,8 +33,9 @@ class DeleteOrderItemAPIView(APIView):
     )
     def delete(self, request, table_id):
         # Check if there is an existing unpaid order and if it belongs to the user
-        table = Table.objects.filter(id=table_id).first()
-        order: (Order | None) = table.current_order if table else None
+
+        order_id = request.data.get("order_id", None)
+        order: (Order | None) = self.get_order(table_id, order_id)
         if not order:
             return Response(
                 {'error': 'Sifariş yoxdur və ya ödəniş edilib'},
@@ -84,3 +85,14 @@ class DeleteOrderItemAPIView(APIView):
             )
 
         return Response({}, status=status.HTTP_200_OK)
+
+    def get_order(self, table_id, order_id):
+        table = Table.objects.filter(id=table_id).first()
+        if not table:
+            return Order.objects.none()
+
+        order: Order = table.current_order \
+            if not order_id else \
+            table.current_orders.filter(id=order_id).first()
+
+        return order

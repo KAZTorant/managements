@@ -44,9 +44,9 @@ class ChangeTableOrderAPIView(APIView):
                 status=status.HTTP_404_NOT_FOUND
             )
 
-        order: Order = table.current_order
+        orders = table.current_orders
 
-        if not order:
+        if not orders.exists():
             return Response(
                 {'error': 'Sifariş yoxdur və ya ödəniş edilib'},
                 status=status.HTTP_404_NOT_FOUND
@@ -67,8 +67,7 @@ class ChangeTableOrderAPIView(APIView):
                 status=status.HTTP_404_NOT_FOUND
             )
 
-        order.table = new_table
-        order.save()
+        orders.update(table=table)
 
         return Response(
             {'message': 'Masa uğurla dəyişdirildi.'},
