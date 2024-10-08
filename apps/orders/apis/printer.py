@@ -275,7 +275,6 @@ class PrinterServiceV2:
 
             orders = table.current_orders
             receipt_text = self.generate_receipt_text_for_orders(table, orders)
-            print(receipt_text)
             response = self.send_to_printer(receipt_text)
             if response.status_code == 200:
                 orders.update(is_check_printed=True)

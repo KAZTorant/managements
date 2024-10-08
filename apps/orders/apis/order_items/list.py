@@ -23,15 +23,18 @@ class ListOrderItemsAPIView(ListAPIView):
         table_id = self.kwargs.get("table_id", 0)
 
         table = Table.objects.filter(id=table_id).first()
-        if not table:
+        default_order_id = table.current_order.id if table and table.current_order else None
+
+        if not default_order_id:
             return OrderItem.objects.none()
 
-        order_id = self.request.GET.get("order_id", table.current_order.id)
-        order = Order.objects.filter(id=order_id).first()
+        order_id = self.request.GET.get("order_id", default_order_id)
+        order = table.current_orders.filter(id=order_id).first()
         if not order:
             return OrderItem.objects.none()
-
-        return order.order_items.order_by('-item_added_at').all()
+        if self.request.user.type == "waitress":
+            return order.order_items.order_by('-item_added_at').all()
+        return order.order_items.all()
 
     @swagger_auto_schema(
         manual_parameters=[
