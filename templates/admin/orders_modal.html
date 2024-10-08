@@ -1,15 +1,12 @@
-{% if order %}
+{% if orders.exists %}
 <div>
-    <h3>Sifariş {{ order.id }} </h3>
+    <br>
+    {% for order in orders %}
     <div class="card mb-3">
         <div class="card-header">
-            {{ table.room }}
-            <br>
-            Massa {{ table.id }}
-            <br>
-            Ofisiant: {{order.waitress}}
-            <br>
-            Ümumi Məbləğ: {{order.total_price}}
+            <strong>
+                Sifariş {{ order.id }} {% if order.is_main %} (Əsas) {%else%}{%endif%}
+            </strong>
         </div>
         <div class="card-body">
             <table class="table">
@@ -32,20 +29,19 @@
                 <hr>
                 <tfoot>
                     <tr>
-                        <th>{{ order.order_items.count }}</th>
+                        <th>Cəmi</th>
                         <th>
-                            {{ total_quantity }}
+                            
                         </th>
                         <th>
-                            {{ total_price }}
+                            {{order.total_price}}
                         </th>
                     </tr>
-                    
                 </tfoot>
             </table>
         </div>
-        
     </div>
+    {% endfor %}
 </div>
 {% else %}
 <p class="text-muted">No active orders for this table.</p>

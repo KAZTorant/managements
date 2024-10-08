@@ -36,6 +36,8 @@ class Order(DateTimeModel, models.Model):
     is_check_printed = models.BooleanField(
         default=False, verbose_name="Çek çıxarılıb")
     is_deleted = models.BooleanField(default=False)
+    is_main = models.BooleanField(default=False)
+
     waitress = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -90,7 +92,6 @@ class OrderItem(DateTimeModel, models.Model):
     is_prepared = models.BooleanField(
         default=False
     )
-    # Adjusted for total price
     price = models.DecimalField(
         max_digits=9, decimal_places=2, default=0.00, verbose_name="Məbləğ")
     is_deleted_by_adminstrator = models.BooleanField(default=False)
