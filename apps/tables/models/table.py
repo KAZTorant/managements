@@ -55,6 +55,10 @@ class Table(DateTimeModel, models.Model):
         return self.orders.filter(is_paid=False, is_main=True).first()
 
     @property
+    def current_orders(self):
+        return self.orders.filter(is_paid=False)
+
+    @property
     def assignable_table(self):
         return not self.orders.filter(is_paid=False).exists()
 

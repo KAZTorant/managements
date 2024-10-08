@@ -22,4 +22,4 @@ class ListTableOrdersAPIView(ListAPIView):
         if not table:
             return Order.objects.none()
 
-        return table.orders.filter(is_paid=False)
+        return table.current_orders

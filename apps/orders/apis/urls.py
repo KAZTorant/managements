@@ -16,6 +16,7 @@ from apps.orders.apis import ListWaitressAPIView
 from apps.orders.apis import ChangeWaitressAPIView
 
 from apps.orders.apis import PrintCheckAPIView
+from apps.orders.apis.printer import PrintCheckAPIViewV2
 
 urlpatterns = [
     path(
@@ -87,7 +88,7 @@ urlpatterns = [
 
     path(
         '<int:table_id>/print-check/',
-        PrintCheckAPIView.as_view(),
+        PrintCheckAPIViewV2.as_view(),
         name='print-check'
     ),
 ]

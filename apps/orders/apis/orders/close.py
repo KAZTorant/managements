@@ -24,24 +24,21 @@ class CloseTableOrderAPIView(APIView):
                 status=status.HTTP_404_NOT_FOUND
             )
 
-        order: Order = table.current_order
+        orders = table.current_orders
 
-        if not order:
+        if not orders.exists():
             return Response(
                 {"success": False, "message": "Masada sifariş yoxdur."},
                 status=status.HTTP_404_NOT_FOUND
             )
 
         try:
-            printer_service = PrinterService()
-            success, message = printer_service.print_order_for_table(
-                table_id, False)
+            printer = PrinterService()
+            printer.print_order_for_table(table_id, False)
         except Exception as e:
             print("Printer error", str(e))
 
-        order.is_paid = True
-        order.save()
-
+        orders.update(is_paid=True)
         return Response(
             {"success": True, "message": "Sifariş uğurla bağlamşdır."},
             status=status.HTTP_200_OK
