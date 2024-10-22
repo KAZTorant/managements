@@ -13,7 +13,7 @@ from datetime import datetime
 from django.conf import settings
 
 
-class PrinterServiceV2:
+class PrinterService:
     PRINTER_URL = settings.PRINTER_URL
 
     @staticmethod
@@ -76,11 +76,11 @@ class PrinterServiceV2:
         if not orders:
             return ""
         # Generate header using table information
-        header = PrinterServiceV2._generate_header(table)
+        header = PrinterService._generate_header(table)
         # Generate body and total from all orders
-        body, total = PrinterServiceV2._generate_body_for_orders(orders)
+        body, total = PrinterService._generate_body_for_orders(orders)
         # Generate footer
-        footer = PrinterServiceV2._generate_footer(total)
+        footer = PrinterService._generate_footer(total)
         return f"\n{header}{body}{footer}\n"
 
     def send_to_printer(self, text):
@@ -126,7 +126,7 @@ class PrinterServiceV2:
             return False, "Table does not exist."
 
 
-class PrintCheckAPIViewV2(APIView):
+class PrintCheckAPIView(APIView):
     permission_classes = [IsAuthenticated, IsAdminOrOwner]
 
     def post(self, request, table_id):
@@ -134,7 +134,7 @@ class PrintCheckAPIViewV2(APIView):
             return Response({"error": "Table ID is required."}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            printer = PrinterServiceV2()
+            printer = PrinterService()
 
             success, message = printer.print_orders_for_table(table_id)
             if success:
