@@ -45,14 +45,18 @@ class Table(DateTimeModel, models.Model):
 
     @property
     def total_price(self):
-        order = self.current_order
-        if order:
-            return order.total_price
-        return 0
+        price = 0
+        for order in self.current_orders:
+            price += order.total_price
+        return price
 
     @property
     def current_order(self):
-        return self.orders.filter(is_paid=False).first()
+        return self.orders.filter(is_paid=False, is_main=True).first()
+
+    @property
+    def current_orders(self):
+        return self.orders.filter(is_paid=False)
 
     @property
     def assignable_table(self):

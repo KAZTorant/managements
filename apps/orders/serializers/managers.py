@@ -12,6 +12,11 @@ class DeleteOrderItemSerializer(serializers.Serializer):
     meal_id = serializers.IntegerField(
         help_text="ID of the meal to decrease quantity from"
     )
+    order_id = serializers.IntegerField(
+        help_text="ID of the order",
+        required=False
+    )
+
     quantity = serializers.IntegerField(
         help_text="Quantity to decrease", min_value=1, default=1
     )
