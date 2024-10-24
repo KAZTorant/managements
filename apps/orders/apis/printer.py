@@ -172,7 +172,7 @@ class PrinterServiceJSON:
         # Add each order and its items to the receipt data
         for order in orders:
             receipt_data['orders'].append(
-                PrinterServiceV2._generate_order_data(order))
+                PrinterServiceJSON._generate_order_data(order))
 
         return receipt_data
 
