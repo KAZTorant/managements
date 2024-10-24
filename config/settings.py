@@ -214,10 +214,6 @@ CORS_ALLOW_HEADERS = [
     'X-PIN',
 ]
 
-PRINTER_URL = os.environ.get(
-    "PRINTER_URL",
-    "http://localhost:3000/print"
-)
 
 CACHES = {
     'default': {
@@ -249,3 +245,12 @@ LOGGING = {
         },
     },
 }
+
+PRINTER_URL = os.environ.get(
+    "PRINTER_URL",
+    "http://localhost:3000/print"
+)
+PRINTER_SERVICE = os.environ.get(
+    "PRINTER_SERVICE",
+    None
+)

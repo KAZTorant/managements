@@ -126,6 +126,94 @@ class PrinterService:
             return False, "Table does not exist."
 
 
+class PrinterServiceJSON:
+    PRINTER_URL = settings.PRINTER_URL
+
+    @staticmethod
+    def _generate_order_data(order):
+        """Generates a JSON structure for a single order."""
+        items = []
+        total = 0
+        for item in order.order_items.all():
+            line_total = item.quantity * item.meal.price
+            items.append({
+                'name': item.meal.name,
+                'quantity': item.quantity,
+                'price': item.meal.price,
+                'line_total': line_total
+            })
+            total += line_total
+
+        return {
+            'order_id': order.id,
+            'items': items,
+            'order_total': total
+        }
+
+    @staticmethod
+    def generate_receipt_data_for_orders(table, orders):
+        """
+        Generates a JSON object that will be sent to Electron JS for receipt printing.
+        """
+        if not orders:
+            return {}
+
+        # Generate the basic information about the table and orders
+        receipt_data = {
+            'date': datetime.now().strftime('%d.%m.%Y %H:%M:%S'),
+            'table': {
+                'room': table.room.name if table and table.room else 'N/A',
+                'number': table.number if table else 'N/A'
+            },
+            'waitress': table.current_order.waitress.get_full_name(),
+            'orders': []
+        }
+
+        # Add each order and its items to the receipt data
+        for order in orders:
+            receipt_data['orders'].append(
+                PrinterServiceV2._generate_order_data(order))
+
+        return receipt_data
+
+    def send_to_printer(self, data):
+        """
+        Sends the receipt data (as JSON) to the printer (Electron JS).
+        """
+        try:
+            # Step 1: Send the data as JSON to the printer service
+            response = requests.post(
+                self.PRINTER_URL,
+                json=data,
+                headers={'Content-Type': 'application/json'}
+            )
+
+            # Return the response from the server request
+            return response
+        except requests.exceptions.RequestException as e:
+            # Handle exceptions in sending the request
+            print(f"Error while sending data to printer: {e}")
+            return None
+
+    def print_orders_for_table(self, table_id, force_print=False):
+        try:
+            table = Table.objects.get(pk=table_id)
+            if not table.can_print_check() and not force_print:
+                return False, "No active order to print or check already printed."
+
+            orders = table.current_orders
+            receipt_data = self.generate_receipt_data_for_orders(table, orders)
+            response = self.send_to_printer(receipt_data)
+
+            if response and response.status_code == 200:
+                orders.update(is_check_printed=True)
+                return True, "Çek uğurla print edildi"
+            else:
+                return False, "Çek print edilmədi. Printer API qoşulmayıb"
+        except Table.DoesNotExist:
+            return False, "Table does not exist."
+
+
 class PrintCheckAPIView(APIView):
     permission_classes = [IsAuthenticated, IsAdminOrOwner]
 
@@ -134,7 +222,10 @@ class PrintCheckAPIView(APIView):
             return Response({"error": "Table ID is required."}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            printer = PrinterService()
+            if not settings.PRINTER_SERVICE:
+                printer = PrinterService()
+            else:
+                printer = PrinterServiceJSON()
 
             success, message = printer.print_orders_for_table(table_id)
             if success:
