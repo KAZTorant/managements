@@ -29,3 +29,14 @@ class DailyResultView(generics.GenericAPIView):
         total_expense = Expense.objects.filter(date=today).aggregate(Sum('amount'))['amount__sum'] or 0
         result = total_income - total_expense
         return Response({"date": today, "total_income": total_income, "total_expense": total_expense, "result": result})
+
+class AllResultsView(generics.GenericAPIView):
+    def get(self, request):
+        results = []
+        unique_dates = Income.objects.values_list('date', flat=True).distinct()
+        for day in unique_dates:
+            total_income = Income.objects.filter(date=day).aggregate(Sum('amount'))['amount__sum'] or 0
+            total_expense = Expense.objects.filter(date=day).aggregate(Sum('amount'))['amount__sum'] or 0
+            result = total_income - total_expense
+            results.append({"date": day, "total_income": total_income, "total_expense": total_expense, "result": result})
+        return Response(results)
