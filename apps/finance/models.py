@@ -9,6 +9,7 @@ class Income(models.Model):
     ]
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     payment_type = models.CharField(max_length=10, choices=PAYMENT_TYPES)
+    description = models.TextField(blank=True, null=True)  # Optional description
     date = models.DateField(default=now)
 
     def __str__(self):
@@ -22,6 +23,7 @@ class Expense(models.Model):
     ]
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     category = models.CharField(max_length=10, choices=CATEGORY_TYPES)
+    description = models.TextField(blank=True, null=True)  # Optional description
     date = models.DateField(default=now)
 
     def __str__(self):
