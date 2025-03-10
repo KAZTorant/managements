@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'apps.tables.apps.TablesConfig',
     'apps.orders.apps.OrdersConfig',
     'apps.meals.apps.MealsConfig',
-
+    'apps.finance.apps.FinanceConfig', 
 
     # 3rd party apps
     'drf_yasg',
