@@ -257,3 +257,5 @@ PRINTER_SERVICE = os.environ.get(
     "PRINTER_SERVICE",
     None
 )
+
+X_FRAME_OPTIONS = 'ALLOWALL'
