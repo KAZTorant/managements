@@ -38,3 +38,6 @@ django-jazzmin-admin-rangefilter
 
 pylint-django
 whitenoise
+
+# Kazza packages
+git+ssh://git@github.com/KAZTorant/kazza_inventory.git

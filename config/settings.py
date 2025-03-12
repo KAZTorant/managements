@@ -46,7 +46,10 @@ INSTALLED_APPS = [
     'apps.tables.apps.TablesConfig',
     'apps.orders.apps.OrdersConfig',
     'apps.meals.apps.MealsConfig',
-    'apps.finance.apps.FinanceConfig', 
+    'apps.finance.apps.FinanceConfig',
+
+    # kazza modular apps
+    'inventory',
 
     # 3rd party apps
     'drf_yasg',
