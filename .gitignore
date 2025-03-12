@@ -5,6 +5,7 @@ media/
 static/
 .env
 venv
+env
 dist
 build
 BirC.spec
