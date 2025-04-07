@@ -7,12 +7,12 @@
 {% block submit_buttons_bottom %}
     {{ block.super }}
     <br>
-    <div class="mt-3">
+    <div class="">
         <div>
             {% if object.title == "till_now" %}
-                <input type="submit" name="_z-cek-till-now" value="{% trans 'Z-Çek' %}" class="btn btn-warning form-control mt-2" />
+                <input type="submit" name="_z-cek-till-now" value="{% trans 'Hesabatı Təsdiqlə' %}" class="btn btn-warning form-control mt-2" />
             {% else %}
-                <input type="submit" name="_z-cek" value="{% trans 'Z-Çek' %}" class="btn btn-warning form-control mt-2" />
+                <input type="submit" name="_z-cek" value="{% trans 'Hesabatı Təsdiqlə' %}" class="btn btn-warning form-control mt-2" />
             {% endif %}
         </div>
 
