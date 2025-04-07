@@ -74,7 +74,7 @@ class OrderInline(admin.TabularInline):
 
 
 class StatisticsAdmin(SimpleHistoryAdmin):
-    list_display = ('title', 'total', 'date', "is_z_checked")
+    list_display = ('title_with_date', 'total', 'date', "is_z_checked")
     exclude = ("orders",)
     change_list_template = "admin/statistics_change_list.html"
     list_filter = ("title", "date", "waitress_info")
@@ -153,13 +153,13 @@ class StatisticsAdmin(SimpleHistoryAdmin):
     def response_change(self, request, obj):
         if "_z-cek" in request.POST:
             self.z_check(obj=obj)
-            self.message_user(request, "Z-Çek hazırlandı %s." % obj.date)
+            self.message_user(request, "Hesabatı Təsdiqləndi %s." % obj.date)
             return HttpResponseRedirect(".")
 
         if "_z-cek-till-now" in request.POST:
             self.z_check_till_now(obj=obj)
             self.message_user(
-                request, "Z-Çek bu günə kimi hazırlandı %s." % obj.date)
+                request, "Hesabat təsdiqləndi %s." % obj.date)
             return HttpResponseRedirect(".")
 
         return super().response_change(request, obj)
@@ -340,6 +340,13 @@ class StatisticsAdmin(SimpleHistoryAdmin):
         table_html += "</tbody></table> <br>"
         table_html += help_text_html
         return format_html(table_html)
+
+    def title_with_date(self, obj):
+        formatted_date = format(obj.date, 'j F')
+        title_display = obj.get_title_display()
+        return f"{title_display} - {formatted_date}"
+
+    title_with_date.short_description = 'Başlıq'
 
     display_order_items.short_description = ""
     display_per_waitress.short_description = ""

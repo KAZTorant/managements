@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'apps.tables.apps.TablesConfig',
     'apps.orders.apps.OrdersConfig',
     'apps.meals.apps.MealsConfig',
-
+    'apps.finance.apps.FinanceConfig',
 
     # 3rd party apps
     'drf_yasg',
@@ -66,8 +66,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'simple_history.middleware.HistoryRequestMiddleware',
-
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'apps.tables.middleware.DisableCSRFMiddleware',
+
 
 ]
 
@@ -149,6 +150,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
+
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STORAGES = {
+    # ...
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+    },
+}
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Default primary key field type
@@ -205,10 +214,6 @@ CORS_ALLOW_HEADERS = [
     'X-PIN',
 ]
 
-PRINTER_URL = os.environ.get(
-    "PRINTER_URL",
-    "http://localhost:3000/print"
-)
 
 CACHES = {
     'default': {
@@ -223,11 +228,11 @@ LOGGING = {
     'disable_existing_loggers': False,
     'handlers': {
         'console': {
-            'level': 'ERROR',
+            'level': 'INFO',
             'class': 'logging.StreamHandler',
         },
         'file': {
-            'level': 'ERROR',
+            'level': 'INFO',
             'class': 'logging.FileHandler',
             'filename': os.path.join(BASE_DIR, 'error.log'),
         },
@@ -235,8 +240,25 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['console', 'file'],
-            'level': 'ERROR',
+            'level': 'INFO',
             'propagate': True,
         },
     },
+}
+
+PRINTER_URL = os.environ.get(
+    "PRINTER_URL",
+    "http://localhost:3000/print"
+)
+PRINTER_SERVICE = os.environ.get(
+    "PRINTER_SERVICE",
+    None
+)
+
+JAZZMIN_SETTINGS = {
+    "site_title": "KAZZA Admin",
+    "site_header": "KAZZA Panel",
+    "site_brand": "KAZZA",
+    "welcome_sign": "Xoş gəldiniz!",
+    "copyright": "KAZZA Team © 2025",
 }

@@ -16,7 +16,6 @@ from apps.orders.apis import ListWaitressAPIView
 from apps.orders.apis import ChangeWaitressAPIView
 
 from apps.orders.apis import PrintCheckAPIView
-from apps.orders.apis.printer import PrintCheckAPIViewV2
 
 urlpatterns = [
     path(

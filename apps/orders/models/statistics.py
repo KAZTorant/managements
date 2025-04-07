@@ -154,7 +154,7 @@ class StatisticsManager(models.Manager):
 
 class Statistics(DateTimeModel, models.Model):
     TITLE_CHOICES = (
-        ("till_now", "Bu günə kimi"),
+        ("till_now", "Hesabat"),
         ("daily", "Günlük"),
         ("monthly", "Aylıq"),
         ("yearly", "İllik"),
@@ -176,7 +176,8 @@ class Statistics(DateTimeModel, models.Model):
         help_text="Ofisiant kodu və adı.",
         verbose_name="Ofisiant"
     )
-    is_z_checked = models.BooleanField(default=False)
+    is_z_checked = models.BooleanField(
+        default=False, verbose_name="Hesabat təsdiqlənib?")
     orders = models.ManyToManyField(
         Order, blank=True, related_name="statistics"
     )
