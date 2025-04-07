@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'apps.tables.apps.TablesConfig',
     'apps.orders.apps.OrdersConfig',
     'apps.meals.apps.MealsConfig',
-    'apps.finance.apps.FinanceConfig', 
+    'apps.finance.apps.FinanceConfig',
 
     # 3rd party apps
     'drf_yasg',
@@ -254,3 +254,11 @@ PRINTER_SERVICE = os.environ.get(
     "PRINTER_SERVICE",
     None
 )
+
+JAZZMIN_SETTINGS = {
+    "site_title": "KAZZA Admin",
+    "site_header": "KAZZA Panel",
+    "site_brand": "KAZZA",
+    "welcome_sign": "Xoş gəldiniz!",
+    "copyright": "KAZZA Team © 2025",
+}
