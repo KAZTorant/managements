@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
         scanBtn.textContent = "Scanning...";
         // Use a relative URL based on the current admin URL.
         // Adjust if your admin URL structure differs.
-        fetch(window.location.pathname + "printers/scan-printers/")
+        fetch(window.location.origin + "/admin/printers/printer/scan-printers/")
             .then(function (response) { return response.json(); })
             .then(function (data) {
                 select.innerHTML = "<option value=''>-- Select a printer --</option>";

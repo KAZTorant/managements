@@ -23,15 +23,16 @@ class PrinterAdmin(admin.ModelAdmin):
         js = ('admin/js/printer_scan.js',)
 
     def get_urls(self):
-        urls = super().get_urls()
+
         custom_urls = [
             path(
-                'printers/scan-printers/',
+                'scan-printers/',
                 self.admin_site.admin_view(self.scan_printers_view),
                 name='scan_printers'
             ),
         ]
-        return custom_urls + urls
+        return custom_urls + super().get_urls()  # 👈 custom URLs əvvəl gəlməlidir!
+
 
     def scan_printers_view(self, request):
         """
@@ -40,7 +41,6 @@ class PrinterAdmin(admin.ModelAdmin):
         """
         # Returns a list of dicts like [{'ip': '192.168.1.10', 'name': 'POS Printer'}, ...]
         printers = scan_printers_with_names()
-
         return JsonResponse(printers, safe=False)
 
 
