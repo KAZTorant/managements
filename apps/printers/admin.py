@@ -1,12 +1,12 @@
 # printers/admin.py
 
-from django.contrib import admin
-from django.urls import path
-from django.http import JsonResponse
 from django import forms
+from django.contrib import admin
+from django.http import JsonResponse
+from django.urls import path
 
 from apps.printers.models import Printer
-from apps.printers.utils.printer_discovery import scan_printers_with_names
+from apps.printers.utils.printer_discovery import discover_all_printers
 
 
 class PrinterForm(forms.ModelForm):
@@ -40,7 +40,7 @@ class PrinterAdmin(admin.ModelAdmin):
         Returns a JSON list of printers with their IP addresses and (dummy) names.
         """
         # Returns a list of dicts like [{'ip': '192.168.1.10', 'name': 'POS Printer'}, ...]
-        printers = scan_printers_with_names()
+        printers = discover_all_printers()
         return JsonResponse(printers, safe=False)
 
 

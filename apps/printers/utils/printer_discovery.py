@@ -1,29 +1,22 @@
 # printers/utils/printer_discovery.py
 
-import socket
 import concurrent.futures
+import platform
+import socket
+
+import cups
 
 
 def get_printer_name(ip, port=9100, timeout=1):
-    """
-    Dummy implementation to get the printer name.
-    You may customize this to use SNMP or another protocol if available.
-    """
     try:
         with socket.create_connection((ip, port), timeout=timeout) as conn:
-            # ESC/POS command (this example won't really return a name)
             conn.sendall(b"\x1b\x21\x00")
-            # In a real implementation, you might read and parse the response
             return "POS Printer"
     except Exception:
         return None
 
 
 def is_printer(ip, port=9100, timeout=1):
-    """
-    Attempts to connect to the given IP and port.
-    Returns True if a connection is successful.
-    """
     try:
         with socket.create_connection((ip, port), timeout=timeout):
             return True
@@ -31,21 +24,55 @@ def is_printer(ip, port=9100, timeout=1):
         return False
 
 
-def scan_printers_with_names(base_ip='192.168.1.', port=9100):
+def scan_network_printers(base_ip='192.168.1.', port=9100):
     """
-    Scans the local subnet (e.g., 192.168.1.1 to 192.168.1.254) for printers on the specified port.
-    Returns a list of dictionaries containing the printer's IP and name.
+    Scans the subnet for printers listening on port 9100.
+    Returns list of {'type': 'network', 'ip': ..., 'name': ...}
     """
     found = []
 
     def check_ip(i):
         ip = f"{base_ip}{i}"
         if is_printer(ip, port):
-            name = get_printer_name(ip, port) or "Unknown Printer"
-            return {"ip": ip, "name": name}
+            name = get_printer_name(ip, port) or "Unknown Network Printer"
+            return {"type": "network", "ip": ip, "name": name}
         return None
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
         results = executor.map(check_ip, range(1, 255))
 
     return [res for res in results if res is not None]
+
+
+def get_local_cups_printers():
+    """
+    Uses CUPS to get local (USB or system-configured) printers.
+    Returns list of {'type': 'usb/local', 'name': ..., 'info': ...}
+    """
+    printers = []
+    try:
+        conn = cups.Connection()
+        local_printers = conn.getPrinters()
+        for name, info in local_printers.items():
+            printers.append({
+                "type": "usb/local",
+                "name": name,
+                "info": info.get("printer-info", ""),
+                "location": info.get("printer-location", ""),
+                "device_uri": info.get("device-uri", "")
+            })
+    except Exception as e:
+        print(f"[!] Error accessing CUPS: {e}")
+    return printers
+
+
+def discover_all_printers():
+    """
+    Combines network + local printer discovery.
+    """
+    if platform.system() not in ["Linux", "Darwin"]:
+        raise EnvironmentError("Only supported on Linux/macOS systems.")
+
+    network = scan_network_printers()
+    local = get_local_cups_printers()
+    return network + local
