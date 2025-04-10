@@ -75,4 +75,5 @@ def discover_all_printers():
 
     network = scan_network_printers()
     local = get_local_cups_printers()
+    print(network, local)
     return network + local
