@@ -11,7 +11,7 @@ from django.utils.dateformat import format
 from django.utils.timezone import localtime
 from django.utils.html import format_html
 
-from apps.orders.apis.printer import PrinterService
+from apps.printers.utils.service import PrinterService
 from apps.orders.models import Statistics
 from apps.orders.models import Order
 from apps.orders.models import OrderItem
@@ -135,7 +135,7 @@ class StatisticsAdmin(SimpleHistoryAdmin):
     def z_check(self, obj):
         Statistics.objects.delete_orders_for_statistics_day(obj.date)
         try:
-            PrinterService().send_to_printer(text=obj.print_check)
+            PrinterService().send_to_printer(data=obj.print_check)
         except Exception as e:
             print("Exception", e)
             return False
@@ -144,7 +144,7 @@ class StatisticsAdmin(SimpleHistoryAdmin):
     def z_check_till_now(self, obj):
         obj.delete_orders_till_now()
         try:
-            PrinterService().send_to_printer(text=obj.print_check)
+            PrinterService().send_to_printer(data=obj.print_check)
         except Exception as e:
             print("Exception", e)
             return False
