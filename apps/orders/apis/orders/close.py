@@ -3,8 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from apps.orders.apis.printer import PrinterService
-from apps.orders.models import Order
+from apps.printers.utils.service import PrinterService
 from apps.tables.models import Table
 
 from apps.users.permissions import IsAdminOrOwner
